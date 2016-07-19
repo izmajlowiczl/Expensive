@@ -19,8 +19,12 @@ android {
     }
 }
 
+ext {
+    supportVersion = '24.1.0'
+}
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "com.android.support:appcompat-v7:$supportVersion"
+
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
 }
