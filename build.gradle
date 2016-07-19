@@ -16,6 +16,11 @@ allprojects {
     repositories {
         jcenter()
     }
+
+    // Log execution of Unit tests
+    tasks.matching {it instanceof Test}.all {
+        testLogging.events = ["failed", "passed", "skipped"]
+    }
 }
 
 task clean(type: Delete) {
