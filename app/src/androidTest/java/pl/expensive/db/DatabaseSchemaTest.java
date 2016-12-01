@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseSchemaTest {
@@ -41,6 +41,6 @@ public class DatabaseSchemaTest {
         List<String> columns = getTableColumns(database.getReadableDatabase(), "tbl_wallet");
 
         assertThat(columns)
-                .containsOnly("uuid", "name");
+                .containsExactly("uuid", "name");
     }
 }
