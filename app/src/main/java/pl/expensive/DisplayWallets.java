@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 
-import pl.expensive.db.Wallet;
-import pl.expensive.db.WalletsStorage;
+import pl.expensive.storage.Wallet;
+import pl.expensive.storage.WalletsStorage;
 
 class DisplayWallets extends AsyncTask<Void, Void, Collection<Wallet>> {
     private final WalletsStorage model;

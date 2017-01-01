@@ -11,8 +11,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
-import pl.expensive.db.Wallet;
-import pl.expensive.db.WalletsStorage;
+import pl.expensive.storage.Wallet;
+import pl.expensive.storage.WalletsStorage;
 
 import static org.mockito.Mockito.verify;
 

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import pl.expensive.db.Wallet;
+import pl.expensive.storage.Wallet;
 
 public class WalletsView extends RecyclerView {
     @Nullable // Lazy

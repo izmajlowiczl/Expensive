@@ -6,9 +6,9 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import pl.expensive.db.Database;
-import pl.expensive.db.SQLiteBasedWalletsStorage;
-import pl.expensive.db.WalletsStorage;
+import pl.expensive.storage.Database;
+import pl.expensive.storage.SQLiteBasedWalletsStorage;
+import pl.expensive.storage.WalletsStorage;
 
 @Module
 public class AppModule {

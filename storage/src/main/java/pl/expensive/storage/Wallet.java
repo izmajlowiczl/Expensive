@@ -1,4 +1,4 @@
-package pl.expensive.db;
+package pl.expensive.storage;
 
 import com.google.auto.value.AutoValue;
 

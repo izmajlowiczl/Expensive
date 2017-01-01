@@ -1,4 +1,4 @@
-package pl.expensive.db;
+package pl.expensive.storage;
 
 import android.support.annotation.NonNull;
 

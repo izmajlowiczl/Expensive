@@ -1,4 +1,4 @@
-package pl.expensive.db;
+package pl.expensive.storage;
 
 import android.content.ContentValues;
 import android.database.Cursor;

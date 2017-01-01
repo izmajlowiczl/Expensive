@@ -23,29 +23,14 @@ android {
     }
 }
 
-ext {
-    // Compile dependencies
-    supportVersion = '24.1.0'
-    daggerVersion = '2.7'
-
-    // Test dependencies
-    junitVersion = '4.12'
-    mockitoVersion = '1.10.19'
-    daggerMockRuleVersion = '0.6.2'
-    dexmakerVersion = 'f8e7c23e4172af8767758c99c9165dd2bd4f0e7f' // replace with 1.5 when released
-    supportTestVersion = '0.5'
-    truthVersion = '0.30'
-    guavaVersion = '19.0'
-    daggerMockRuleVersion = '0.6.2'
-    autoValueVersion = '1.3'
-}
-
 configurations.all {
     // daggerMock rule includes previous dagger version
     resolutionStrategy.force "com.google.dagger:dagger:$daggerVersion"
 }
 
 dependencies {
+    compile project(path: ':storage')
+
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
 
@@ -55,30 +40,6 @@ dependencies {
     compile "com.google.dagger:dagger:$daggerVersion"
     provided "javax.annotation:jsr250-api:1.0"
 
-    annotationProcessor "com.google.auto.value:auto-value:$autoValueVersion"
-    provided "com.jakewharton.auto.value:auto-value-annotations:$autoValueVersion"
-
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
-
-
-    androidTestCompile "com.android.support:support-annotations:$supportVersion"
-    androidTestCompile "com.android.support.test:runner:$supportTestVersion"
-    androidTestCompile "com.android.support.test:rules:$supportTestVersion"
-    androidTestCompile "com.android.support.test.espresso:espresso-core:2.2.2"
-    androidTestCompile "com.android.support.test.espresso:espresso-intents:2.2.2"
-    androidTestCompile "com.google.truth:truth:$truthVersion@jar"
-    androidTestCompile "com.google.guava:guava:$guavaVersion"
-    androidTestCompile "org.mockito:mockito-core:$mockitoVersion"
-    // dexmaker is required to run mockito at android device tests
-    androidTestCompile "com.github.crittercism.dexmaker:dexmaker-parent:$dexmakerVersion"
-    androidTestCompile "com.github.crittercism.dexmaker:dexmaker-mockito:$dexmakerVersion"
-    androidTestCompile "com.github.crittercism.dexmaker:dexmaker-dx:$dexmakerVersion"
-    androidTestCompile "com.github.crittercism.dexmaker:dexmaker:$dexmakerVersion"
-    androidTestCompile "com.github.fabioCollini:DaggerMock:$daggerMockRuleVersion"
-}
-
-repositories {
-    mavenCentral()
-    maven { url "https://jitpack.io" } // delete after dexmaker 1.5 released
 }
