@@ -29,9 +29,4 @@ public class AppModule {
     WalletsStorage walletModel(Database database) {
         return new SQLiteBasedWalletsStorage(database);
     }
-
-    @Provides
-    DisplayWallets displayWallets(WalletsStorage walletsStorage) {
-        return new DisplayWallets(walletsStorage);
-    }
 }

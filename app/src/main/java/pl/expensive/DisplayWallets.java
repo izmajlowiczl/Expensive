@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 
+import javax.inject.Inject;
+
 import pl.expensive.storage.Wallet;
 import pl.expensive.storage.WalletsStorage;
 
@@ -12,6 +14,7 @@ class DisplayWallets extends AsyncTask<Void, Void, Collection<Wallet>> {
     private final WalletsStorage model;
     private WeakReference<WalletsView> view;
 
+    @Inject
     DisplayWallets(WalletsStorage model) {
         this.model = model;
     }
