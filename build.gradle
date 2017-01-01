@@ -41,6 +41,11 @@ allprojects {
     }
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.2'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-${GradleVersion}-all.zip"
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
