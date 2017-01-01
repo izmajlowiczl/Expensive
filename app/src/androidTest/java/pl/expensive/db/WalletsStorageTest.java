@@ -14,15 +14,15 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class WalletModelTest {
+public class WalletsStorageTest {
     Database inMemDatabase;
-    WalletModel model;
+    SQLiteBasedWalletsStorage model;
 
     @Before
     public void setUp() {
         inMemDatabase = new Database(
                 InstrumentationRegistry.getTargetContext(), null);
-        model = new WalletModel(inMemDatabase);
+        model = new SQLiteBasedWalletsStorage(inMemDatabase);
     }
 
     @Test

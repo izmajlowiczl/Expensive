@@ -10,14 +10,39 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
-public class WalletModel {
+public class SQLiteBasedWalletsStorage implements WalletsStorage {
     private static final String TABLE = "tbl_wallet";
     private static final String COL_UUID = "uuid";
     private static final String COL_NAME = "name";
     private final Database database;
 
-    public WalletModel(Database database) {
+    public SQLiteBasedWalletsStorage(Database database) {
         this.database = database;
+    }
+
+    @NonNull
+    @Override
+    public Collection<Wallet> list() {
+        SQLiteDatabase readableDatabase = database.getReadableDatabase();
+        Cursor cursor = readableDatabase.query(TABLE, null, null, null, null, null, null);
+
+        Collection<Wallet> wallets = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            wallets.add(fromCursor(cursor));
+        }
+
+        cursor.close();
+        return wallets;
+    }
+
+    @Override
+    public void insert(@NonNull Wallet wallet) {
+        SQLiteDatabase writableDatabase = database.getWritableDatabase();
+        try {
+            writableDatabase.insertOrThrow(TABLE, null, toContentValues(wallet));
+        } catch (SQLiteConstraintException ex) {
+            throw new IllegalStateException("Trying to store wallet, which already exist. Wallet -> " + wallet);
+        }
     }
 
     private static Wallet fromCursor(Cursor cursor) {
@@ -31,28 +56,5 @@ public class WalletModel {
         cv.put(COL_UUID, wallet.uuid().toString());
         cv.put(COL_NAME, wallet.name());
         return cv;
-    }
-
-    @NonNull
-    public Collection<Wallet> list() {
-        SQLiteDatabase readableDatabase = database.getReadableDatabase();
-        Cursor cursor = readableDatabase.query(TABLE, null, null, null, null, null, null);
-
-        Collection<Wallet> wallets = new ArrayList<Wallet>();
-        while (cursor.moveToNext()) {
-            wallets.add(fromCursor(cursor));
-        }
-
-        cursor.close();
-        return wallets;
-    }
-
-    public void insert(@NonNull Wallet wallet) {
-        SQLiteDatabase writableDatabase = database.getWritableDatabase();
-        try {
-            writableDatabase.insertOrThrow(TABLE, null, toContentValues(wallet));
-        } catch (SQLiteConstraintException ex) {
-            throw new IllegalStateException("Trying to store wallet, which already exist. Wallet -> " + wallet);
-        }
     }
 }

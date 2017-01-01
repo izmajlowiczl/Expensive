@@ -7,7 +7,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import pl.expensive.db.Database;
-import pl.expensive.db.WalletModel;
+import pl.expensive.db.SQLiteBasedWalletsStorage;
+import pl.expensive.db.WalletsStorage;
 
 @Module
 public class AppModule {
@@ -25,12 +26,12 @@ public class AppModule {
 
     @Singleton
     @Provides
-    WalletModel walletModel(Database database) {
-        return new WalletModel(database);
+    WalletsStorage walletModel(Database database) {
+        return new SQLiteBasedWalletsStorage(database);
     }
 
     @Provides
-    DisplayWallets displayWallets(WalletModel walletModel) {
-        return new DisplayWallets(walletModel);
+    DisplayWallets displayWallets(WalletsStorage walletsStorage) {
+        return new DisplayWallets(walletsStorage);
     }
 }

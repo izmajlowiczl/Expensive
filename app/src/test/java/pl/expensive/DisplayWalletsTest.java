@@ -11,15 +11,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
-import pl.expensive.db.WalletModel;
 import pl.expensive.db.Wallet;
+import pl.expensive.db.WalletsStorage;
 
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DisplayWalletsTest {
     @Mock
-    WalletModel model;
+    WalletsStorage model;
     @Mock
     WalletsView view;
 
