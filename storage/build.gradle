@@ -1,12 +1,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 25
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetToolsVersion
+
         versionCode 1
         versionName "1.0"
 
@@ -32,8 +33,4 @@ dependencies {
     androidTestCompile "com.google.guava:guava:$guavaVersion"
 
     testCompile 'junit:junit:4.12'
-}
-
-repositories {
-    mavenCentral()
 }
