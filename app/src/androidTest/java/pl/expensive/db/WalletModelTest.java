@@ -27,7 +27,7 @@ public class WalletModelTest {
 
     @Test
     public void createAndListWallet() {
-        Wallet wallet = new Wallet(UUID.randomUUID(), "Test-Walet");
+        Wallet wallet = Wallet.create(UUID.randomUUID(), "Test-Walet");
         model.insert(wallet);
 
         Collection<Wallet> wallets = model.list();
@@ -39,10 +39,10 @@ public class WalletModelTest {
     public void storingWalletWithTheSameUuidIsNotAllowed() {
         UUID theSameId = UUID.randomUUID();
 
-        Wallet wallet = new Wallet(theSameId, "Test-Walet");
+        Wallet wallet = Wallet.create(theSameId, "Test-Walet");
         model.insert(wallet);
 
-        Wallet otherWallet = new Wallet(theSameId, "Other-Test-Walet");
+        Wallet otherWallet = Wallet.create(theSameId, "Other-Test-Walet");
         model.insert(otherWallet);
 
         // should never get here
@@ -53,10 +53,10 @@ public class WalletModelTest {
     public void storingWalletWithTheSameNameNotAllowed() {
         String theSameName = "the-same-name";
 
-        Wallet wallet = new Wallet(UUID.randomUUID(), theSameName);
+        Wallet wallet = Wallet.create(UUID.randomUUID(), theSameName);
         model.insert(wallet);
 
-        Wallet otherWallet = new Wallet(UUID.randomUUID(), theSameName);
+        Wallet otherWallet = Wallet.create(UUID.randomUUID(), theSameName);
         model.insert(otherWallet);
 
         // should never get here

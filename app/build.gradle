@@ -37,6 +37,7 @@ ext {
     truthVersion = '0.30'
     guavaVersion = '19.0'
     daggerMockRuleVersion = '0.6.2'
+    autoValueVersion = '1.3'
 }
 
 configurations.all {
@@ -54,6 +55,8 @@ dependencies {
     compile "com.google.dagger:dagger:$daggerVersion"
     provided "javax.annotation:jsr250-api:1.0"
 
+    annotationProcessor "com.google.auto.value:auto-value:$autoValueVersion"
+    provided "com.jakewharton.auto.value:auto-value-annotations:$autoValueVersion"
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"

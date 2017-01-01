@@ -91,7 +91,7 @@ public class WalletsView extends RecyclerView {
         }
 
         void bind(@NonNull Wallet wallet) {
-            vName.setText(wallet.name);
+            vName.setText(wallet.name());
         }
     }
 }

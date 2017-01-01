@@ -36,7 +36,7 @@ public class DisplayWalletsTest {
     @Test
     public void updatesViewWithStoredWallets() {
         Collection<Wallet> storedWallets = Arrays.asList(
-                new Wallet(UUID.randomUUID(), "Test-wallet"));
+                Wallet.create(UUID.randomUUID(), "Test-wallet"));
 
         useCase.setCallback(view)
                 .onPostExecute(storedWallets);

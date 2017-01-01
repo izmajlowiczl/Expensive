@@ -21,15 +21,15 @@ public class WalletModel {
     }
 
     private static Wallet fromCursor(Cursor cursor) {
-        return new Wallet(
+        return Wallet.create(
                 UUID.fromString(cursor.getString(cursor.getColumnIndexOrThrow(COL_UUID))),
                 cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME)));
     }
 
     private static ContentValues toContentValues(Wallet wallet) {
         ContentValues cv = new ContentValues();
-        cv.put(COL_UUID, wallet.uuid.toString());
-        cv.put(COL_NAME, wallet.name);
+        cv.put(COL_UUID, wallet.uuid().toString());
+        cv.put(COL_NAME, wallet.name());
         return cv;
     }
 
