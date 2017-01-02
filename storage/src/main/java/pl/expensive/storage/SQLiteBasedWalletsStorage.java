@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
-public class SQLiteBasedWalletsStorage implements WalletsStorage {
+class SQLiteBasedWalletsStorage implements WalletsStorage {
     private static final String TABLE = "tbl_wallet";
     private static final String COL_UUID = "uuid";
     private static final String COL_NAME = "name";
+
     private final Database database;
 
-    public SQLiteBasedWalletsStorage(Database database) {
+    SQLiteBasedWalletsStorage(Database database) {
         this.database = database;
     }
 

@@ -5,11 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.VisibleForTesting;
 
-public class Database extends SQLiteOpenHelper {
+class Database extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String NAME = "expensive.db";
 
-    public Database(Context context) {
+    Database(Context context) {
         super(context, NAME, null, VERSION);
     }
 
