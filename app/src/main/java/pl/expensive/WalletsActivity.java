@@ -8,9 +8,8 @@ import javax.inject.Inject;
 
 public class WalletsActivity extends AppCompatActivity {
     @Inject
-    DisplayWallets displayWallets;
-
-    private WalletsView vWallets;
+    DisplayWallets fetchWallets;
+    private WalletsViewContract vWallets;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -19,13 +18,21 @@ public class WalletsActivity extends AppCompatActivity {
 
         Injector.app().inject(this);
         vWallets = (WalletsView) findViewById(R.id.wallets);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
         showWallets();
     }
 
     private void showWallets() {
-        displayWallets
-                .setCallback(vWallets)
-                .execute();
+        fetchWallets.runFor(vWallets);
+    }
+
+    @Override
+    protected void onStop() {
+        fetchWallets.dispose();
+        super.onStop();
     }
 }

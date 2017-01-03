@@ -13,14 +13,20 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     testOptions {
         unitTests.returnDefaultValues = true
+    }
+
+    packagingOptions {
+        pickFirst  'META-INF/rxjava.properties'
     }
 }
 
@@ -34,6 +40,12 @@ dependencies {
 
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
+
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxjava:1.1.0'
+
+    annotationProcessor "com.google.auto.value:auto-value:$autoValueVersion"
+    provided "com.jakewharton.auto.value:auto-value-annotations:$autoValueVersion"
 
     annotationProcessor "com.squareup:javapoet:1.8.0" // needs to be declared before dagger
     annotationProcessor "com.google.guava:guava:$guavaVersion" // required by dagger compiler

@@ -11,14 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import pl.expensive.storage.Wallet;
-
-public class WalletsView extends RecyclerView {
+public class WalletsView extends RecyclerView implements WalletsViewContract {
     @Nullable // Lazy
     private WalletsAdapter walletsAdapter;
 
@@ -34,8 +33,9 @@ public class WalletsView extends RecyclerView {
         super(context, attrs, defStyleAttr);
     }
 
+    @Override
     @MainThread
-    void showWallets(Collection<Wallet> storedWallets) {
+    public void showWallets(Collection<WalletViewModel> storedWallets) {
         // Lazy load adapter on the first usage
         if (walletsAdapter == null) {
             walletsAdapter = new WalletsAdapter();
@@ -48,13 +48,20 @@ public class WalletsView extends RecyclerView {
         setVisibility(VISIBLE);
     }
 
+    @Override
     @MainThread
-    void showEmpty() {
+    public void showEmpty() {
         setVisibility(GONE);
     }
 
+    @Override
+    @MainThread
+    public void showFetchError() {
+        Toast.makeText(getContext(), "Cannot fetch wallets", Toast.LENGTH_SHORT).show();
+    }
+
     private static class WalletsAdapter extends RecyclerView.Adapter<WalletViewHolder> {
-        private final List<Wallet> wallets = new ArrayList<>();
+        private final List<WalletViewModel> wallets = new ArrayList<>();
 
         @Override
         public WalletViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -73,7 +80,7 @@ public class WalletsView extends RecyclerView {
             return wallets.size();
         }
 
-        void bind(Collection<Wallet> newWallets) {
+        void bind(Collection<WalletViewModel> newWallets) {
             // TODO: 10.09.2016 Measure if making diff makes sense
 
             wallets.clear();
@@ -90,7 +97,7 @@ public class WalletsView extends RecyclerView {
             vName = (TextView) itemView.findViewById(R.id.wallet_name);
         }
 
-        void bind(@NonNull Wallet wallet) {
+        void bind(@NonNull WalletViewModel wallet) {
             vName.setText(wallet.name());
         }
     }

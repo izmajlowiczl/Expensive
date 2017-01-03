@@ -2,54 +2,48 @@ package pl.expensive;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
 import pl.expensive.storage.Wallet;
 import pl.expensive.storage.WalletsStorage;
 
+import static java.util.Arrays.asList;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DisplayWalletsTest {
-    @Mock
-    WalletsStorage model;
-    @Mock
-    WalletsView view;
+    private static final Wallet CASH = Wallet.create(UUID.randomUUID(), "Cash");
+    private static final Wallet CREDIT_CARD = Wallet.create(UUID.randomUUID(), "Credit Card");
 
-    @InjectMocks
-    DisplayWallets useCase;
+    @Mock
+    WalletsViewContract view;
+    @Mock
+    WalletsStorage storage;
 
     @Test
-    public void fetchesWalletsFromStorage() {
-        useCase.doInBackground();
+    public void displayStoredWallets() {
+        when(storage.list()).thenReturn(asList(CASH, CREDIT_CARD));
+        FetchWallets fetchWallets = new FetchWallets(storage);
 
-        verify(model).list();
+        new DisplayWallets(fetchWallets)
+                .runFor(view);
+
+        verify(view).showWallets(
+                asList(WalletViewModel.create("Cash"), WalletViewModel.create("Credit Card")));
     }
 
     @Test
-    public void updatesViewWithStoredWallets() {
-        Collection<Wallet> storedWallets = Arrays.asList(
-                Wallet.create(UUID.randomUUID(), "Test-wallet"));
+    public void displayNoWallets() {
+        when(storage.list()).thenReturn(Collections.<Wallet>emptyList());
+        FetchWallets fetchWallets = new FetchWallets(storage);
 
-        useCase.setCallback(view)
-                .onPostExecute(storedWallets);
-
-        verify(view).showWallets(storedWallets);
-    }
-
-    @Test
-    public void handlesEmptyStateWhenNothingWasStored() {
-        Collection<Wallet> noWallets = Collections.emptyList();
-
-        useCase.setCallback(view)
-                .onPostExecute(noWallets);
+        new DisplayWallets(fetchWallets)
+                .runFor(view);
 
         verify(view).showEmpty();
     }

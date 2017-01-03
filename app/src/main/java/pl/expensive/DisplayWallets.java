@@ -1,49 +1,65 @@
 package pl.expensive;
 
-import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 
-import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Inject;
 
 import pl.expensive.storage.Wallet;
-import pl.expensive.storage.WalletsStorage;
+import rx.SingleSubscriber;
+import rx.Subscription;
+import rx.functions.Func1;
 
-class DisplayWallets extends AsyncTask<Void, Void, Collection<Wallet>> {
-    private final WalletsStorage model;
-    private WeakReference<WalletsView> view;
+class DisplayWallets {
+    private final FetchWallets fetchWallets;
+    @Nullable
+    private Subscription fetchWalletsSubscription;
 
     @Inject
-    DisplayWallets(WalletsStorage model) {
-        this.model = model;
+    DisplayWallets(FetchWallets fetchWallets) {
+        this.fetchWallets = fetchWallets;
     }
 
-    public DisplayWallets setCallback(WalletsView callback) {
-        view = new WeakReference(callback);
-        return this;
+    void runFor(final WalletsViewContract view) {
+        fetchWalletsSubscription = fetchWallets.fetchWallets()
+                .map(new WalletsToViewModelsTransformer())
+                .subscribe(new SingleSubscriber<Collection<WalletViewModel>>() {
+                    @Override
+                    public void onSuccess(Collection<WalletViewModel> value) {
+                        if (value.isEmpty()) {
+                            view.showEmpty();
+                        } else {
+                            view.showWallets(value);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        view.showFetchError();
+                    }
+                });
     }
 
-    @Override
-    protected Collection<Wallet> doInBackground(Void... voids) {
-        Collection<Wallet> storedWallets = model.list();
-        return storedWallets;
-    }
-
-    @Override
-    protected void onPostExecute(Collection<Wallet> wallets) {
-        super.onPostExecute(wallets);
-        WalletsView target = view.get();
-        if (target == null) {
-            return;
+    private static class WalletsToViewModelsTransformer implements Func1<Collection<Wallet>, Collection<WalletViewModel>> {
+        @Override
+        public Collection<WalletViewModel> call(Collection<Wallet> wallets) {
+            Collection<WalletViewModel> result = new ArrayList<>(wallets.size());
+            for (Wallet wallet : wallets) {
+                result.add(WalletViewModel.create(wallet.name()));
+            }
+            return result;
         }
+    }
 
-        if (wallets.isEmpty()) {
-            target.showEmpty();
-        } else {
-            target.showWallets(wallets);
+    void dispose() {
+        if (!isDisposed()) {
+            fetchWalletsSubscription.unsubscribe();
         }
+    }
 
-        view.clear();
+    private boolean isDisposed() {
+        return fetchWalletsSubscription == null || fetchWalletsSubscription.isUnsubscribed();
     }
 }

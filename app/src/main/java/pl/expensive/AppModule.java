@@ -3,6 +3,8 @@ package pl.expensive;
 import android.app.Application;
 
 import dagger.Module;
+import dagger.Provides;
+import pl.expensive.storage.WalletsStorage;
 
 @Module
 public class AppModule {
@@ -12,4 +14,8 @@ public class AppModule {
         this.application = application;
     }
 
+    @Provides
+    FetchWallets fetchWallets(WalletsStorage storage) {
+        return new FetchWallets(storage);
+    }
 }
