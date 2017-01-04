@@ -5,7 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.VisibleForTesting;
 
+import java.util.UUID;
+
 class Database extends SQLiteOpenHelper {
+    static final Wallet DEFAULT_WALLET = Wallet.create(
+            UUID.fromString("c2ee3260-94eb-4cc2-8d5c-af38f964fbd5"), "cash");
+
     private static final int VERSION = 1;
     private static final String NAME = "expensive.db";
 
@@ -20,7 +25,16 @@ class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE tbl_wallet (uuid TEXT, name TEXT NOT NULL UNIQUE, PRIMARY KEY(uuid));");
+        createSchema(sqLiteDatabase);
+        applySeeds(sqLiteDatabase);
+    }
+
+    private static void createSchema(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE tbl_wallet (uuid TEXT, name TEXT NOT NULL UNIQUE, PRIMARY KEY(uuid));");
+    }
+
+    private static void applySeeds(SQLiteDatabase db) {
+        db.execSQL(String.format("INSERT INTO tbl_wallet VALUES('%s', '%s');", DEFAULT_WALLET.uuid(), DEFAULT_WALLET.name()));
     }
 
     @Override
