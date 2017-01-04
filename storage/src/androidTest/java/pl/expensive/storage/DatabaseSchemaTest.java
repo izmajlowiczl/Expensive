@@ -1,6 +1,5 @@
 package pl.expensive.storage;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
@@ -13,8 +12,7 @@ import static pl.expensive.storage.DatabaseSchemaTestHelper.getTableColumns;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseSchemaTest {
-    Database database = new Database(
-            InstrumentationRegistry.getTargetContext(), null);
+    private Database database = Injector.provideDatabase();
 
     @Test
     public void walletTableIsCreatedWithAllColumns() {

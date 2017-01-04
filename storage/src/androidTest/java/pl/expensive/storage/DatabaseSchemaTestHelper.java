@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DatabaseSchemaTestHelper {
+import static org.junit.Assert.fail;
 
-    public static List<String> getTableColumns(SQLiteDatabase db, String tableName) {
+class DatabaseSchemaTestHelper {
+
+    static List<String> getTableColumns(SQLiteDatabase db, String tableName) {
         Cursor c = null;
         try {
             c = db.rawQuery("pragma table_info(" + tableName + ");", null);
@@ -24,5 +26,27 @@ public class DatabaseSchemaTestHelper {
         } catch (Exception ignored) {
             return Collections.emptyList();
         }
+    }
+
+    static List<String> getStoredWalletNames(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery(selectNameFrom("tbl_wallet"), null);
+        if (cursor == null) {
+            fail("Wallet was not stored");
+            cursor.close();
+        }
+        List<String> storedWalletNames = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            storedWalletNames.add(cursor.getString(0));
+        }
+        return storedWalletNames;
+    }
+
+    private static String selectNameFrom(String table) {
+        return String.format("SELECT name FROM %s", table);
+    }
+
+    static String storeWalletSql(Wallet wallet) {
+        return String.format("INSERT INTO tbl_wallet VALUES ('%s', '%s');",
+                wallet.uuid().toString(), wallet.name());
     }
 }
