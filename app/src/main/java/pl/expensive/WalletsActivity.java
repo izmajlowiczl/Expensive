@@ -14,7 +14,7 @@ public class WalletsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_budgets);
+        setContentView(R.layout.activity_wallets);
 
         Injector.app().inject(this);
         vWallets = (WalletsView) findViewById(R.id.wallets);
