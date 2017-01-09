@@ -1,16 +1,12 @@
 package pl.expensive;
 
 import android.support.annotation.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import android.text.TextUtils;
 
 import javax.inject.Inject;
 
-import pl.expensive.storage.Wallet;
-import rx.SingleSubscriber;
+import rx.Observable;
 import rx.Subscription;
-import rx.functions.Func1;
 
 class DisplayWallets {
     private final FetchWallets fetchWallets;
@@ -24,33 +20,17 @@ class DisplayWallets {
 
     void runFor(final WalletsViewContract view) {
         fetchWalletsSubscription = fetchWallets.fetchWallets()
-                .map(new WalletsToViewModelsTransformer())
-                .subscribe(new SingleSubscriber<Collection<WalletViewModel>>() {
-                    @Override
-                    public void onSuccess(Collection<WalletViewModel> value) {
-                        if (value.isEmpty()) {
-                            view.showEmpty();
-                        } else {
-                            view.showWallets(value);
-                        }
+                .flatMapObservable(Observable::from)
+                .filter(wallet -> !TextUtils.isEmpty(wallet.name())) // TODO: 09.01.2017 Replace with non-android version
+                .map(wallet -> WalletViewModel.create(wallet.name()))
+                .toList()
+                .subscribe(walletViewModels -> {
+                    if (walletViewModels.isEmpty()) {
+                        view.showEmpty();
+                    } else {
+                        view.showWallets(walletViewModels);
                     }
-
-                    @Override
-                    public void onError(Throwable error) {
-                        view.showFetchError();
-                    }
-                });
-    }
-
-    private static class WalletsToViewModelsTransformer implements Func1<Collection<Wallet>, Collection<WalletViewModel>> {
-        @Override
-        public Collection<WalletViewModel> call(Collection<Wallet> wallets) {
-            Collection<WalletViewModel> result = new ArrayList<>(wallets.size());
-            for (Wallet wallet : wallets) {
-                result.add(WalletViewModel.create(wallet.name()));
-            }
-            return result;
-        }
+                }, err -> view.showFetchError());
     }
 
     void dispose() {
