@@ -1,7 +1,6 @@
 package pl.expensive;
 
 import java.util.Collection;
-import java.util.concurrent.Callable;
 
 import pl.expensive.storage.Wallet;
 import pl.expensive.storage.WalletsStorage;
@@ -15,11 +14,6 @@ class FetchWallets {
     }
 
     Single<Collection<Wallet>> fetchWallets() {
-        return Single.fromCallable(new Callable<Collection<Wallet>>() {
-            @Override
-            public Collection<Wallet> call() throws Exception {
-                return storage.list();
-            }
-        });
+        return Single.fromCallable(storage::list);
     }
 }
