@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion project.compileSdkVersion
@@ -27,6 +28,11 @@ android {
 
     packagingOptions {
         pickFirst  'META-INF/rxjava.properties'
+    }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
