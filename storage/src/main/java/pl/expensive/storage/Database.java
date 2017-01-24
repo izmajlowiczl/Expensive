@@ -31,6 +31,7 @@ class Database extends SQLiteOpenHelper {
 
     private static void createSchema(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE tbl_wallet (uuid TEXT, name TEXT NOT NULL UNIQUE, PRIMARY KEY(uuid));");
+        db.execSQL("CREATE TABLE tbl_transaction (uuid TEXT NOT NULL, amount INTEGER NOT NULL, currency TEXT NOT NULL, date TEXT NOT NULL, description TEXT, wallet_uuid TEXT NOT NULL, PRIMARY KEY(uuid), FOREIGN KEY(wallet_uuid) REFERENCES tbl_wallet(uuid));");
     }
 
     private static void applySeeds(SQLiteDatabase db) {
@@ -45,10 +46,6 @@ class Database extends SQLiteOpenHelper {
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
-        // Enable Foreign keys to be able to delete cascade
-        // Fixme: 01.01.2017 Why is it for read only db?
-        if (db.isReadOnly()) {
-            db.execSQL("PRAGMA foreign_keys=ON;");
-        }
+        db.execSQL("PRAGMA foreign_keys=ON;");
     }
 }

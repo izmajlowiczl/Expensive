@@ -15,10 +15,18 @@ public class DatabaseSchemaTest {
     private Database database = Injector.provideDatabase();
 
     @Test
-    public void walletTableIsCreatedWithAllColumns() {
+    public void columnsForWalletTable() {
         List<String> columns = getTableColumns(database.getReadableDatabase(), "tbl_wallet");
 
         assertThat(columns)
                 .containsExactly("uuid", "name");
+    }
+
+    @Test
+    public void columnsForTransactionTable() {
+        List<String> columns = getTableColumns(database.getReadableDatabase(), "tbl_transaction");
+
+        assertThat(columns)
+                .containsExactly("uuid", "amount", "currency", "date", "description", "wallet_uuid");
     }
 }
