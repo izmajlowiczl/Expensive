@@ -1,21 +1,31 @@
 package pl.expensive.storage;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static com.google.common.truth.Truth.assertThat;
 import static junit.framework.Assert.fail;
+import static pl.expensive.storage.DatabaseSchemaTestHelper.assertCurrencyCodeStored;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseSeedsTest {
-    private Database database = Injector.provideDatabase();
+    Database database;
+    SQLiteDatabase db;
+
+    @Before
+    public void setup() {
+        database = Injector.provideDatabase();
+        db = database.getReadableDatabase();
+    }
 
     @Test
     public void containsPrePopulatedCashWallet() {
-        Cursor cursor = database.getWritableDatabase().rawQuery("SELECT name FROM tbl_wallet", null);
+        Cursor cursor = db.rawQuery("SELECT name FROM tbl_wallet", null);
         if (cursor == null || !cursor.moveToNext()) {
             fail("Cannot find pre populated cash row");
         }
@@ -26,44 +36,26 @@ public class DatabaseSeedsTest {
 
     @Test
     public void containsEurCurrency() {
-        assertCurrencyCodeStored("EUR");
+        assertCurrencyCodeStored(db, "EUR");
     }
 
     @Test
     public void containsGBPCurrency() {
-        assertCurrencyCodeStored("GBP");
+        assertCurrencyCodeStored(db, "GBP");
     }
 
     @Test
     public void containsCHFCurrency() {
-        assertCurrencyCodeStored("CHF");
+        assertCurrencyCodeStored(db, "CHF");
     }
 
     @Test
     public void containsPLNCurrency() {
-        assertCurrencyCodeStored("PLN");
+        assertCurrencyCodeStored(db, "PLN");
     }
 
     @Test
     public void containsCZKCurrency() {
-        assertCurrencyCodeStored("CZK");
-    }
-
-    // =========================================
-    //              Helper methods
-    // =========================================
-
-    private void assertCurrencyCodeStored(String code) {
-        Cursor cursor = database.getWritableDatabase().rawQuery(queryForCurrencyCode(code), null);
-        if (cursor == null || !cursor.moveToNext()) {
-            fail("Cannot find pre populated cash row");
-        }
-
-        assertThat(cursor.getString(0))
-                .isEqualTo(code);
-    }
-
-    private String queryForCurrencyCode(String code) {
-        return String.format("SELECT code FROM tbl_currency WHERE code='%s';", code);
+        assertCurrencyCodeStored(db, "CZK");
     }
 }

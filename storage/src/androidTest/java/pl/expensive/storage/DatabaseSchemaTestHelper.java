@@ -3,10 +3,13 @@ package pl.expensive.storage;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import junit.framework.Assert;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
 class DatabaseSchemaTestHelper {
@@ -49,4 +52,23 @@ class DatabaseSchemaTestHelper {
         return String.format("INSERT INTO tbl_wallet VALUES ('%s', '%s');",
                 wallet.uuid().toString(), wallet.name());
     }
+
+
+    // Currencies
+
+    public static void assertCurrencyCodeStored(SQLiteDatabase db, String code) {
+        Cursor cursor = db.rawQuery(queryForCurrencyCode(code), null);
+        if (cursor == null || !cursor.moveToNext()) {
+            Assert.fail("Cannot find currency code");
+        }
+
+        assertThat(cursor.getString(0))
+                .isEqualTo(code);
+    }
+
+    public static String queryForCurrencyCode(String code) {
+        return String.format("SELECT code FROM tbl_currency WHERE code='%s';", code);
+    }
+
+    // -- Currencies
 }
