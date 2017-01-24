@@ -5,12 +5,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.VisibleForTesting;
 
-import java.util.UUID;
+import static pl.expensive.storage._Seeds.CASH;
+import static pl.expensive.storage._Seeds.CHF;
+import static pl.expensive.storage._Seeds.CZK;
+import static pl.expensive.storage._Seeds.EUR;
+import static pl.expensive.storage._Seeds.GBP;
+import static pl.expensive.storage._Seeds.PLN;
 
 class Database extends SQLiteOpenHelper {
-    static final Wallet DEFAULT_WALLET = Wallet.create(
-            UUID.fromString("c2ee3260-94eb-4cc2-8d5c-af38f964fbd5"), "cash");
-
     private static final int VERSION = 1;
     private static final String NAME = "expensive.db";
 
@@ -30,12 +32,25 @@ class Database extends SQLiteOpenHelper {
     }
 
     private static void createSchema(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE tbl_wallet (uuid TEXT, name TEXT NOT NULL UNIQUE, PRIMARY KEY(uuid));");
-        db.execSQL("CREATE TABLE tbl_transaction (uuid TEXT NOT NULL, amount INTEGER NOT NULL, currency TEXT NOT NULL, date TEXT NOT NULL, description TEXT, wallet_uuid TEXT NOT NULL, PRIMARY KEY(uuid), FOREIGN KEY(wallet_uuid) REFERENCES tbl_wallet(uuid));");
+        db.execSQL("CREATE TABLE tbl_wallet (uuid TEXT NOT NULL, name TEXT NOT NULL UNIQUE, PRIMARY KEY(uuid));");
+        db.execSQL("CREATE TABLE tbl_currency (code TEXT NOT NULL, format TEXT NOT NULL, PRIMARY KEY(code));");
+        db.execSQL("CREATE TABLE tbl_transaction (uuid TEXT NOT NULL, amount TEXT NOT NULL, currency TEXT NOT NULL, date INTEGER NOT NULL, description TEXT, wallet_uuid TEXT NOT NULL, PRIMARY KEY(uuid), FOREIGN KEY(wallet_uuid) REFERENCES tbl_wallet(uuid));");
     }
 
     private static void applySeeds(SQLiteDatabase db) {
-        db.execSQL(String.format("INSERT INTO tbl_wallet VALUES('%s', '%s');", DEFAULT_WALLET.uuid(), DEFAULT_WALLET.name()));
+        // Cash wallet
+        db.execSQL(String.format("INSERT INTO tbl_wallet VALUES('%s', '%s');", CASH.uuid(), CASH.name()));
+
+        // Currencies
+        storeCurrency(db, EUR);
+        storeCurrency(db, GBP);
+        storeCurrency(db, CHF);
+        storeCurrency(db, PLN);
+        storeCurrency(db, CZK);
+    }
+
+    private static void storeCurrency(SQLiteDatabase db, Currency currency) {
+        db.execSQL(String.format("INSERT INTO tbl_currency VALUES('%s', '%s');", currency.code(), currency.format()));
     }
 
     @Override

@@ -29,4 +29,12 @@ public class DatabaseSchemaTest {
         assertThat(columns)
                 .containsExactly("uuid", "amount", "currency", "date", "description", "wallet_uuid");
     }
+
+    @Test
+    public void columnsForCurrencyTable() {
+        List<String> columns = getTableColumns(database.getReadableDatabase(), "tbl_currency");
+
+        assertThat(columns)
+                .containsExactly("code", "format");
+    }
 }

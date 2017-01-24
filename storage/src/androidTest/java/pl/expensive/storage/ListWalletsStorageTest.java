@@ -11,8 +11,8 @@ import java.util.Collection;
 
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.UUID.randomUUID;
-import static pl.expensive.storage.Database.DEFAULT_WALLET;
 import static pl.expensive.storage.DatabaseSchemaTestHelper.storeWalletSql;
+import static pl.expensive.storage._Seeds.CASH;
 
 @RunWith(AndroidJUnit4.class)
 public class ListWalletsStorageTest {
@@ -31,7 +31,7 @@ public class ListWalletsStorageTest {
         Collection<Wallet> wallets = storage.list();
 
         assertThat(wallets)
-                .containsExactly(DEFAULT_WALLET);
+                .containsExactly(CASH);
     }
 
     @Test
@@ -44,6 +44,6 @@ public class ListWalletsStorageTest {
         Collection<Wallet> wallets = storage.list();
 
         assertThat(wallets)
-                .containsExactly(DEFAULT_WALLET, bankWallet, ccWallet);
+                .containsExactly(CASH, bankWallet, ccWallet);
     }
 }

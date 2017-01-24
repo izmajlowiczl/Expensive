@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
 
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.UUID.randomUUID;
-import static pl.expensive.storage.Database.DEFAULT_WALLET;
 import static pl.expensive.storage.DatabaseSchemaTestHelper.getStoredWalletNames;
+import static pl.expensive.storage._Seeds.CASH;
 
 @RunWith(AndroidJUnit4.class)
 public class InsertWalletStorageTest {
@@ -30,7 +30,7 @@ public class InsertWalletStorageTest {
         storage.insert(bankWallet);
 
         assertThat(getStoredWalletNames(db))
-                .containsExactly(DEFAULT_WALLET.name(), "bank");
+                .containsExactly(CASH.name(), "bank");
     }
 
     @Test
@@ -39,7 +39,7 @@ public class InsertWalletStorageTest {
         storage.insert(Wallet.create(randomUUID(), "credit card"));
 
         assertThat(getStoredWalletNames(db))
-                .containsExactly(DEFAULT_WALLET.name(), "bank", "credit card");
+                .containsExactly(CASH.name(), "bank", "credit card");
     }
 
     @Test(expected = IllegalStateException.class)
