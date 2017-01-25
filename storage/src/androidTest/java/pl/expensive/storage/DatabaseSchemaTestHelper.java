@@ -53,7 +53,6 @@ class DatabaseSchemaTestHelper {
                 wallet.uuid().toString(), wallet.name());
     }
 
-
     // Currencies
 
     public static void assertCurrencyCodeStored(SQLiteDatabase db, String code) {

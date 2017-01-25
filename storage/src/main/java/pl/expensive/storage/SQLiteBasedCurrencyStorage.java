@@ -20,13 +20,13 @@ public class SQLiteBasedCurrencyStorage implements CurrencyStorage {
         SQLiteDatabase readableDatabase = database.getReadableDatabase();
         Cursor cursor = readableDatabase.query("tbl_currency", new String[]{"code", "format"}, null, null, null, null, null);
 
-        Collection<Currency> wallets = new ArrayList<>();
+        Collection<Currency> result = new ArrayList<>();
         while (cursor.moveToNext()) {
-            wallets.add(Currency.create(cursor.getString(0), cursor.getString(1)));
+            result.add(Currency.create(cursor.getString(0), cursor.getString(1)));
         }
 
         cursor.close();
-        return wallets;
+        return result;
     }
 
     @Override

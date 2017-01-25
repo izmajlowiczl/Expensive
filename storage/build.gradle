@@ -35,6 +35,8 @@ dependencies {
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
+    testCompile "com.google.truth:truth:$truthVersion@jar"
+    testCompile "com.google.guava:guava:$guavaVersion"
 
     androidTestCompile "com.android.support.test:runner:$supportTestVersion"
     androidTestCompile "com.android.support.test:rules:$supportTestVersion"
