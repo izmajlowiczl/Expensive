@@ -33,13 +33,13 @@ dependencies {
     annotationProcessor "com.google.auto.value:auto-value:$autoValueVersion"
     provided "com.jakewharton.auto.value:auto-value-annotations:$autoValueVersion"
 
-    compile 'com.jakewharton.threetenabp:threetenabp:1.0.4'
-    compile "org.threeten:threetenbp:1.3.2:no-tzdb"
+    compile "com.jakewharton.threetenabp:threetenabp:$threeTenAndroidVersion"
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
     testCompile "com.google.truth:truth:$truthVersion@jar"
     testCompile "com.google.guava:guava:$guavaVersion"
+    testCompile "org.threeten:threetenbp:$threeTenAndroidVersion"
 
     androidTestCompile "com.android.support.test:runner:$supportTestVersion"
     androidTestCompile "com.android.support.test:rules:$supportTestVersion"

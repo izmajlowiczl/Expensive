@@ -50,8 +50,7 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'io.reactivex:rxjava:1.1.0'
 
-    compile 'com.jakewharton.threetenabp:threetenabp:1.0.4'
-    compile "org.threeten:threetenbp:1.3.2:no-tzdb"
+    compile "com.jakewharton.threetenabp:threetenabp:$threeTenAndroidVersion"
 
     annotationProcessor "com.google.auto.value:auto-value:$autoValueVersion"
     provided "com.jakewharton.auto.value:auto-value-annotations:$autoValueVersion"
@@ -68,12 +67,12 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     androidTestCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
-    androidTestCompile 'com.jakewharton.threetenabp:threetenabp:1.0.4'
+    androidTestCompile "com.jakewharton.threetenabp:threetenabp:$threeTenAndroidVersion"
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
     testCompile "com.google.truth:truth:$truthVersion@jar"
     testCompile "com.google.guava:guava:$guavaVersion"
     // replace Android ThreeTenBP with regular .jar to avoid using context at unit tests
-    testCompile "org.threeten:threetenbp:1.3.2"
+    testCompile "org.threeten:threetenbp:$threeTenVersion"
 }
