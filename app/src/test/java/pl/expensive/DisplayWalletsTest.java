@@ -27,16 +27,15 @@ public class DisplayWalletsTest {
     @Mock
     WalletsViewContract view;
     @Mock
-    WalletsStorage storage;
+    WalletsStorage walletsStorage;
     @Mock
     TransactionStorage transactionStorage;
 
     @Test
     public void displayStoredWallets() {
-        when(storage.list()).thenReturn(asList(CASH, CREDIT_CARD));
-        FetchWallets fetchWallets = new FetchWallets(storage);
+        when(walletsStorage.list()).thenReturn(asList(CASH, CREDIT_CARD));
 
-        DisplayWallets displayWallets = new DisplayWallets(fetchWallets, transactionStorage);
+        DisplayWallets displayWallets = new DisplayWallets(walletsStorage, transactionStorage);
         displayWallets.runFor(view);
 
         verify(view).showWallets(
@@ -45,12 +44,11 @@ public class DisplayWalletsTest {
 
     @Test
     public void containTransactions() {
-        when(storage.list()).thenReturn(asList(CASH, CREDIT_CARD));
+        when(walletsStorage.list()).thenReturn(asList(CASH, CREDIT_CARD));
         when(transactionStorage.select(CASH.uuid())).thenReturn(
                 asList(Transaction.deposit(CASH.uuid(), BigDecimal.TEN, EUR, "")));
-        FetchWallets fetchWallets = new FetchWallets(storage);
 
-        DisplayWallets displayWallets = new DisplayWallets(fetchWallets, transactionStorage);
+        DisplayWallets displayWallets = new DisplayWallets(walletsStorage, transactionStorage);
         displayWallets.runFor(view);
 
         verify(view).showWallets(asList(
@@ -60,10 +58,9 @@ public class DisplayWalletsTest {
 
     @Test
     public void displayNoWallets() {
-        when(storage.list()).thenReturn(Collections.<Wallet>emptyList());
-        FetchWallets fetchWallets = new FetchWallets(storage);
+        when(walletsStorage.list()).thenReturn(Collections.<Wallet>emptyList());
 
-        DisplayWallets displayWallets = new DisplayWallets(fetchWallets, transactionStorage);
+        DisplayWallets displayWallets = new DisplayWallets(walletsStorage, transactionStorage);
         displayWallets.runFor(view);
 
         verify(view).showEmpty();

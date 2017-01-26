@@ -10,24 +10,26 @@ import javax.inject.Inject;
 
 import pl.expensive.storage.Transaction;
 import pl.expensive.storage.TransactionStorage;
+import pl.expensive.storage.WalletsStorage;
 import rx.Observable;
+import rx.Single;
 import rx.Subscription;
 
 class DisplayWallets {
-    private final FetchWallets fetchWallets;
     @Nullable
     private Subscription fetchWalletsSubscription;
 
+    private final WalletsStorage walletsStorage;
     private final TransactionStorage transactionStorage;
 
     @Inject
-    DisplayWallets(FetchWallets fetchWallets, TransactionStorage transactionStorage) {
-        this.fetchWallets = fetchWallets;
+    DisplayWallets(WalletsStorage walletsStorage, TransactionStorage transactionStorage) {
+        this.walletsStorage = walletsStorage;
         this.transactionStorage = transactionStorage;
     }
 
     void runFor(final WalletsViewContract view) {
-        fetchWalletsSubscription = fetchWallets.fetchWallets()
+        fetchWalletsSubscription = Single.fromCallable(walletsStorage::list)
                 .flatMapObservable(Observable::from)
                 .filter(wallet -> !TextUtils.isEmpty(wallet.name())) // TODO: 09.01.2017 Replace with non-android version
                 .map(wallet -> WalletViewModel.create(
