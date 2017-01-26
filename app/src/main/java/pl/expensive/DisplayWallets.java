@@ -3,8 +3,13 @@ package pl.expensive;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import java.math.BigDecimal;
+import java.util.Collection;
+
 import javax.inject.Inject;
 
+import pl.expensive.storage.Transaction;
+import pl.expensive.storage.TransactionStorage;
 import rx.Observable;
 import rx.Subscription;
 
@@ -13,16 +18,21 @@ class DisplayWallets {
     @Nullable
     private Subscription fetchWalletsSubscription;
 
+    private final TransactionStorage transactionStorage;
+
     @Inject
-    DisplayWallets(FetchWallets fetchWallets) {
+    DisplayWallets(FetchWallets fetchWallets, TransactionStorage transactionStorage) {
         this.fetchWallets = fetchWallets;
+        this.transactionStorage = transactionStorage;
     }
 
     void runFor(final WalletsViewContract view) {
         fetchWalletsSubscription = fetchWallets.fetchWallets()
                 .flatMapObservable(Observable::from)
                 .filter(wallet -> !TextUtils.isEmpty(wallet.name())) // TODO: 09.01.2017 Replace with non-android version
-                .map(wallet -> WalletViewModel.create(wallet.name()))
+                .map(wallet -> WalletViewModel.create(
+                        wallet.name(),
+                        calculateTotal(transactionStorage.select(wallet.uuid()))))
                 .toList()
                 .subscribe(walletViewModels -> {
                     if (walletViewModels.isEmpty()) {
@@ -41,5 +51,15 @@ class DisplayWallets {
 
     private boolean isDisposed() {
         return fetchWalletsSubscription == null || fetchWalletsSubscription.isUnsubscribed();
+    }
+
+    private static BigDecimal calculateTotal(Collection<Transaction> transactions) {
+        BigDecimal total = BigDecimal.ZERO;
+        if (!transactions.isEmpty()) {
+            for (Transaction transaction : transactions) {
+                total = total.add(transaction.amount());
+            }
+        }
+        return total;
     }
 }

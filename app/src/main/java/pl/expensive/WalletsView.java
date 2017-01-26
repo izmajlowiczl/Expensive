@@ -91,14 +91,19 @@ public class WalletsView extends RecyclerView implements WalletsViewContract {
 
     private static class WalletViewHolder extends RecyclerView.ViewHolder {
         private final TextView vName;
+        private final TextView vTotalAmount;
 
         WalletViewHolder(View itemView) {
             super(itemView);
             vName = (TextView) itemView.findViewById(R.id.wallet_name);
+            vTotalAmount = (TextView) itemView.findViewById(R.id.wallet_total);
         }
 
-        void bind(@NonNull WalletViewModel wallet) {
-            vName.setText(wallet.name());
+        void bind(@NonNull WalletViewModel viewModel) {
+            vName.setText(viewModel.name());
+
+            // TODO: 26.01.2017 Show currency
+            vTotalAmount.setText(viewModel.total().toString());
         }
     }
 }
