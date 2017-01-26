@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
+import pl.expensive.storage.Currency;
 import pl.expensive.storage.Transaction;
 import pl.expensive.storage.TransactionStorage;
 import pl.expensive.storage.WalletsStorage;
@@ -32,9 +33,20 @@ class DisplayWallets {
         fetchWalletsSubscription = Single.fromCallable(walletsStorage::list)
                 .flatMapObservable(Observable::from)
                 .filter(wallet -> !TextUtils.isEmpty(wallet.name())) // TODO: 09.01.2017 Replace with non-android version
-                .map(wallet -> WalletViewModel.create(
-                        wallet.name(),
-                        calculateTotal(transactionStorage.select(wallet.uuid()))))
+                .map(wallet -> {
+                    Currency maybeCurrency;
+                    Collection<Transaction> select = transactionStorage.select(wallet.uuid());
+                    if (select.isEmpty()) {
+                        maybeCurrency = null;
+                    } else {
+                        maybeCurrency = select.iterator().next().currency();
+                    }
+
+                    return WalletViewModel.create(
+                            wallet.name(),
+                            calculateTotal(select),
+                            maybeCurrency);
+                })
                 .toList()
                 .subscribe(walletViewModels -> {
                     if (walletViewModels.isEmpty()) {

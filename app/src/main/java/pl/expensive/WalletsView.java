@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import pl.expensive.storage.Currency;
+
 public class WalletsView extends RecyclerView implements WalletsViewContract {
     @Nullable // Lazy
     private WalletsAdapter walletsAdapter;
@@ -103,7 +105,8 @@ public class WalletsView extends RecyclerView implements WalletsViewContract {
             vName.setText(viewModel.name());
 
             // TODO: 26.01.2017 Show currency
-            vTotalAmount.setText(viewModel.total().toString());
+            Currency currency = viewModel.currency();
+            vTotalAmount.setText(currency.formatValue(viewModel.total()));
         }
     }
 }
