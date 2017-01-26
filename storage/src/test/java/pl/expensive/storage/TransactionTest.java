@@ -12,14 +12,14 @@ public class TransactionTest {
 
     @Test
     public void createDeposit() {
-        Transaction deposit = Transaction.deposit(CASH.uuid(), new BigDecimal("4.99"), EUR.code(), "");
+        Transaction deposit = Transaction.deposit(CASH.uuid(), new BigDecimal("4.99"), EUR, "");
 
         assertThat(deposit.amount()).isEqualTo(new BigDecimal("4.99"));
     }
 
     @Test
     public void createWithdrawal() {
-        Transaction deposit = Transaction.withdrawal(CASH.uuid(), new BigDecimal("4.99"), EUR.code(), "");
+        Transaction deposit = Transaction.withdrawal(CASH.uuid(), new BigDecimal("4.99"), EUR, "");
 
         assertThat(deposit.amount()).isEqualTo(new BigDecimal("-4.99"));
     }

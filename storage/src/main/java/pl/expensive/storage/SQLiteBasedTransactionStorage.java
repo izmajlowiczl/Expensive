@@ -21,8 +21,8 @@ public class SQLiteBasedTransactionStorage implements TransactionStorage {
     @Override
     public Collection<Transaction> select(UUID wallet) {
         SQLiteDatabase readableDatabase = database.getReadableDatabase();
-        String[] columns = {"uuid", "wallet_uuid", "amount", "currency", "date", "description"};
-        Cursor cursor = readableDatabase.query("tbl_transaction", columns, "wallet_uuid=?", new String[]{wallet.toString()}, null, null, null);
+        String[] columns = {"t.uuid", "t.wallet_uuid", "t.amount", "t.currency", "t.date", "t.description", "c.format"};
+        Cursor cursor = readableDatabase.query("tbl_transaction t , " + " tbl_currency c", columns, "wallet_uuid=? AND t.currency=c.code", new String[]{wallet.toString()}, null, null, null);
 
         Collection<Transaction> result = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -53,7 +53,7 @@ public class SQLiteBasedTransactionStorage implements TransactionStorage {
         cv.put("uuid", transaction.uuid().toString());
         cv.put("wallet_uuid", transaction.wallet().toString());
         cv.put("amount", transaction.amount().toString());
-        cv.put("currency", transaction.currencyCode());
+        cv.put("currency", transaction.currency().code());
         cv.put("date", transaction.date());
         cv.put("description", transaction.description());
         return cv;
@@ -61,11 +61,12 @@ public class SQLiteBasedTransactionStorage implements TransactionStorage {
 
     @NonNull
     private Transaction from(Cursor cursor) {
+        Currency currency = Currency.create(cursor.getString(3), cursor.getString(6));
         return Transaction.create(
                 UUID.fromString(cursor.getString(0)),
                 UUID.fromString(cursor.getString(1)),
                 new BigDecimal(cursor.getString(2)),
-                cursor.getString(3),
+                currency,
                 cursor.getLong(4),
                 cursor.getString(5));
     }

@@ -30,7 +30,7 @@ public class TransactionStorageTest {
 
     @Test
     public void storeSingleTransaction() {
-        Transaction beer = Transaction.create(UUID.randomUUID(), CASH.uuid(), new BigDecimal("4.99"), EUR.code(), new Date().getTime(), "Beer");
+        Transaction beer = Transaction.create(UUID.randomUUID(), CASH.uuid(), new BigDecimal("4.99"), EUR, new Date().getTime(), "Beer");
 
         storage.insert(beer);
 
@@ -40,7 +40,7 @@ public class TransactionStorageTest {
 
     @Test
     public void selectTransaction() {
-        Transaction beer = Transaction.create(UUID.randomUUID(), CASH.uuid(), new BigDecimal("4.99"), PLN.code(), new Date().getTime(), "Beer");
+        Transaction beer = Transaction.create(UUID.randomUUID(), CASH.uuid(), new BigDecimal("4.99"), PLN, new Date().getTime(), "Beer");
         storage.insert(beer);
 
         assertThat(storage.select(CASH.uuid()))
@@ -54,14 +54,14 @@ public class TransactionStorageTest {
 
     @Test(expected = IllegalStateException.class)
     public void withoutStoredWallet() {
-        Transaction beer = Transaction.create(UUID.randomUUID(), UUID.randomUUID(), new BigDecimal("4.99"), EUR.code(), new Date().getTime(), "Beer");
+        Transaction beer = Transaction.create(UUID.randomUUID(), UUID.randomUUID(), new BigDecimal("4.99"), EUR, new Date().getTime(), "Beer");
 
         storage.insert(beer);
     }
 
     @Test(expected = IllegalStateException.class)
     public void withoutStoredCurrency() {
-        Transaction beer = Transaction.create(UUID.randomUUID(), CASH.uuid(), new BigDecimal("4.99"), "NOT_EXISTING_CURRENCY", new Date().getTime(), "Beer");
+        Transaction beer = Transaction.create(UUID.randomUUID(), CASH.uuid(), new BigDecimal("4.99"), Currency.create("NOT_EXISTING_CURRENCY", "#.###"), new Date().getTime(), "Beer");
 
         storage.insert(beer);
     }

@@ -17,6 +17,7 @@ import pl.expensive.storage.WalletsStorage;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static pl.expensive.storage._Seeds.EUR;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DisplayWalletsTest {
@@ -46,7 +47,7 @@ public class DisplayWalletsTest {
     public void containTransactions() {
         when(storage.list()).thenReturn(asList(CASH, CREDIT_CARD));
         when(transactionStorage.select(CASH.uuid())).thenReturn(
-                asList(Transaction.deposit(CASH.uuid(), BigDecimal.TEN, "EUR", "")));
+                asList(Transaction.deposit(CASH.uuid(), BigDecimal.TEN, EUR, "")));
         FetchWallets fetchWallets = new FetchWallets(storage);
 
         DisplayWallets displayWallets = new DisplayWallets(fetchWallets, transactionStorage);

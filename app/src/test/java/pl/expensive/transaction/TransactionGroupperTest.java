@@ -15,6 +15,7 @@ import java.util.UUID;
 import pl.expensive.storage.Transaction;
 
 import static com.google.common.truth.Truth.assertThat;
+import static pl.expensive.storage._Seeds.EUR;
 
 public class TransactionGroupperTest {
     private static final LocalDateTime SOME_DAY = LocalDateTime.of(2001, 10, 19, 10, 20, 0);
@@ -56,6 +57,6 @@ public class TransactionGroupperTest {
 
     @NonNull
     private Transaction transactionAt(LocalDateTime today) {
-        return Transaction.create(UUID.randomUUID(), UUID.randomUUID(), BigDecimal.TEN, "EUR", today, "");
+        return Transaction.create(UUID.randomUUID(), UUID.randomUUID(), BigDecimal.TEN, EUR, today, "");
     }
 }
