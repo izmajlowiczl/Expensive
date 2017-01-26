@@ -4,6 +4,7 @@ import com.google.auto.value.AutoValue;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 @AutoValue
 public abstract class Currency {
@@ -16,5 +17,11 @@ public abstract class Currency {
 
     public String formatValue(BigDecimal money) {
         return new DecimalFormat(format()).format(money);
+    }
+
+    public String formatValue(Locale locale, BigDecimal money) {
+        DecimalFormat numberFormat = (DecimalFormat) DecimalFormat.getInstance(locale);
+        numberFormat.applyPattern(format());
+        return numberFormat.format(money);
     }
 }
