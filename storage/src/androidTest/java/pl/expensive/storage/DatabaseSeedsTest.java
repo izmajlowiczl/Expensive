@@ -31,7 +31,7 @@ public class DatabaseSeedsTest {
         }
 
         assertThat(cursor.getString(0))
-                .isEqualTo("cash");
+                .isEqualTo("Cash");
     }
 
     @Test

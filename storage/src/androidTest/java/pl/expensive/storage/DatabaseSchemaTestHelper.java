@@ -48,11 +48,6 @@ class DatabaseSchemaTestHelper {
         return String.format("SELECT name FROM %s", table);
     }
 
-    static String storeWalletSql(Wallet wallet) {
-        return String.format("INSERT INTO tbl_wallet VALUES ('%s', '%s');",
-                wallet.uuid().toString(), wallet.name());
-    }
-
     // Currencies
 
     public static void assertCurrencyCodeStored(SQLiteDatabase db, String code) {

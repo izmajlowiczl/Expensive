@@ -14,7 +14,6 @@ import java.util.UUID;
 import static com.google.common.truth.Truth.assertThat;
 import static pl.expensive.storage._Seeds.CASH;
 import static pl.expensive.storage._Seeds.EUR;
-import static pl.expensive.storage._Seeds.PLN;
 
 @RunWith(AndroidJUnit4.class)
 public class TransactionStorageTest {
@@ -30,7 +29,7 @@ public class TransactionStorageTest {
 
     @Test
     public void storeSingleTransaction() {
-        Transaction beer = Transaction.create(UUID.randomUUID(), CASH.uuid(), new BigDecimal("4.99"), EUR, new Date().getTime(), "Beer");
+        Transaction beer = Transaction.create(UUID.randomUUID(), CASH.uuid(), new BigDecimal("4.99"), CASH.currency(), new Date().getTime(), "Beer");
 
         storage.insert(beer);
 
@@ -40,7 +39,7 @@ public class TransactionStorageTest {
 
     @Test
     public void selectTransaction() {
-        Transaction beer = Transaction.create(UUID.randomUUID(), CASH.uuid(), new BigDecimal("4.99"), PLN, new Date().getTime(), "Beer");
+        Transaction beer = Transaction.create(UUID.randomUUID(), CASH.uuid(), new BigDecimal("4.99"), CASH.currency(), new Date().getTime(), "Beer");
         storage.insert(beer);
 
         assertThat(storage.select(CASH.uuid()))

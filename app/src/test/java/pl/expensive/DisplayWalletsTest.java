@@ -14,6 +14,7 @@ import pl.expensive.storage.Transaction;
 import pl.expensive.storage.TransactionStorage;
 import pl.expensive.storage.Wallet;
 import pl.expensive.storage.WalletsStorage;
+import pl.expensive.storage._Seeds;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.verify;
@@ -22,8 +23,8 @@ import static pl.expensive.storage._Seeds.EUR;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DisplayWalletsTest {
-    private static final Wallet CASH = Wallet.create(UUID.randomUUID(), "Cash");
-    private static final Wallet CREDIT_CARD = Wallet.create(UUID.randomUUID(), "Credit Card");
+    private static final Wallet CASH = _Seeds.CASH;
+    private static final Wallet CREDIT_CARD = Wallet.create(UUID.randomUUID(), "Credit Card", EUR);
 
     @Mock
     WalletsViewContract view;
@@ -39,8 +40,9 @@ public class DisplayWalletsTest {
         DisplayWallets displayWallets = new DisplayWallets(walletsStorage, transactionStorage);
         displayWallets.runFor(view);
 
-        verify(view).showWallets(
-                asList(WalletViewModel.create("Cash"), WalletViewModel.create("Credit Card")));
+        verify(view).showWallets(asList(
+                WalletViewModel.create("Cash", Collections.emptyList(), EUR),
+                WalletViewModel.create("Credit Card", Collections.emptyList(), EUR)));
     }
 
     @Test
@@ -55,6 +57,18 @@ public class DisplayWalletsTest {
         verify(view).showWallets(asList(
                 WalletViewModel.create("Cash", transactions, EUR),
                 WalletViewModel.create("Credit Card", Collections.emptyList(), EUR)));
+    }
+
+    @Test
+    public void usePrimeCurrencyWhenNoTransactions() {
+        when(walletsStorage.list()).thenReturn(asList(CASH));
+        when(transactionStorage.select(CASH.uuid())).thenReturn(Collections.emptyList());
+
+        DisplayWallets displayWallets = new DisplayWallets(walletsStorage, transactionStorage);
+        displayWallets.runFor(view);
+
+        verify(view).showWallets(asList(
+                WalletViewModel.create("Cash", Collections.emptyList(), EUR)));
     }
 
     @Test

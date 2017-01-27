@@ -1,6 +1,5 @@
 package pl.expensive.storage;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -11,18 +10,16 @@ import java.util.Collection;
 
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.UUID.randomUUID;
-import static pl.expensive.storage.DatabaseSchemaTestHelper.storeWalletSql;
 import static pl.expensive.storage._Seeds.CASH;
+import static pl.expensive.storage._Seeds.EUR;
 
 @RunWith(AndroidJUnit4.class)
 public class ListWalletsStorageTest {
     private WalletsStorage storage;
-    private SQLiteDatabase db;
 
     @Before
     public void setUp() {
         Database inMemDatabase = Injector.provideDatabase();
-        db = inMemDatabase.getWritableDatabase();
         storage = new SQLiteBasedWalletsStorage(inMemDatabase);
     }
 
@@ -36,10 +33,10 @@ public class ListWalletsStorageTest {
 
     @Test
     public void listMultipleWallets() {
-        Wallet bankWallet = Wallet.create(randomUUID(), "bank");
-        Wallet ccWallet = Wallet.create(randomUUID(), "credit card");
-        db.execSQL(storeWalletSql(bankWallet));
-        db.execSQL(storeWalletSql(ccWallet));
+        Wallet bankWallet = Wallet.create(randomUUID(), "bank", EUR);
+        Wallet ccWallet = Wallet.create(randomUUID(), "credit card", EUR);
+        storage.insert(bankWallet);
+        storage.insert(ccWallet);
 
         Collection<Wallet> wallets = storage.list();
 

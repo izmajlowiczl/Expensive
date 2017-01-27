@@ -11,6 +11,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static java.util.UUID.randomUUID;
 import static pl.expensive.storage.DatabaseSchemaTestHelper.getStoredWalletNames;
 import static pl.expensive.storage._Seeds.CASH;
+import static pl.expensive.storage._Seeds.PLN;
 
 @RunWith(AndroidJUnit4.class)
 public class InsertWalletStorageTest {
@@ -26,7 +27,7 @@ public class InsertWalletStorageTest {
 
     @Test
     public void storeSingleWallet() {
-        Wallet bankWallet = Wallet.create(randomUUID(), "bank");
+        Wallet bankWallet = Wallet.create(randomUUID(), "bank", PLN);
         storage.insert(bankWallet);
 
         assertThat(getStoredWalletNames(db))
@@ -35,8 +36,8 @@ public class InsertWalletStorageTest {
 
     @Test
     public void storeMultipleWallets() {
-        storage.insert(Wallet.create(randomUUID(), "bank"));
-        storage.insert(Wallet.create(randomUUID(), "credit card"));
+        storage.insert(Wallet.create(randomUUID(), "bank", PLN));
+        storage.insert(Wallet.create(randomUUID(), "credit card", PLN));
 
         assertThat(getStoredWalletNames(db))
                 .containsExactly(CASH.name(), "bank", "credit card");
@@ -44,7 +45,7 @@ public class InsertWalletStorageTest {
 
     @Test(expected = IllegalStateException.class)
     public void storeDuplicates() {
-        Wallet bankWallet = Wallet.create(randomUUID(), "bank");
+        Wallet bankWallet = Wallet.create(randomUUID(), "bank", PLN);
         storage.insert(bankWallet);
         storage.insert(bankWallet);
     }

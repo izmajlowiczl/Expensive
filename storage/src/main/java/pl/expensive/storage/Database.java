@@ -32,14 +32,14 @@ class Database extends SQLiteOpenHelper {
     }
 
     private static void createSchema(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE tbl_wallet (uuid TEXT NOT NULL, name TEXT NOT NULL UNIQUE, PRIMARY KEY(uuid));");
+        db.execSQL("CREATE TABLE tbl_wallet (uuid TEXT NOT NULL, name TEXT NOT NULL UNIQUE, currency TEXT NOT NULL, PRIMARY KEY(uuid), FOREIGN KEY(currency) REFERENCES tbl_currency(code));");
         db.execSQL("CREATE TABLE tbl_currency (code TEXT NOT NULL, format TEXT NOT NULL, PRIMARY KEY(code));");
         db.execSQL("CREATE TABLE tbl_transaction (uuid TEXT NOT NULL, amount TEXT NOT NULL, currency TEXT NOT NULL, date INTEGER NOT NULL, description TEXT, wallet_uuid TEXT NOT NULL, PRIMARY KEY(uuid), FOREIGN KEY(wallet_uuid) REFERENCES tbl_wallet(uuid), FOREIGN KEY(currency) REFERENCES tbl_currency(code));");
     }
 
     private static void applySeeds(SQLiteDatabase db) {
         // Cash wallet
-        db.execSQL(String.format("INSERT INTO tbl_wallet VALUES('%s', '%s');", CASH.uuid(), CASH.name()));
+        db.execSQL(String.format("INSERT INTO tbl_wallet VALUES('%s', '%s', '%s');", CASH.uuid(), CASH.name(), EUR.code()));
 
         // Currencies
         storeCurrency(db, EUR);

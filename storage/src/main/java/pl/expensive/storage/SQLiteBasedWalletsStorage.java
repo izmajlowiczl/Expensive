@@ -11,10 +11,6 @@ import java.util.Collection;
 import java.util.UUID;
 
 class SQLiteBasedWalletsStorage implements WalletsStorage {
-    private static final String TABLE = "tbl_wallet";
-    private static final String COL_UUID = "uuid";
-    private static final String COL_NAME = "name";
-
     private final Database database;
 
     SQLiteBasedWalletsStorage(Database database) {
@@ -25,7 +21,8 @@ class SQLiteBasedWalletsStorage implements WalletsStorage {
     @Override
     public Collection<Wallet> list() {
         SQLiteDatabase readableDatabase = database.getReadableDatabase();
-        Cursor cursor = readableDatabase.query(TABLE, null, null, null, null, null, null);
+        String[] columns = {"w.uuid", "w.name", "c.code ", "c.format"};
+        Cursor cursor = readableDatabase.query("tbl_wallet w, " + " tbl_currency c", columns, "w.currency=c.code", null, null, null, null);
 
         Collection<Wallet> wallets = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -40,22 +37,25 @@ class SQLiteBasedWalletsStorage implements WalletsStorage {
     public void insert(@NonNull Wallet wallet) {
         SQLiteDatabase writableDatabase = database.getWritableDatabase();
         try {
-            writableDatabase.insertOrThrow(TABLE, null, toContentValues(wallet));
+            writableDatabase.insertOrThrow("tbl_wallet", null, toContentValues(wallet));
         } catch (SQLiteConstraintException ex) {
             throw new IllegalStateException("Trying to store wallet, which already exist. Wallet -> " + wallet);
         }
     }
 
     private static Wallet fromCursor(Cursor cursor) {
+        Currency currency = Currency.create(cursor.getString(2), cursor.getString(3));
         return Wallet.create(
-                UUID.fromString(cursor.getString(cursor.getColumnIndexOrThrow(COL_UUID))),
-                cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME)));
+                UUID.fromString(cursor.getString(0)),
+                cursor.getString(1),
+                currency);
     }
 
     private static ContentValues toContentValues(Wallet wallet) {
         ContentValues cv = new ContentValues();
-        cv.put(COL_UUID, wallet.uuid().toString());
-        cv.put(COL_NAME, wallet.name());
+        cv.put("uuid", wallet.uuid().toString());
+        cv.put("name", wallet.name());
+        cv.put("currency", wallet.currency().code());
         return cv;
     }
 }

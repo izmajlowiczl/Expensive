@@ -19,7 +19,7 @@ public class DatabaseSchemaTest {
         List<String> columns = getTableColumns(database.getReadableDatabase(), "tbl_wallet");
 
         assertThat(columns)
-                .containsExactly("uuid", "name");
+                .containsExactly("uuid", "name", "currency");
     }
 
     @Test
