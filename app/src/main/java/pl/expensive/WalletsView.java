@@ -2,7 +2,6 @@ package pl.expensive;
 
 import android.content.Context;
 import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import pl.expensive.storage.Currency;
+import pl.expensive.core.MoneyFormat;
 
 public class WalletsView extends RecyclerView implements WalletsViewContract {
     private WalletsAdapter walletsAdapter;
@@ -98,17 +97,9 @@ public class WalletsView extends RecyclerView implements WalletsViewContract {
             vTotalAmount = (TextView) itemView.findViewById(R.id.wallet_total);
         }
 
-        void bind(@NonNull WalletViewModel viewModel) {
+        void bind(WalletViewModel viewModel) {
             vName.setText(viewModel.name());
-
-            // TODO: 27.01.2017 Currency won't be nullable after adding primary-currency on wallet level
-            Currency currency = viewModel.currency();
-            if (currency != null) {
-                vTotalAmount.setText(currency.formatValue(viewModel.calculateTotal()));
-            } else {
-                vTotalAmount.setText(String.valueOf(viewModel.calculateTotal()));
-
-            }
+            vTotalAmount.setText(MoneyFormat.formatValue(viewModel.calculateTotal(), viewModel.currency()));
         }
     }
 }
