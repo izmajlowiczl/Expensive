@@ -1,3 +1,3 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="pl.expensive.storage">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="pl.expensive.walletsStorage">
     <application />
 </manifest>

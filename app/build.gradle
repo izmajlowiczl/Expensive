@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
@@ -30,9 +31,8 @@ android {
         pickFirst  'META-INF/rxjava.properties'
     }
 
-    compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
     }
 }
 
@@ -75,4 +75,8 @@ dependencies {
     testCompile "com.google.guava:guava:$guavaVersion"
     // replace Android ThreeTenBP with regular .jar to avoid using context at unit tests
     testCompile "org.threeten:threetenbp:$threeTenVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
