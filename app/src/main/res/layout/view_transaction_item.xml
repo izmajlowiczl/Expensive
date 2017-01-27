@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/transaction_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="16dp"
+        android:textAppearance="?android:textAppearanceMedium"
+        tools:text="11:23" />
+
+    <TextView
+        android:id="@+id/transaction_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="8dp"
+        android:layout_toLeftOf="@id/transaction_time"
+        android:paddingBottom="8dp"
+        android:paddingTop="16dp"
+        android:textAppearance="?android:textAppearanceMedium"
+        tools:text="-12.00 Eur" />
+
+
+    <TextView
+        android:id="@+id/transaction_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/transaction_amount"
+        android:layout_marginLeft="8dp"
+        android:textAppearance="?android:textAppearanceSmall"
+        tools:text="120.33 Eur" />
+</RelativeLayout>

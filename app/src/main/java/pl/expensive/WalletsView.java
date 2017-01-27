@@ -3,7 +3,6 @@ package pl.expensive;
 import android.content.Context;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -20,34 +19,34 @@ import java.util.List;
 import pl.expensive.storage.Currency;
 
 public class WalletsView extends RecyclerView implements WalletsViewContract {
-    @Nullable // Lazy
     private WalletsAdapter walletsAdapter;
 
     public WalletsView(Context context) {
         super(context);
+        init(context);
     }
 
     public WalletsView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context);
     }
 
     public WalletsView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    private void init(Context context) {
+        setLayoutManager(new LinearLayoutManager(context));
+        setVisibility(VISIBLE);
+        walletsAdapter = new WalletsAdapter();
+        setAdapter(walletsAdapter);
     }
 
     @Override
     @MainThread
     public void showWallets(Collection<WalletViewModel> storedWallets) {
-        // Lazy load adapter on the first usage
-        if (walletsAdapter == null) {
-            walletsAdapter = new WalletsAdapter();
-            setAdapter(walletsAdapter);
-        }
-
         walletsAdapter.bind(storedWallets);
-
-        setLayoutManager(new LinearLayoutManager(getContext()));
-        setVisibility(VISIBLE);
     }
 
     @Override
@@ -83,8 +82,6 @@ public class WalletsView extends RecyclerView implements WalletsViewContract {
         }
 
         void bind(Collection<WalletViewModel> newWallets) {
-            // TODO: 10.09.2016 Measure if making diff makes sense
-
             wallets.clear();
             wallets.addAll(newWallets);
             notifyDataSetChanged();
@@ -104,9 +101,14 @@ public class WalletsView extends RecyclerView implements WalletsViewContract {
         void bind(@NonNull WalletViewModel viewModel) {
             vName.setText(viewModel.name());
 
-            // TODO: 26.01.2017 Show currency
+            // TODO: 27.01.2017 Currency won't be nullable after adding primary-currency on wallet level
             Currency currency = viewModel.currency();
-            vTotalAmount.setText(currency.formatValue(viewModel.total()));
+            if (currency != null) {
+                vTotalAmount.setText(currency.formatValue(viewModel.calculateTotal()));
+            } else {
+                vTotalAmount.setText(String.valueOf(viewModel.calculateTotal()));
+
+            }
         }
     }
 }

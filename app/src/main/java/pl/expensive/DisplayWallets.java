@@ -2,9 +2,9 @@ package pl.expensive;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
-import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -35,7 +35,7 @@ class DisplayWallets {
                 .filter(wallet -> !TextUtils.isEmpty(wallet.name())) // TODO: 09.01.2017 Replace with non-android version
                 .map(wallet -> {
                     Currency maybeCurrency;
-                    Collection<Transaction> select = transactionStorage.select(wallet.uuid());
+                    List<Transaction> select = (List<Transaction>) transactionStorage.select(wallet.uuid());
                     if (select.isEmpty()) {
                         maybeCurrency = null;
                     } else {
@@ -44,7 +44,7 @@ class DisplayWallets {
 
                     return WalletViewModel.create(
                             wallet.name(),
-                            calculateTotal(select),
+                            select,
                             maybeCurrency);
                 })
                 .toList()
@@ -54,7 +54,10 @@ class DisplayWallets {
                     } else {
                         view.showWallets(walletViewModels);
                     }
-                }, err -> view.showFetchError());
+                }, err -> {
+                    Log.e("XXX", err.toString());
+                    view.showFetchError();
+                });
     }
 
     void dispose() {
@@ -65,15 +68,5 @@ class DisplayWallets {
 
     private boolean isDisposed() {
         return fetchWalletsSubscription == null || fetchWalletsSubscription.isUnsubscribed();
-    }
-
-    private static BigDecimal calculateTotal(Collection<Transaction> transactions) {
-        BigDecimal total = BigDecimal.ZERO;
-        if (!transactions.isEmpty()) {
-            for (Transaction transaction : transactions) {
-                total = total.add(transaction.amount());
-            }
-        }
-        return total;
     }
 }

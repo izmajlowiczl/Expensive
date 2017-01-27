@@ -7,6 +7,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import pl.expensive.storage.Transaction;
@@ -45,15 +46,15 @@ public class DisplayWalletsTest {
     @Test
     public void containTransactions() {
         when(walletsStorage.list()).thenReturn(asList(CASH, CREDIT_CARD));
-        when(transactionStorage.select(CASH.uuid())).thenReturn(
-                asList(Transaction.deposit(CASH.uuid(), BigDecimal.TEN, EUR, "")));
+        List<Transaction> transactions = asList(Transaction.deposit(CASH.uuid(), BigDecimal.TEN, EUR, ""));
+        when(transactionStorage.select(CASH.uuid())).thenReturn(transactions);
 
         DisplayWallets displayWallets = new DisplayWallets(walletsStorage, transactionStorage);
         displayWallets.runFor(view);
 
         verify(view).showWallets(asList(
-                WalletViewModel.create("Cash", BigDecimal.TEN),
-                WalletViewModel.create("Credit Card", BigDecimal.ZERO)));
+                WalletViewModel.create("Cash", transactions, EUR),
+                WalletViewModel.create("Credit Card", Collections.emptyList(), EUR)));
     }
 
     @Test
