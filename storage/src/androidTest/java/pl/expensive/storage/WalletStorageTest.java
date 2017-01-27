@@ -12,9 +12,10 @@ import static com.google.common.truth.Truth.assertThat;
 import static java.util.UUID.randomUUID;
 import static pl.expensive.storage._Seeds.CASH;
 import static pl.expensive.storage._Seeds.EUR;
+import static pl.expensive.storage._Seeds.PLN;
 
 @RunWith(AndroidJUnit4.class)
-public class ListWalletsStorageTest {
+public class WalletStorageTest {
     private WalletsStorage storage;
 
     @Before
@@ -42,5 +43,32 @@ public class ListWalletsStorageTest {
 
         assertThat(wallets)
                 .containsExactly(CASH, bankWallet, ccWallet);
+    }
+
+    @Test
+    public void storeSingleWallet() {
+        Wallet bankWallet = Wallet.create(randomUUID(), "bank", PLN);
+        storage.insert(bankWallet);
+
+        assertThat(storage.list())
+                .containsExactly(CASH, bankWallet);
+    }
+
+    @Test
+    public void storeMultipleWallets() {
+        Wallet bankWallet = Wallet.create(randomUUID(), "bank", PLN);
+        Wallet ccWallet = Wallet.create(randomUUID(), "credit card", PLN);
+        storage.insert(bankWallet);
+        storage.insert(ccWallet);
+
+        assertThat(storage.list())
+                .containsExactly(CASH, bankWallet, ccWallet );
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void storeDuplicates() {
+        Wallet bankWallet = Wallet.create(randomUUID(), "bank", PLN);
+        storage.insert(bankWallet);
+        storage.insert(bankWallet);
     }
 }
