@@ -6,8 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
+import pl.expensive.storage.TransactionStorage;
+import pl.expensive.storage.WalletsStorage;
+
 public class WalletsActivity extends AppCompatActivity {
     @Inject
+    WalletsStorage walletsStorage;
+    @Inject
+    TransactionStorage transactionStorage;
+
     DisplayWallets fetchWallets;
     private WalletsViewContract vWallets;
 
@@ -18,6 +25,8 @@ public class WalletsActivity extends AppCompatActivity {
 
         Injector.app().inject(this);
         vWallets = (WalletsView) findViewById(R.id.wallets);
+
+        fetchWallets = new DisplayWallets(walletsStorage, transactionStorage);
     }
 
     @Override
@@ -30,9 +39,4 @@ public class WalletsActivity extends AppCompatActivity {
         fetchWallets.runFor(vWallets);
     }
 
-    @Override
-    protected void onStop() {
-        fetchWallets.dispose();
-        super.onStop();
-    }
 }

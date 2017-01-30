@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import pl.expensive.core.MoneyFormat;
-
 public class WalletsView extends RecyclerView implements WalletsViewContract {
     private WalletsAdapter walletsAdapter;
 
@@ -98,8 +96,8 @@ public class WalletsView extends RecyclerView implements WalletsViewContract {
         }
 
         void bind(WalletViewModel viewModel) {
-            vName.setText(viewModel.name());
-            vTotalAmount.setText(MoneyFormat.formatValue(viewModel.calculateTotal(), viewModel.currency()));
+            vName.setText(viewModel.getName());
+            vTotalAmount.setText(viewModel.formattedTotal());
         }
     }
 }
