@@ -10,8 +10,8 @@ data class WalletViewModel(val name: String,
                            val transactions: List<Transaction>,
                            val currency: Currency) {
 
-    fun formattedTotal() : String {
-        return formatValue(Locale.getDefault(), calculateTotal(), currency);
+    fun formattedTotal(): String {
+        return formatValue(Locale.getDefault(), calculateTotal(), currency)
     }
 
     fun calculateTotal(): BigDecimal {
