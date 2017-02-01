@@ -7,8 +7,8 @@ import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage.Wallet
 import pl.expensive.storage.WalletsStorage
 
-internal open class DisplayWallets(private val walletsStorage: WalletsStorage,
-                                   private val transactionStorage: TransactionStorage) {
+internal open class DisplayWallets(private val walletsStorage: WalletsStorage = Injector.app().wallets(),
+                                   private val transactionStorage: TransactionStorage = Injector.app().transactions()) {
     fun runFor(view: WalletsViewContract) {
         view.display { fetchWallets() }
     }

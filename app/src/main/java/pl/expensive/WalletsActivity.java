@@ -4,18 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import javax.inject.Inject;
-
-import pl.expensive.storage.TransactionStorage;
-import pl.expensive.storage.WalletsStorage;
-
 public class WalletsActivity extends AppCompatActivity {
-    @Inject
-    WalletsStorage walletsStorage;
-    @Inject
-    TransactionStorage transactionStorage;
-
-    DisplayWallets fetchWallets;
+    private DisplayWallets fetchWallets;
     private WalletsViewContract vWallets;
 
     @Override
@@ -26,7 +16,7 @@ public class WalletsActivity extends AppCompatActivity {
         Injector.app().inject(this);
         vWallets = (WalletsView) findViewById(R.id.wallets);
 
-        fetchWallets = new DisplayWallets(walletsStorage, transactionStorage);
+        fetchWallets = Injector.app().displayWallets();
     }
 
     @Override
