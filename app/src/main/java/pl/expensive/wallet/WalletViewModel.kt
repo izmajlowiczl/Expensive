@@ -10,17 +10,17 @@ data class WalletViewModel(val name: String,
                            val transactions: List<Transaction>,
                            val currency: Currency) {
 
-    fun formattedTotal(): String {
-        return formatValue(Locale.getDefault(), calculateTotal(), currency)
+    fun formattedTotal(locale: Locale = Locale.getDefault()): String {
+        return formatValue(locale, calculateTotal(), currency)
     }
 
-    fun calculateTotal(): BigDecimal {
+    private fun calculateTotal(): BigDecimal {
         var total = BigDecimal.ZERO
         transactions.map { total += it.amount }
         return total
     }
 
-    fun formatValue(locale: Locale, money: BigDecimal, currency: Currency): String {
+    private fun formatValue(locale: Locale, money: BigDecimal, currency: Currency): String {
         val numberFormat = DecimalFormat.getInstance(locale) as DecimalFormat
         numberFormat.applyPattern(currency.format)
         return numberFormat.format(money)

@@ -2,7 +2,6 @@ package pl.expensive.wallet
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
-import pl.expensive.wallet.WalletViewModel
 import pl.expensive.storage.Transaction
 import pl.expensive.storage._Seeds.CASH
 import pl.expensive.storage._Seeds.CHF
@@ -11,6 +10,7 @@ import pl.expensive.storage._Seeds.EUR
 import pl.expensive.storage._Seeds.GBP
 import pl.expensive.storage._Seeds.PLN
 import java.math.BigDecimal
+import java.util.*
 
 class WalletViewModelTest {
     @Test
@@ -26,7 +26,7 @@ class WalletViewModelTest {
                             listOf(Transaction.deposit(CASH.uuid, BigDecimal("9.99"), it.value, "")),
                             it.value)
 
-                    assertThat(it.key).isEqualTo(viewModel.formattedTotal())
+                    assertThat(it.key).isEqualTo(viewModel.formattedTotal(Locale.GERMANY))
                 }
     }
 }
