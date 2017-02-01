@@ -45,6 +45,20 @@ class TransactionGroupperTest {
         assertThat(group[SOME_DAY.plusDays(1)]).containsExactly(t2)
     }
 
+    @Test
+    fun multipleTransactionsForDifferentDays() {
+        val d1t1 = transactionAt(SOME_DAY)
+        val d1t2 = transactionAt(SOME_DAY)
+        val d2t1 = transactionAt(SOME_DAY.plusDays(1))
+        val d2t2 = transactionAt(SOME_DAY.plusDays(1))
+        val transactions = listOf(d1t1, d1t2, d2t1, d2t2)
+
+        val group = TransactionGrouper.group(transactions)
+        assertThat(group.size).isEqualTo(2)
+        assertThat(group[SOME_DAY]).containsExactly(d1t1, d1t2)
+        assertThat(group[SOME_DAY.plusDays(1)]).containsExactly(d2t1, d2t2)
+    }
+
     private fun transactionAt(today: LocalDateTime): Transaction {
         return Transaction.create(UUID.randomUUID(), UUID.randomUUID(), BigDecimal.TEN, EUR, today, "")
     }

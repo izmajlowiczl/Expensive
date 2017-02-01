@@ -14,7 +14,7 @@ data class Transaction(val uuid: UUID,
                        val date: Long, // time in millis
                        val description: String) {
 
-    fun toLocalDate(): LocalDateTime {
+    fun toLocalDateTime(): LocalDateTime {
         return Instant.ofEpochMilli(date)
                 .atZone(ZoneId.of("UTC"))
                 .toLocalDateTime()
