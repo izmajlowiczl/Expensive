@@ -1,4 +1,4 @@
-package pl.expensive;
+package pl.expensive.wallet;
 
 import android.support.annotation.MainThread;
 

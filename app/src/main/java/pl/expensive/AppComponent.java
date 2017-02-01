@@ -6,6 +6,8 @@ import dagger.Component;
 import pl.expensive.storage.StorageModule;
 import pl.expensive.storage.TransactionStorage;
 import pl.expensive.storage.WalletsStorage;
+import pl.expensive.wallet.DisplayWallets;
+import pl.expensive.wallet.WalletsActivity;
 
 @Singleton
 @Component(modules = {StorageModule.class, AppModule.class})

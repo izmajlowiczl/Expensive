@@ -1,8 +1,10 @@
-package pl.expensive
+package pl.expensive.wallet
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_wallets.*
+import pl.expensive.Injector
+import pl.expensive.R
 
 class WalletsActivity : AppCompatActivity() {
     private lateinit var fetchWallets: DisplayWallets

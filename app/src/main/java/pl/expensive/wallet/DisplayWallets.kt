@@ -1,7 +1,8 @@
-package pl.expensive
+package pl.expensive.wallet
 
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import pl.expensive.Injector
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage.Wallet

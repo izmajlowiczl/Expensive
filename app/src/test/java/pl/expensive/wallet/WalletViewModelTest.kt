@@ -1,7 +1,8 @@
-package pl.expensive
+package pl.expensive.wallet
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
+import pl.expensive.wallet.WalletViewModel
 import pl.expensive.storage.Transaction
 import pl.expensive.storage._Seeds.CASH
 import pl.expensive.storage._Seeds.CHF

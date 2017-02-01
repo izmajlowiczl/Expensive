@@ -1,4 +1,4 @@
-package pl.expensive
+package pl.expensive.wallet
 
 import pl.expensive.storage.Currency
 import pl.expensive.storage.Transaction

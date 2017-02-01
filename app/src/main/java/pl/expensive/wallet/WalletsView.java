@@ -1,4 +1,4 @@
-package pl.expensive;
+package pl.expensive.wallet;
 
 import android.content.Context;
 import android.support.annotation.MainThread;
@@ -8,12 +8,13 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import pl.expensive.R;
 
 public class WalletsView extends RecyclerView implements WalletsViewContract {
     private WalletsAdapter walletsAdapter;
@@ -82,22 +83,6 @@ public class WalletsView extends RecyclerView implements WalletsViewContract {
             wallets.clear();
             wallets.addAll(newWallets);
             notifyDataSetChanged();
-        }
-    }
-
-    private static class WalletViewHolder extends RecyclerView.ViewHolder {
-        private final TextView vName;
-        private final TextView vTotalAmount;
-
-        WalletViewHolder(View itemView) {
-            super(itemView);
-            vName = (TextView) itemView.findViewById(R.id.wallet_name);
-            vTotalAmount = (TextView) itemView.findViewById(R.id.wallet_total);
-        }
-
-        void bind(WalletViewModel viewModel) {
-            vName.setText(viewModel.getName());
-            vTotalAmount.setText(viewModel.formattedTotal());
         }
     }
 }

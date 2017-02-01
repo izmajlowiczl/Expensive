@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="pl.expensive.WalletsActivity">
+    tools:context="pl.expensive.wallet.WalletsActivity">
 
-    <pl.expensive.WalletsView
+    <pl.expensive.wallet.WalletsView
         android:id="@+id/wallets"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
