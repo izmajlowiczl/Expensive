@@ -5,16 +5,9 @@ import android.support.annotation.MainThread;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
-import pl.expensive.R;
 
 public class WalletsView extends RecyclerView implements WalletsViewContract {
     private WalletsAdapter walletsAdapter;
@@ -57,32 +50,5 @@ public class WalletsView extends RecyclerView implements WalletsViewContract {
     @MainThread
     public void showFetchError() {
         Toast.makeText(getContext(), "Cannot fetch wallets", Toast.LENGTH_SHORT).show();
-    }
-
-    private static class WalletsAdapter extends RecyclerView.Adapter<WalletViewHolder> {
-        private final List<WalletViewModel> wallets = new ArrayList<>();
-
-        @Override
-        public WalletViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.view_wallet_item, parent, false);
-            return new WalletViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(WalletViewHolder holder, int position) {
-            holder.bind(wallets.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return wallets.size();
-        }
-
-        void bind(Collection<WalletViewModel> newWallets) {
-            wallets.clear();
-            wallets.addAll(newWallets);
-            notifyDataSetChanged();
-        }
     }
 }
