@@ -60,4 +60,24 @@ class TransactionStorageTest {
 
         storage.insert(beer)
     }
+
+    fun withCategory() {
+        val cat = _Seeds.FOOD
+        val beer = Transaction(UUID.randomUUID(), CASH.uuid, BigDecimal("4.99"), EUR, Date().time, "Beer", cat)
+        storage.insert(beer)
+
+        val transactions = storage.select(CASH.uuid)
+        assertThat(transactions).containsExactly(beer)
+        assertThat(transactions.first().category).isEqualTo(cat)
+    }
+
+    fun categoryIsOptional() {
+        val cat = null
+        val beer = Transaction(UUID.randomUUID(), CASH.uuid, BigDecimal("4.99"), EUR, Date().time, "Beer", cat)
+        storage.insert(beer)
+
+        val transactions = storage.select(CASH.uuid)
+        assertThat(transactions).containsExactly(beer)
+        assertThat(transactions.first().category).isNull()
+    }
 }

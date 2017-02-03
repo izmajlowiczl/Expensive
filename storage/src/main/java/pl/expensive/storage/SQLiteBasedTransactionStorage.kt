@@ -43,6 +43,7 @@ class SQLiteBasedTransactionStorage(private val database: Database) : Transactio
         cv.put("currency", transaction.currency.code)
         cv.put("date", transaction.date)
         cv.put("description", transaction.description)
+        cv.put("category", transaction.category?.name)
         return cv
     }
 

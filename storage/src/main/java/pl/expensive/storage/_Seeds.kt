@@ -11,4 +11,7 @@ object _Seeds {
     val CZK = Currency("CZK", "##.##\u00a0K\u010d")
 
     val CASH = Wallet(UUID.fromString("c2ee3260-94eb-4cc2-8d5c-af38f964fbd5"), "Cash", EUR)
+
+    val OTHER = Category("Other", "cat_other")
+    val FOOD = Category("Food", "cat_food")
 }

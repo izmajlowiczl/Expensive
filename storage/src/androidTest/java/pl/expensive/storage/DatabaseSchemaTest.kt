@@ -1,11 +1,9 @@
 package pl.expensive.storage
 
 import android.support.test.runner.AndroidJUnit4
-
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import com.google.common.truth.Truth.assertThat
 import pl.expensive.storage.DatabaseSchemaTestHelper.getTableColumns
 
 @RunWith(AndroidJUnit4::class)
@@ -25,7 +23,7 @@ class DatabaseSchemaTest {
         val columns = getTableColumns(database.readableDatabase, "tbl_transaction")
 
         assertThat(columns)
-                .containsExactly("uuid", "amount", "currency", "date", "description", "wallet_uuid")
+                .containsExactly("uuid", "amount", "currency", "date", "description", "wallet_uuid", "category")
     }
 
     @Test
@@ -34,5 +32,13 @@ class DatabaseSchemaTest {
 
         assertThat(columns)
                 .containsExactly("code", "format")
+    }
+
+    @Test
+    fun columnsForCategoryTable() {
+        val columns = getTableColumns(database.readableDatabase, "tbl_category")
+
+        assertThat(columns)
+                .containsExactly("name", "name_res")
     }
 }

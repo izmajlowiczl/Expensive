@@ -12,7 +12,8 @@ data class Transaction(val uuid: UUID,
                        val amount: BigDecimal,
                        val currency: Currency,
                        val date: Long, // time in millis
-                       val description: String) {
+                       val description: String,
+                       var category: Category? = null) {
 
     fun toLocalDateTime(): LocalDateTime {
         return Instant.ofEpochMilli(date)

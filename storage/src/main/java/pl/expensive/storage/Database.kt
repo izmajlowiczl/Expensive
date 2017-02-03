@@ -36,7 +36,18 @@ class Database : SQLiteOpenHelper {
     private fun createSchema(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE tbl_wallet (uuid TEXT NOT NULL, name TEXT NOT NULL UNIQUE, currency TEXT NOT NULL, PRIMARY KEY(uuid), FOREIGN KEY(currency) REFERENCES tbl_currency(code));")
         db.execSQL("CREATE TABLE tbl_currency (code TEXT NOT NULL, format TEXT NOT NULL, PRIMARY KEY(code));")
-        db.execSQL("CREATE TABLE tbl_transaction (uuid TEXT NOT NULL, amount TEXT NOT NULL, currency TEXT NOT NULL, date INTEGER NOT NULL, description TEXT, wallet_uuid TEXT NOT NULL, PRIMARY KEY(uuid), FOREIGN KEY(wallet_uuid) REFERENCES tbl_wallet(uuid), FOREIGN KEY(currency) REFERENCES tbl_currency(code));")
+        db.execSQL("CREATE TABLE tbl_category (name TEXT NOT NULL, name_res TEXT, PRIMARY KEY(name));")
+        db.execSQL("CREATE TABLE tbl_transaction (" +
+                "uuid TEXT NOT NULL, amount TEXT NOT NULL, " +
+                "currency TEXT NOT NULL, " +
+                "date INTEGER NOT NULL, " +
+                "description TEXT, " +
+                "wallet_uuid TEXT NOT NULL, " +
+                "category TEXT, " +
+                "PRIMARY KEY(uuid), " +
+                "FOREIGN KEY(wallet_uuid) REFERENCES tbl_wallet(uuid), " +
+                "FOREIGN KEY(currency) REFERENCES tbl_currency(code), " +
+                "FOREIGN KEY(category) REFERENCES tbl_category(name));")
     }
 
     private fun applySeeds(db: SQLiteDatabase) {
@@ -49,10 +60,18 @@ class Database : SQLiteOpenHelper {
         storeCurrency(db, CHF)
         storeCurrency(db, PLN)
         storeCurrency(db, CZK)
+
+        // Categories
+        db.storeCategory(_Seeds.OTHER)
+        db.storeCategory(_Seeds.FOOD)
     }
 
     private fun storeCurrency(db: SQLiteDatabase, currency: Currency) {
         db.execSQL(String.format("INSERT INTO tbl_currency VALUES('%s', '%s');", currency.code, currency.format))
+    }
+
+    private fun SQLiteDatabase.storeCategory(category: Category) {
+        execSQL(String.format("INSERT INTO tbl_category VALUES('%s', '%s');", category.name, category.name_res))
     }
 
     companion object {
