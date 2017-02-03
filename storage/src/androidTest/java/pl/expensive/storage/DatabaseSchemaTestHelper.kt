@@ -61,4 +61,18 @@ internal object DatabaseSchemaTestHelper {
     }
 
     // -- Currencies
+
+    fun assertCategoryNameStored(db: SQLiteDatabase, name: String) {
+        val cursor = db.rawQuery(queryForCategoryName(name), null)
+        if (cursor == null || !cursor.moveToNext()) {
+            Assert.fail("Cannot find category")
+        }
+
+        assertThat(cursor!!.getString(0))
+                .isEqualTo(name)
+    }
+
+    fun queryForCategoryName(name: String): String {
+        return String.format("SELECT name FROM tbl_category WHERE name='%s';", name)
+    }
 }
