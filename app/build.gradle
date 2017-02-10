@@ -42,6 +42,7 @@ configurations.all {
 }
 
 dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile project(path: ':storage')
 
     compile "com.android.support:appcompat-v7:$supportVersion"
@@ -69,13 +70,15 @@ dependencies {
 
     androidTestCompile "com.jakewharton.threetenabp:threetenabp:$threeTenAndroidVersion"
 
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
     testCompile "com.google.truth:truth:$truthVersion@jar"
     testCompile "com.google.guava:guava:$guavaVersion"
     // replace Android ThreeTenBP with regular .jar to avoid using context at unit tests
     testCompile "org.threeten:threetenbp:$threeTenVersion"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 repositories {
     mavenCentral()
