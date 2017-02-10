@@ -7,31 +7,29 @@ import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage.Wallet
 import pl.expensive.storage.WalletsStorage
+import pl.expensive.wallet.ViewState.*
 
 internal open class DisplayWallets(private val walletsStorage: WalletsStorage = Injector.app().wallets(),
                                    private val transactionStorage: TransactionStorage = Injector.app().transactions()) {
     fun runFor(view: WalletsViewContract) {
-        view.display { fetchWallets() }
-    }
+        view.update(Loading())
 
-    fun WalletsViewContract.display(f: () -> Collection<Wallet>) {
-        doAsync {
-            val viewModels = f()
-                    .map {
-                        WalletViewModel(
-                                it.name,
-                                transactionStorage.select(it.uuid) as List<Transaction>,
-                                it.currency)
-                    }
+        val exceptionHandler: (Throwable) -> Unit = {
+            view.update(Error("Cannot Load wallets"))
+        }
+
+        doAsync(exceptionHandler) {
+            val viewModels = walletsStorage.list().map { it.toViewModel() }
             uiThread {
-                if (viewModels.isEmpty()) {
-                    showEmpty()
-                } else {
-                    showWallets(viewModels)
-                }
+                view.update(if (viewModels.isNotEmpty()) Wallets(viewModels) else Empty())
             }
         }
     }
 
-    private fun fetchWallets(): Collection<Wallet> = walletsStorage.list()
+    private fun Wallet.toViewModel(): WalletViewModel {
+        return WalletViewModel(
+                name,
+                transactionStorage.select(uuid) as List<Transaction>,
+                currency)
+    }
 }
