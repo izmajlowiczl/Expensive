@@ -1,4 +1,6 @@
 <resources>
     <string name="cat_other">Andere</string>
     <string name="cat_food">Essen</string>
+
+    <string name="err_loading_wallets">Daten können nicht geladen werden</string>
 </resources>

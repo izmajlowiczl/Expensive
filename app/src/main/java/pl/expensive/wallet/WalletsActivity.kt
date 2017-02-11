@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_wallets.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -15,7 +16,7 @@ import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage.WalletsStorage
 import pl.expensive.transaction.TransactionsAdapter
 
-class WalletsActivity : AppCompatActivity() {
+class WalletsActivity : AppCompatActivity(), WalletsViewContract {
     private val walletStorage: WalletsStorage by lazy(mode = LazyThreadSafetyMode.NONE) {
         Injector.app().wallets()
     }
@@ -42,24 +43,44 @@ class WalletsActivity : AppCompatActivity() {
     }
 
     private fun showWallets() {
-        wallets.update(ViewState.Loading())
-        loading.visibility = VISIBLE
+        update(ViewState.Loading())
 
-        doAsync {
-            val data = walletStorage.list()
+        doAsync(exceptionHandler = { update(ViewState.Error(getString(R.string.err_loading_wallets))) }) {
+            val data = walletStorage.list().first()
             val transactionData = transactionStorage.select()
-
-            val viewModels = data.map {
-                val uuid = it.uuid
-                WalletViewModel(it.name, transactionData.filter { it.wallet == uuid }, it.currency)
-            }
+            val viewModel = WalletViewModel(
+                    data.name,
+                    transactionData.filter { it.wallet == data.uuid },
+                    data.currency)
 
             uiThread {
-                adapter.data = transactionData
-                wallets.update(if (viewModels.isNotEmpty()) ViewState.Wallets(viewModels) else ViewState.Empty())
-                loading.visibility = GONE
+                update(ViewState.Wallets(viewModel))
+            }
+        }
+    }
+
+    override fun update(viewState: ViewState) {
+        when (viewState) {
+            is ViewState.Loading -> {
+                wallets.visibility = GONE
+                transactions.visibility = GONE
+                loading.visibility = VISIBLE
+            }
+            is ViewState.Wallets -> {
                 wallets.visibility = VISIBLE
                 transactions.visibility = VISIBLE
+                loading.visibility = GONE
+
+                adapter.data = viewState.viewModels.transactions
+                wallets.update(viewState.viewModels)
+            }
+            is ViewState.Error -> {
+                wallets.visibility = GONE
+                transactions.visibility = GONE
+                loading.visibility = GONE
+
+                // TODO: show error view here instead toast
+                Toast.makeText(this, viewState.err, Toast.LENGTH_SHORT).show()
             }
         }
     }

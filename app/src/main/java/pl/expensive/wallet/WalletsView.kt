@@ -4,10 +4,8 @@ import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
-import android.view.View
-import android.widget.Toast
 
-internal class WalletsView : RecyclerView, WalletsViewContract {
+internal class WalletsView : RecyclerView {
     private var walletsAdapter: WalletsAdapter = WalletsAdapter()
 
     constructor(context: Context) : super(context)
@@ -19,20 +17,7 @@ internal class WalletsView : RecyclerView, WalletsViewContract {
         adapter = walletsAdapter
     }
 
-    override fun update(viewState: ViewState) {
-        when (viewState) {
-            is ViewState.Loading -> {
-            }
-            is ViewState.Wallets -> {
-                visibility = View.VISIBLE
-                walletsAdapter.bind(viewState.viewModels)
-            }
-            is ViewState.Empty -> {
-                visibility = GONE
-            }
-            is ViewState.Error -> {
-                Toast.makeText(context, viewState.err, Toast.LENGTH_SHORT).show()
-            }
-        }
+    fun update(wallets: WalletViewModel) {
+        walletsAdapter.bind(listOf(wallets))
     }
 }
