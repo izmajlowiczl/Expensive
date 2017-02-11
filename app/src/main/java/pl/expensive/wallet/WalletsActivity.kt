@@ -9,11 +9,17 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_wallets.*
 import kotlinx.android.synthetic.main.view_wallet_item.view.*
+import org.jetbrains.anko.toast
 import pl.expensive.Injector
 import pl.expensive.R
+import pl.expensive.formatValue
+import pl.expensive.hideKeyboard
+import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage.WalletsStorage
+import pl.expensive.storage._Seeds
 import pl.expensive.transaction.TransactionsAdapter
+import java.math.BigDecimal
 
 class WalletsActivity : AppCompatActivity() {
     private val walletStorage: WalletsStorage by lazy(mode = LazyThreadSafetyMode.NONE) {
@@ -34,18 +40,38 @@ class WalletsActivity : AppCompatActivity() {
         val vRecycler = findViewById(R.id.transactions) as RecyclerView
         vRecycler.layoutManager = LinearLayoutManager(this)
         vRecycler.adapter = adapter
+
+        vCreateTransaction.setOnClickListener {
+            val amountText = vCreateTransactionAmount.text.toString()
+            if (amountText.isNullOrEmpty()) {
+                vCreateTransactionAmount.error = "Mandatory"
+            } else {
+                vCreateTransactionAmount.error = null
+
+                update(ViewState.Loading())
+
+                val amount = BigDecimal(amountText)
+                transactionStorage.insert(Transaction.withAmount(amount = amount))
+                vCreateTransactionAmount.text.clear()
+                vCreateTransactionAmount.hideKeyboard()
+
+                toast("Transaction for ${_Seeds.EUR.formatValue(money = amount)} created!")
+
+                showWallets()
+            }
+        }
     }
 
     override fun onStart() {
         super.onStart()
+
+        update(ViewState.Loading())
         showWallets()
     }
 
     private fun showWallets() {
-        update(ViewState.Loading())
-
         val data = walletStorage.list().first()
-        val transactionData = transactionStorage.select()
+        val transactionData = transactionStorage.select().sortedByDescending { it.date }
         val viewModel = WalletViewModel(
                 data.name,
                 transactionData.filter { it.wallet == data.uuid },

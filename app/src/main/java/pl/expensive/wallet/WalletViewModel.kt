@@ -1,9 +1,9 @@
 package pl.expensive.wallet
 
+import pl.expensive.formatValue
 import pl.expensive.storage.Currency
 import pl.expensive.storage.Transaction
 import java.math.BigDecimal
-import java.text.DecimalFormat
 import java.util.*
 
 data class WalletViewModel(val name: String,
@@ -11,7 +11,7 @@ data class WalletViewModel(val name: String,
                            val currency: Currency) {
 
     fun formattedTotal(locale: Locale = Locale.getDefault()): String {
-        return formatValue(locale, calculateTotal(), currency)
+        return currency.formatValue(locale, calculateTotal())
     }
 
     private fun calculateTotal(): BigDecimal {
@@ -20,9 +20,4 @@ data class WalletViewModel(val name: String,
         return total
     }
 
-    private fun formatValue(locale: Locale, money: BigDecimal, currency: Currency): String {
-        val numberFormat = DecimalFormat.getInstance(locale) as DecimalFormat
-        numberFormat.applyPattern(currency.format)
-        return numberFormat.format(money)
-    }
 }
