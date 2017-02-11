@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteConstraintException
 import java.util.*
 
 class SQLiteBasedCategoryStorage(private val db: Database) : CategoryStorage {
-    override fun list(): Collection<Category> {
+    override fun list(): List<Category> {
         val cursor = db.readableDatabase.query("tbl_category", arrayOf("name", "name_res"), null, null, null, null, null)
 
         val result = ArrayList<Category>()

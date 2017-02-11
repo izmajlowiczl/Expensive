@@ -8,7 +8,7 @@ import java.util.*
 
 class SQLiteBasedTransactionStorage(private val database: Database) : TransactionStorage {
 
-    override fun select(wallet: UUID): Collection<Transaction> {
+    override fun select(wallet: UUID): List<Transaction> {
         val readableDatabase = database.readableDatabase
         val columns = arrayOf("t.uuid", "t.wallet_uuid", "t.amount", "t.currency", "t.date", "t.description", "c.format")
         val cursor = readableDatabase.query("tbl_transaction t , " + " tbl_currency c", columns, "wallet_uuid=? AND t.currency=c.code", arrayOf(wallet.toString()), null, null, null)
@@ -22,7 +22,7 @@ class SQLiteBasedTransactionStorage(private val database: Database) : Transactio
         return result
     }
 
-    override fun list(): Collection<Transaction> {
+    override fun list(): List<Transaction> {
         throw UnsupportedOperationException("Cannot perform list on transactions. Use select(wallet)!")
     }
 

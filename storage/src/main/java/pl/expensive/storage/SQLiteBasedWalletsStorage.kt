@@ -3,12 +3,11 @@ package pl.expensive.storage
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteConstraintException
-import org.jetbrains.anko.db.rowParser
 import java.util.*
 
 class SQLiteBasedWalletsStorage(private val database: Database) : WalletsStorage {
 
-    override fun list(): Collection<Wallet> {
+    override fun list(): List<Wallet> {
         val readableDatabase = database.readableDatabase
         val columns = arrayOf("w.uuid", "w.name", "c.code ", "c.format")
         val cursor = readableDatabase.query("tbl_wallet w, " + " tbl_currency c", columns, "w.currency=c.code", null, null, null, null)

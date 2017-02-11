@@ -21,7 +21,7 @@ internal class WalletsAdapter : RecyclerView.Adapter<WalletViewHolder>() {
             wallets.size
 
 
-    fun bind(newWallets: Collection<WalletViewModel>) {
+    fun bind(newWallets: List<WalletViewModel>) {
         wallets.clear()
         wallets.addAll(newWallets)
         notifyDataSetChanged()

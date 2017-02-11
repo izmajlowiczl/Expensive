@@ -6,7 +6,7 @@ import java.util.*
 
 class SQLiteBasedCurrencyStorage(val database: Database) : CurrencyStorage {
 
-    override fun list(): Collection<Currency> {
+    override fun list(): List<Currency> {
         val readableDatabase = database.readableDatabase
         val cursor = readableDatabase.query("tbl_currency", arrayOf("code", "format"), null, null, null, null, null)
 

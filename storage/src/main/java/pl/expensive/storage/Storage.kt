@@ -6,7 +6,7 @@ interface Storage<DBO> {
 
      * @return Collection of all stored database objects or Collections.emptyList() for empty result.
      */
-    fun list(): Collection<DBO>
+    fun list(): List<DBO>
 
     /**
      * Stores [Wallet] object.
