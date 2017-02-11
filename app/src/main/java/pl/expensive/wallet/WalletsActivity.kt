@@ -7,15 +7,14 @@ import pl.expensive.Injector
 import pl.expensive.R
 
 class WalletsActivity : AppCompatActivity() {
-    private lateinit var fetchWallets: DisplayWallets
+    private val fetchWallets: DisplayWallets
+            by lazy { Injector.app().displayWallets() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wallets)
 
         Injector.app().inject(this)
-
-        fetchWallets = Injector.app().displayWallets()
     }
 
     override fun onStart() {
