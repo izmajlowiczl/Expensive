@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/wallet_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:paddingBottom="8dp"
+        android:paddingBottom="16dp"
         android:paddingTop="16dp"
         android:textAppearance="?android:textAppearanceLarge"
         android:textStyle="bold"
@@ -18,11 +18,12 @@
 
     <TextView
         android:id="@+id/wallet_total"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:paddingBottom="16dp"
-        android:paddingTop="8dp"
+        android:paddingTop="16dp"
+        android:layout_marginLeft="8dp"
         android:textAppearance="?android:textAppearanceMedium"
         tools:text="120.33 Eur" />
 
