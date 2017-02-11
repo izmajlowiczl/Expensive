@@ -9,8 +9,6 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_wallets.*
 import kotlinx.android.synthetic.main.view_wallet_item.view.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import pl.expensive.Injector
 import pl.expensive.R
 import pl.expensive.storage.TransactionStorage
@@ -46,18 +44,14 @@ class WalletsActivity : AppCompatActivity() {
     private fun showWallets() {
         update(ViewState.Loading())
 
-        doAsync(exceptionHandler = { update(ViewState.Error(getString(R.string.err_loading_wallets))) }) {
-            val data = walletStorage.list().first()
-            val transactionData = transactionStorage.select()
-            val viewModel = WalletViewModel(
-                    data.name,
-                    transactionData.filter { it.wallet == data.uuid },
-                    data.currency)
+        val data = walletStorage.list().first()
+        val transactionData = transactionStorage.select()
+        val viewModel = WalletViewModel(
+                data.name,
+                transactionData.filter { it.wallet == data.uuid },
+                data.currency)
 
-            uiThread {
-                update(ViewState.Wallets(viewModel))
-            }
-        }
+        update(ViewState.Wallets(viewModel))
     }
 
     private fun update(viewState: ViewState) {
