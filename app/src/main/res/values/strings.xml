@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Expensive</string>
-
     <string name="cat_other">Other</string>
     <string name="cat_food">Food</string>
 </resources>
