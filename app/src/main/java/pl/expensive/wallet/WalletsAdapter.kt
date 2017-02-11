@@ -1,11 +1,9 @@
 package pl.expensive.wallet
 
-import android.support.annotation.LayoutRes
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import pl.expensive.R
+import pl.expensive.inflateLayout
 import java.util.*
 
 internal class WalletsAdapter : RecyclerView.Adapter<WalletViewHolder>() {
@@ -28,7 +26,4 @@ internal class WalletsAdapter : RecyclerView.Adapter<WalletViewHolder>() {
         wallets.addAll(newWallets)
         notifyDataSetChanged()
     }
-
-    fun ViewGroup.inflateLayout(@LayoutRes layout: Int): View =
-            LayoutInflater.from(context).inflate(layout, this, false)
 }
