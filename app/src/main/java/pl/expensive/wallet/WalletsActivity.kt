@@ -3,6 +3,7 @@ package pl.expensive.wallet
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -19,6 +20,8 @@ import pl.expensive.storage.WalletsStorage
 import pl.expensive.storage._Seeds
 import pl.expensive.transaction.TransactionsAdapter
 import java.math.BigDecimal
+
+
 
 class WalletsActivity : AppCompatActivity() {
     private val walletStorage: WalletsStorage by lazy(mode = LazyThreadSafetyMode.NONE) {
@@ -41,6 +44,9 @@ class WalletsActivity : AppCompatActivity() {
         val vRecycler = findViewById(R.id.transactions) as RecyclerView
         vRecycler.layoutManager = LinearLayoutManager(this)
         vRecycler.adapter = adapter
+
+        val snapHelper = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(vRecycler)
 
         vCreateTransaction.setOnClickListener {
             val amountText = vCreateTransactionAmount.text.toString()
