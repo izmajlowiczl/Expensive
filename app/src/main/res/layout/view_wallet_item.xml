@@ -26,8 +26,4 @@
         android:textAppearance="?android:textAppearanceMedium"
         tools:text="120.33 Eur" />
 
-    <!--<pl.expensive.TransactionsView-->
-        <!--android:id="@+id/wallet_transactions"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
 </LinearLayout>

@@ -13,8 +13,9 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-    <pl.expensive.wallet.WalletsView
+    <include
         android:id="@+id/wallets"
+        layout="@layout/view_wallet_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />

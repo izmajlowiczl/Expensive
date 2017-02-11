@@ -8,6 +8,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_wallets.*
+import kotlinx.android.synthetic.main.view_wallet_item.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import pl.expensive.Injector
@@ -16,7 +17,7 @@ import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage.WalletsStorage
 import pl.expensive.transaction.TransactionsAdapter
 
-class WalletsActivity : AppCompatActivity(), WalletsViewContract {
+class WalletsActivity : AppCompatActivity() {
     private val walletStorage: WalletsStorage by lazy(mode = LazyThreadSafetyMode.NONE) {
         Injector.app().wallets()
     }
@@ -59,7 +60,7 @@ class WalletsActivity : AppCompatActivity(), WalletsViewContract {
         }
     }
 
-    override fun update(viewState: ViewState) {
+    private fun update(viewState: ViewState) {
         when (viewState) {
             is ViewState.Loading -> {
                 wallets.visibility = GONE
@@ -72,7 +73,8 @@ class WalletsActivity : AppCompatActivity(), WalletsViewContract {
                 loading.visibility = GONE
 
                 adapter.data = viewState.viewModels.transactions
-                wallets.update(viewState.viewModels)
+                wallets.wallet_name.text = viewState.viewModels.name
+                wallets.wallet_total.text = viewState.viewModels.formattedTotal()
             }
             is ViewState.Error -> {
                 wallets.visibility = GONE

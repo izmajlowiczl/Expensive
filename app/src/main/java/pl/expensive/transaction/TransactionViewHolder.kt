@@ -13,13 +13,13 @@ class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
     fun update(viewModel: Transaction) {
         with(itemView) {
-            transaction_amount.text = viewModel.formatValue(Locale.getDefault())
+            transaction_amount.text = viewModel.formatValue()
             transaction_desc.text = viewModel.description
             transaction_time.text = viewModel.toLocalDateTime().toLocalTime().format(timeFormat)
         }
     }
 
-    private fun Transaction.formatValue(locale: Locale): String {
+    private fun Transaction.formatValue(locale: Locale = Locale.getDefault()): String {
         val numberFormat = DecimalFormat.getInstance(locale) as DecimalFormat
         numberFormat.applyPattern(currency.format)
         return numberFormat.format(amount)
