@@ -10,4 +10,7 @@
     <color name="toolbar_bg">@color/colorPrimary</color>
     <color name="window_bg">#FFFFFF</color>
 
+    <color name="header_bg">#EEEEEE</color>
+    <color name="header_text">#7C7C7C</color>
+
 </resources>

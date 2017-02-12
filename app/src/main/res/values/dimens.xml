@@ -7,7 +7,8 @@
     <dimen name="spacer">16dp</dimen>
     <dimen name="big_spacer">32dp</dimen>
 
-    <dimen name="listItemText">18sp</dimen>
+    <dimen name="listItemText">16sp</dimen>
+    <dimen name="listItemTextMedium">14sp</dimen>
     <dimen name="listItemTextSmall">12sp</dimen>
 
     <dimen name="content_padding_left">@dimen/spacer</dimen>

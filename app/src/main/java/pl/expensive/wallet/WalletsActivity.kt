@@ -2,16 +2,20 @@ package pl.expensive.wallet
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
+import android.text.style.SuperscriptSpan
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_wallets.*
 import org.jetbrains.anko.toast
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.TextStyle
 import pl.expensive.Injector
 import pl.expensive.R
 import pl.expensive.formatValue
@@ -20,8 +24,10 @@ import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage.WalletsStorage
 import pl.expensive.storage._Seeds
+import pl.expensive.transaction.TransactionGrouper
 import pl.expensive.transaction.TransactionsAdapter
 import java.math.BigDecimal
+import java.util.*
 
 
 class WalletsActivity : AppCompatActivity() {
@@ -45,6 +51,10 @@ class WalletsActivity : AppCompatActivity() {
         val vRecycler = findViewById(R.id.transactions) as RecyclerView
         vRecycler.layoutManager = LinearLayoutManager(this)
         vRecycler.adapter = adapter
+
+        val dividerItemDecoration = DividerItemDecoration(vRecycler.getContext(),
+                LinearLayoutManager.VERTICAL)
+        vRecycler.addItemDecoration(dividerItemDecoration)
 
         vCreateTransaction.setOnClickListener {
             val amountText = vCreateTransactionAmount.text.toString()
@@ -97,7 +107,7 @@ class WalletsActivity : AppCompatActivity() {
                 transactions.visibility = VISIBLE
                 loading.visibility = GONE
 
-                adapter.data = viewState.viewModels.transactions
+                adapter.data = TransactionGrouper.group(viewState.viewModels.transactions)
                 toolbar.title = viewState.viewModels.formattedTitle()
             }
             is ViewState.Error -> {
@@ -110,9 +120,23 @@ class WalletsActivity : AppCompatActivity() {
         }
     }
 
+    private fun Map.Entry<LocalDate, List<Transaction>>.formatHeader(): Spannable {
+        val month = key.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
+        val year = if (key.year > 2000) key.year - 2000 else key.year
+
+        val span = SpannableString("$month '$year")
+        val start = month.length
+        val end = span.length
+        span.setSpan(SuperscriptSpan(), start, end, 0)
+        span.setSpan(RelativeSizeSpan(.6f), start, end, 0)
+
+        return span
+    }
+
     private fun WalletViewModel.formattedTitle(): Spannable {
         val span: Spannable = SpannableString("$name  ${formattedTotal()}")
-        span.setSpan(RelativeSizeSpan(.5f), 0, name.length, 0)
+        span.setSpan(RelativeSizeSpan(.6f), 0, name.length, 0)
         return span
     }
 }
+

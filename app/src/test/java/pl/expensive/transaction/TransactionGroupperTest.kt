@@ -20,7 +20,7 @@ class TransactionGroupperTest {
         val transactions = Arrays.asList(transactionAt(SOME_DAY))
 
         assertThat(TransactionGrouper.group(transactions))
-                .containsExactly(SOME_DAY, transactions)
+                .containsExactly(SOME_DAY.toLocalDate(), transactions)
     }
 
     @Test
@@ -30,7 +30,7 @@ class TransactionGroupperTest {
                 transactionAt(SOME_DAY))
 
         assertThat(TransactionGrouper.group(transactions))
-                .containsExactly(SOME_DAY, transactions)
+                .containsExactly(SOME_DAY.toLocalDate(), transactions)
     }
 
     @Test
@@ -41,8 +41,8 @@ class TransactionGroupperTest {
 
         val group = TransactionGrouper.group(transactions)
         assertThat(group.size).isEqualTo(2)
-        assertThat(group[SOME_DAY]).containsExactly(t1)
-        assertThat(group[SOME_DAY.plusDays(1)]).containsExactly(t2)
+        assertThat(group[SOME_DAY.toLocalDate()]).containsExactly(t1)
+        assertThat(group[SOME_DAY.toLocalDate().plusDays(1)]).containsExactly(t2)
     }
 
     @Test
@@ -55,8 +55,8 @@ class TransactionGroupperTest {
 
         val group = TransactionGrouper.group(transactions)
         assertThat(group.size).isEqualTo(2)
-        assertThat(group[SOME_DAY]).containsExactly(d1t1, d1t2)
-        assertThat(group[SOME_DAY.plusDays(1)]).containsExactly(d2t1, d2t2)
+        assertThat(group[SOME_DAY.toLocalDate()]).containsExactly(d1t1, d1t2)
+        assertThat(group[SOME_DAY.toLocalDate().plusDays(1)]).containsExactly(d2t1, d2t2)
     }
 
     private fun transactionAt(today: LocalDateTime): Transaction {

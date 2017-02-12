@@ -3,17 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/small_spacer"
+    android:paddingBottom="@dimen/spacer"
     android:paddingLeft="@dimen/content_padding_left"
-    android:paddingTop="@dimen/small_spacer">
+    android:paddingTop="@dimen/spacer">
 
     <TextView
         android:id="@+id/transaction_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:paddingRight="@dimen/small_spacer"
-        android:textSize="@dimen/listItemTextSmall"
+        android:paddingRight="@dimen/spacer"
+        android:textSize="@dimen/listItemTextMedium"
         tools:text="11:23" />
 
     <TextView
@@ -22,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/transaction_time"
-        android:paddingLeft="@dimen/small_spacer"
         android:textSize="@dimen/listItemText"
         android:textStyle="bold"
         tools:text="-12.00 Eur" />
@@ -32,9 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/transaction_amount"
-        android:paddingLeft="@dimen/small_spacer"
-        android:paddingRight="@dimen/small_spacer"
+        android:paddingRight="@dimen/spacer"
         android:textSize="@dimen/listItemTextSmall"
         tools:text="120.33 Eur" />
-
 </RelativeLayout>
