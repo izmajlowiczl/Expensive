@@ -15,6 +15,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_wallets.*
 import org.jetbrains.anko.toast
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.TextStyle
 import pl.expensive.Injector
 import pl.expensive.R
@@ -24,6 +25,7 @@ import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage.WalletsStorage
 import pl.expensive.storage._Seeds
+import pl.expensive.transaction.Header
 import pl.expensive.transaction.TransactionGrouper
 import pl.expensive.transaction.TransactionsAdapter
 import java.math.BigDecimal
@@ -97,26 +99,32 @@ class WalletsActivity : AppCompatActivity() {
         update(ViewState.Wallets(viewModel))
     }
 
-    private fun update(viewState: ViewState) {
-        when (viewState) {
-            is ViewState.Loading -> {
-                transactions.visibility = GONE
-                loading.visibility = VISIBLE
-            }
-            is ViewState.Wallets -> {
-                transactions.visibility = VISIBLE
-                loading.visibility = GONE
+    private fun update(viewState: ViewState) = when (viewState) {
+        is ViewState.Loading -> {
+            transactions.visibility = GONE
+            loading.visibility = VISIBLE
+        }
+        is ViewState.Wallets -> {
+            transactions.visibility = VISIBLE
+            loading.visibility = GONE
 
-                adapter.data = TransactionGrouper.group(viewState.viewModels.transactions)
-                toolbar.title = viewState.viewModels.formattedTitle()
+            val result = mutableListOf<Any>()
+            val today = LocalDateTime.now()
+            TransactionGrouper.group(viewState.viewModels.transactions.filter {
+                !it.toLocalDateTime().isAfter(today)
+            }).forEach {
+                result.add(Header(it.formatHeader()))
+                result.addAll(it.value)
             }
-            is ViewState.Error -> {
-                transactions.visibility = GONE
-                loading.visibility = GONE
+            adapter.data = result
+            toolbar.title = viewState.viewModels.formattedTitle()
+        }
+        is ViewState.Error -> {
+            transactions.visibility = GONE
+            loading.visibility = GONE
 
-                // TODO: show error view here instead toast
-                Toast.makeText(this, viewState.err, Toast.LENGTH_SHORT).show()
-            }
+            // TODO: show error view here instead toast
+            Toast.makeText(this, viewState.err, Toast.LENGTH_SHORT).show()
         }
     }
 
