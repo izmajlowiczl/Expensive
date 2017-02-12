@@ -53,10 +53,7 @@ class WalletsActivity : AppCompatActivity() {
         val vRecycler = findViewById(R.id.transactions) as RecyclerView
         vRecycler.layoutManager = LinearLayoutManager(this)
         vRecycler.adapter = adapter
-
-        val dividerItemDecoration = DividerItemDecoration(vRecycler.getContext(),
-                LinearLayoutManager.VERTICAL)
-        vRecycler.addItemDecoration(dividerItemDecoration)
+        vRecycler.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
 
         vCreateTransaction.setOnClickListener {
             val amountText = vCreateTransactionAmount.text.toString()
