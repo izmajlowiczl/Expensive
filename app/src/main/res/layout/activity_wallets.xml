@@ -12,40 +12,52 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:subtitle="Cash"
-        app:title="123.44 EUR" />
+        android:layout_height="96dp"
+        android:background="@color/toolbar_bg"
+        android:gravity="bottom"
+        android:paddingBottom="@dimen/small_spacer"
+        android:paddingLeft="@dimen/content_padding_left"
+        app:elevation="4dp"
+        app:title="123.44 EUR"
+        app:titleTextColor="@color/toolbar_text" />
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/vCreateTransactionParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/vCreateTransactionAmount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="$$$"
-            android:inputType="numberDecimal"
-            android:maxLines="1" />
+        android:layout_marginTop="@dimen/small_spacer"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/content_padding_left">
 
         <Button
             android:id="@+id/vCreateTransaction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="new transaction" />
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+            android:text="Add" />
 
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/transactions"
+        <EditText
+            android:id="@+id/vCreateTransactionAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="visible" />
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/vCreateTransaction"
+            android:hint="$$$"
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
+    </RelativeLayout>
 
-    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/transactions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/vCreateTransactionParent"
+        android:paddingTop="4dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/loading"

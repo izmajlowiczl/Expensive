@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
@@ -19,7 +22,6 @@ import pl.expensive.storage.WalletsStorage
 import pl.expensive.storage._Seeds
 import pl.expensive.transaction.TransactionsAdapter
 import java.math.BigDecimal
-
 
 
 class WalletsActivity : AppCompatActivity() {
@@ -94,8 +96,7 @@ class WalletsActivity : AppCompatActivity() {
                 loading.visibility = GONE
 
                 adapter.data = viewState.viewModels.transactions
-
-                toolbar.title = "${viewState.viewModels.name}  ${viewState.viewModels.formattedTotal()}"
+                toolbar.title = viewState.viewModels.formattedTitle()
             }
             is ViewState.Error -> {
                 transactions.visibility = GONE
@@ -105,5 +106,11 @@ class WalletsActivity : AppCompatActivity() {
                 Toast.makeText(this, viewState.err, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun WalletViewModel.formattedTitle(): Spannable {
+        val span: Spannable = SpannableString("$name  ${formattedTotal()}")
+        span.setSpan(RelativeSizeSpan(.5f), 0, name.length, 0)
+        return span
     }
 }

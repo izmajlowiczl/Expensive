@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#FFF</color>
+    <color name="colorPrimaryDark">#DBDBDB</color>
+    <color name="colorAccent">#5aa672</color>
+    <color name="colorText">#616161</color>
+    <color name="colorTextLight">#8c8c8c</color>
+
+    <color name="toolbar_text">@color/colorText</color>
+    <color name="toolbar_bg">@color/colorPrimary</color>
+
 </resources>

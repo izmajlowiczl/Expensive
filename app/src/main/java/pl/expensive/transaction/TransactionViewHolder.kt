@@ -2,6 +2,8 @@ package pl.expensive.transaction
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.view_transaction_item.view.*
 import org.threeten.bp.format.DateTimeFormatter
 import pl.expensive.storage.Transaction
@@ -14,8 +16,13 @@ class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     fun update(viewModel: Transaction) {
         with(itemView) {
             transaction_amount.text = viewModel.formatValue()
-            transaction_desc.text = viewModel.description
             transaction_time.text = viewModel.toLocalDateTime().toLocalTime().format(timeFormat)
+            if (viewModel.description.isNullOrBlank()) {
+                transaction_desc.visibility = GONE
+            } else {
+                transaction_desc.visibility = VISIBLE
+                transaction_desc.text = viewModel.description
+            }
         }
     }
 
