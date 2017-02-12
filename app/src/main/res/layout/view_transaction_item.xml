@@ -24,8 +24,8 @@
         android:layout_toLeftOf="@id/transaction_time"
         android:paddingLeft="@dimen/small_spacer"
         android:textSize="@dimen/listItemText"
+        android:textStyle="bold"
         tools:text="-12.00 Eur" />
-
 
     <TextView
         android:id="@+id/transaction_desc"
@@ -34,9 +34,7 @@
         android:layout_below="@id/transaction_amount"
         android:paddingLeft="@dimen/small_spacer"
         android:paddingRight="@dimen/small_spacer"
-        android:textColor="@color/colorTextLight"
         android:textSize="@dimen/listItemTextSmall"
-        android:textStyle="bold"
         tools:text="120.33 Eur" />
 
 </RelativeLayout>

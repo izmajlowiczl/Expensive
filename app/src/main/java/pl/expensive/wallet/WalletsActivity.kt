@@ -56,8 +56,10 @@ class WalletsActivity : AppCompatActivity() {
                 update(ViewState.Loading())
 
                 val amount = BigDecimal(amountText)
-                transactionStorage.insert(Transaction.withAmount(amount = amount))
+                val descText = vCreateTransactionDescription.text.toString()
+                transactionStorage.insert(Transaction.withAmount(amount = amount, desc = descText))
                 vCreateTransactionAmount.text.clear()
+                vCreateTransactionDescription.text.clear()
                 vCreateTransactionAmount.hideKeyboard()
 
                 toast("Transaction for ${_Seeds.EUR.formatValue(money = amount)} created!")
