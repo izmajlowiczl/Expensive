@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF6C6C</color>
     <color name="colorText">#F9FCFF</color>
     <color name="colorTextLight">#FFFFFF</color>
+    <color name="colorTextDark">#000000</color>
 
     <color name="toolbar_text">@color/colorText</color>
     <color name="toolbar_bg">@color/colorPrimary</color>

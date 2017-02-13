@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:clickable="true"
     android:paddingBottom="@dimen/spacer"
     android:paddingLeft="@dimen/content_padding_left"
     android:paddingTop="@dimen/spacer">
@@ -12,7 +14,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:paddingLeft="@dimen/spacer"
         android:paddingRight="@dimen/spacer"
+        android:textColor="@color/colorTextDark"
         android:textSize="@dimen/listItemTextMedium"
         tools:text="11:23" />
 
@@ -22,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/transaction_time"
+        android:textColor="@color/colorTextDark"
         android:textSize="@dimen/listItemText"
-        android:textStyle="bold"
         tools:text="-12.00 Eur" />
 
     <TextView
