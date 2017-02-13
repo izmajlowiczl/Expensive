@@ -39,6 +39,9 @@ class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         return span
     }
 
+    /**
+     * Formats transaction's amount to use localised currency symbol
+     */
     private fun Transaction.formatAmount(locale: Locale = Locale.getDefault()): String {
         val numberFormat = DecimalFormat.getInstance(locale) as DecimalFormat
         numberFormat.applyPattern(currency.format)

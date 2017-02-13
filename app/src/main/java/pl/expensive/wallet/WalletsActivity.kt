@@ -14,8 +14,8 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_wallets.*
 import org.jetbrains.anko.toast
-import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.YearMonth
 import org.threeten.bp.format.TextStyle
 import pl.expensive.Injector
 import pl.expensive.R
@@ -125,7 +125,11 @@ class WalletsActivity : AppCompatActivity() {
         }
     }
 
-    private fun Map.Entry<LocalDate, List<Transaction>>.formatHeader(): Spannable {
+    /**
+     * Creates Spannable with month name at full size,
+     * followed by short year  (eg '17 from 2017) with 60% text size (from month name)
+     */
+    private fun Map.Entry<YearMonth, List<Transaction>>.formatHeader(): Spannable {
         val month = key.month.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()
         val year = if (key.year > 2000) key.year - 2000 else key.year
 
@@ -138,6 +142,10 @@ class WalletsActivity : AppCompatActivity() {
         return span
     }
 
+    /**
+     * Crates Spannable with wallet's name at 60% text size (from amount),
+     * followed by total amount at full text size.
+     */
     private fun WalletViewModel.formattedTitle(): Spannable {
         val span: Spannable = SpannableString("$name  ${formattedTotal()}")
         span.setSpan(RelativeSizeSpan(.6f), 0, name.length, 0)
