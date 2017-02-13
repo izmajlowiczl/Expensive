@@ -12,12 +12,11 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="96dp"
         android:background="@color/toolbar_bg"
         android:gravity="bottom"
         android:paddingBottom="@dimen/small_spacer"
         android:paddingLeft="@dimen/content_padding_left"
-        app:elevation="4dp"
         app:title="123.44 EUR"
         app:titleTextColor="@color/toolbar_text" />
 
@@ -26,11 +25,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
-        android:padding="@dimen/spacer"
         android:background="@color/toolbar_bg"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        app:elevation="4dp">
+        android:padding="@dimen/spacer">
 
         <EditText
             android:id="@+id/vCreateTransactionAmount"
