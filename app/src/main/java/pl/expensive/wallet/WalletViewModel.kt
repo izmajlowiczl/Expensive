@@ -14,9 +14,12 @@ data class WalletViewModel(val name: String,
         return currency.formatValue(locale, calculateTotal())
     }
 
+    /**
+     * Calculate total of <b>absolute</b> amounts
+     */
     private fun calculateTotal(): BigDecimal {
         var total = BigDecimal.ZERO
-        transactions.map { total += it.amount }
+        transactions.map { total += it.amount.abs() }
         return total
     }
 

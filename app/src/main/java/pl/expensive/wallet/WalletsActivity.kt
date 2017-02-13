@@ -66,7 +66,7 @@ class WalletsActivity : AppCompatActivity() {
 
                 val amount = BigDecimal(amountText)
                 val descText = vCreateTransactionDescription.text.toString()
-                transactionStorage.insert(Transaction.withAmount(amount = amount, desc = descText))
+                transactionStorage.insert(Transaction.withdrawalWithAmount(amount = amount, desc = descText))
                 vCreateTransactionAmount.text.clear()
                 vCreateTransactionDescription.text.clear()
                 vCreateTransactionAmount.hideKeyboard()

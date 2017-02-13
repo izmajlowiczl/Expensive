@@ -22,13 +22,13 @@ data class Transaction(val uuid: UUID,
     }
 
     companion object {
-        fun withAmount(uuid: UUID = UUID.randomUUID(),
-                       wallet: UUID = _Seeds.CASH.uuid,
-                       amount: BigDecimal,
-                       currency: Currency = _Seeds.EUR,
-                       time: Long = Date().time,
-                       desc: String = ""): Transaction {
-            return Transaction(uuid, wallet, amount, currency, time, desc)
+        fun withdrawalWithAmount(uuid: UUID = UUID.randomUUID(),
+                                 wallet: UUID = _Seeds.CASH.uuid,
+                                 amount: BigDecimal,
+                                 currency: Currency = _Seeds.EUR,
+                                 time: Long = Date().time,
+                                 desc: String = ""): Transaction {
+            return Transaction(uuid, wallet, amount.negate(), currency, time, desc)
         }
 
         fun create(uuid: UUID, wallet: UUID, amount: BigDecimal, currency: Currency, date: LocalDateTime, desc: String): Transaction {
