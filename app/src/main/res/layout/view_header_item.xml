@@ -8,4 +8,5 @@
     android:textColor="@color/header_text"
     android:padding="@dimen/spacer"
     android:paddingLeft="@dimen/content_padding_left"
-    tools:text="11:23" />
+    android:textStyle="bold"
+    tools:text="January" />

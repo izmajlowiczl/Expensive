@@ -126,7 +126,7 @@ class WalletsActivity : AppCompatActivity() {
     }
 
     private fun Map.Entry<LocalDate, List<Transaction>>.formatHeader(): Spannable {
-        val month = key.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
+        val month = key.month.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()
         val year = if (key.year > 2000) key.year - 2000 else key.year
 
         val span = SpannableString("$month '$year")
