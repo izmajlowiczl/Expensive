@@ -20,11 +20,19 @@
         app:title="123.44 EUR"
         app:titleTextColor="@color/toolbar_text" />
 
+    <View
+        android:id="@+id/toolbar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@id/toolbar"
+        android:background="@drawable/bottom_shadow" />
+
     <LinearLayout
         android:id="@+id/vCreateTransactionParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/toolbar_shadow"
+        android:layout_marginTop="@dimen/small_spacer"
         android:background="@color/toolbar_bg"
         android:gravity="center_vertical"
         android:orientation="vertical"
