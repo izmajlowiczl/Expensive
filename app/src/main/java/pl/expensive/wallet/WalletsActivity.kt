@@ -94,11 +94,12 @@ class WalletsActivity : AppCompatActivity() {
             val today = LocalDateTime.now()
             TransactionGrouper.group(viewState.viewModels.transactions.filter {
                 !it.toLocalDateTime().isAfter(today)
-            }).forEach {
+            }).apply {
+                result.add(NewTransactionPlaceHolder())
+            }.forEach {
                 result.add(Header(it.formatHeader()))
                 result.addAll(it.value)
             }
-            result.add(if (result.isNotEmpty()) 1 else 0, NewTransactionPlaceHolder())
 
             adapter.data = result
             supportActionBar!!.title = viewState.viewModels.formattedTitle()
