@@ -5,6 +5,7 @@
 
     <dimen name="small_spacer">8dp</dimen>
     <dimen name="spacer">16dp</dimen>
+    <dimen name="medium_spacer">24dp</dimen>
     <dimen name="big_spacer">32dp</dimen>
 
     <dimen name="listItemText">16sp</dimen>

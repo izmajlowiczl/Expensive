@@ -26,6 +26,7 @@ import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage.WalletsStorage
 import pl.expensive.storage._Seeds
 import pl.expensive.transaction.Header
+import pl.expensive.transaction.NewTransactionPlaceHolder
 import pl.expensive.transaction.TransactionGrouper
 import pl.expensive.transaction.TransactionsAdapter
 import java.math.BigDecimal
@@ -113,6 +114,8 @@ class WalletsActivity : AppCompatActivity() {
                 result.add(Header(it.formatHeader()))
                 result.addAll(it.value)
             }
+            result.add(if (result.isNotEmpty()) 1 else 0, NewTransactionPlaceHolder())
+
             adapter.data = result
             supportActionBar!!.title = viewState.viewModels.formattedTitle()
         }

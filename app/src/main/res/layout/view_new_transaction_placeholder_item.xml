@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:clickable="true"
+    android:gravity="center_vertical"
+    android:padding="@dimen/spacer"
+    android:paddingLeft="@dimen/content_padding_left">
+
+    <ImageView
+        android:id="@+id/vNewTransactionPlaceholderImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_add_white_24dp"
+        android:tint="@color/colorTextLight" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/vNewTransactionPlaceholderImg"
+        android:paddingLeft="@dimen/medium_spacer"
+        android:paddingRight="@dimen/small_spacer"
+        android:text="Dodaj nowy wydatek"
+        android:textColor="@color/colorTextLight" />
+
+
+</RelativeLayout>
