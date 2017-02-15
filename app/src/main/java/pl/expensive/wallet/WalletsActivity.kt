@@ -114,7 +114,7 @@ class WalletsActivity : AppCompatActivity() {
                 result.addAll(it.value)
             }
             adapter.data = result
-            toolbar.title = viewState.viewModels.formattedTitle()
+            supportActionBar!!.title = viewState.viewModels.formattedTitle()
         }
         is ViewState.Error -> {
             transactions.visibility = GONE
