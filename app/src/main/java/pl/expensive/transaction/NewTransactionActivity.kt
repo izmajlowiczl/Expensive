@@ -1,9 +1,10 @@
 package pl.expensive.transaction
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_new_transaction.*
-import org.jetbrains.anko.toast
 import pl.expensive.Injector
 import pl.expensive.R
 import pl.expensive.formatValue
@@ -32,7 +33,8 @@ class NewTransactionActivity : AppCompatActivity() {
                 transactionStorage.insert(Transaction.withdrawalWithAmount(amount = amount, desc = descText))
 
                 clearView()
-                toast("Transaction for ${_Seeds.EUR.formatValue(money = amount)} created!")
+
+                setResult(Activity.RESULT_OK, Intent().putExtra("amount", _Seeds.EUR.formatValue(money = amount)))
                 finish()
             }
         }

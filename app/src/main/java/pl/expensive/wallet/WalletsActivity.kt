@@ -1,5 +1,6 @@
 package pl.expensive.wallet
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -14,6 +15,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_wallets.*
+import org.jetbrains.anko.toast
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.TextStyle
@@ -36,7 +38,9 @@ class WalletsActivity : AppCompatActivity() {
 
     private val adapter by lazy(mode = LazyThreadSafetyMode.NONE) {
         TransactionsAdapter(newTransactionClickListener = {
-            startActivity(Intent(this@WalletsActivity, NewTransactionActivity::class.java))
+            startActivityForResult(
+                    Intent(this@WalletsActivity, NewTransactionActivity::class.java),
+                    666)
         })
     }
 
@@ -58,6 +62,15 @@ class WalletsActivity : AppCompatActivity() {
 
         update(ViewState.Loading())
         showWallets()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 666 && resultCode == Activity.RESULT_OK) {
+            val createdAmount: String = data?.getStringExtra("amount") ?: ""
+            if (createdAmount.isNotBlank()) {
+                toast("Transaction for $createdAmount created!")
+            }
+        }
     }
 
     private fun showWallets() {
