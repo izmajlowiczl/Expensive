@@ -2,9 +2,9 @@ package pl.expensive.transaction
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.view_new_transaction_placeholder_item.view.*
+import pl.expensive.collapseUp
+import pl.expensive.expandDown
 import pl.expensive.hideKeyboard
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
@@ -13,12 +13,8 @@ import java.math.BigDecimal
 class NewTransactionPlaceHolderViewHolder(itemView: View,
                                           val transactionStorage: TransactionStorage,
                                           val afterTransactionStored: (transition: Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {
-    private var isOpen = false
-
     fun update() {
-
-        itemView.setOnClickListener { if (!isOpen) expand() else collapse() }
-
+        itemView.vNewTransactionTitleHeader.setOnClickListener { toggleView() }
         itemView.vNewTransactionSubmit.setOnClickListener {
             if (validate()) {
                 val amount = BigDecimal(itemView.vNewTransactionAmount.text.toString())
@@ -28,28 +24,34 @@ class NewTransactionPlaceHolderViewHolder(itemView: View,
                 transactionStorage.insert(storedTransaction)
 
                 clearViews()
-                collapse()
+                toggleView()
 
                 afterTransactionStored(storedTransaction)
             }
         }
     }
 
-    private fun expand() = itemView.vNewTransactionPlaceholderImg.animate()
-            .rotationBy(45f)
-            .withEndAction {
-                isOpen = !isOpen
-                itemView.vNewTransactionParent.visibility = VISIBLE
+    private var isOpen = false
+    private fun toggleView() {
+        itemView.vNewTransactionTitleHeader.isClickable = false
+        itemView.vNewTransactionPlaceholderImg.rotateBy(if (!isOpen) 45f else -45f) {
+            if (!isOpen) {
+                itemView.vNewTransactionParent.expandDown()
+            } else {
+                itemView.vNewTransactionParent.collapseUp()
             }
-            .start()
+            isOpen = !isOpen
+            itemView.vNewTransactionTitleHeader.isClickable = true
+        }
+    }
 
-    private fun collapse() = itemView.vNewTransactionPlaceholderImg.animate()
-            .rotationBy(-45f)
-            .withEndAction {
-                isOpen = !isOpen
-                itemView.vNewTransactionParent.visibility = GONE
-            }
-            .start()
+    private fun View.rotateBy(value: Float, endAction: () -> Unit) {
+        animate()
+                .rotationBy(value)
+                .withEndAction {
+                    endAction()
+                }.start()
+    }
 
     private fun validate(): Boolean {
         var isValid = true
