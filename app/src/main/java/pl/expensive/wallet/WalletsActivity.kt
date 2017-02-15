@@ -1,7 +1,5 @@
 package pl.expensive.wallet
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -21,10 +19,15 @@ import org.threeten.bp.YearMonth
 import org.threeten.bp.format.TextStyle
 import pl.expensive.Injector
 import pl.expensive.R
+import pl.expensive.formatValue
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage.WalletsStorage
-import pl.expensive.transaction.*
+import pl.expensive.storage._Seeds
+import pl.expensive.transaction.Header
+import pl.expensive.transaction.NewTransactionPlaceHolder
+import pl.expensive.transaction.TransactionGrouper
+import pl.expensive.transaction.TransactionsAdapter
 import java.util.*
 
 
@@ -36,12 +39,15 @@ class WalletsActivity : AppCompatActivity() {
         Injector.app().transactions()
     }
 
+    private val afterTransactionStoredCallback: (Transaction) -> Unit = {
+        toast("Transaction for ${_Seeds.EUR.formatValue(money = it.amount)} created!")
+        // TODO: Instead just add to Adapter...
+        showWallets()
+    }
     private val adapter by lazy(mode = LazyThreadSafetyMode.NONE) {
-        TransactionsAdapter(newTransactionClickListener = {
-            startActivityForResult(
-                    Intent(this@WalletsActivity, NewTransactionActivity::class.java),
-                    666)
-        })
+        TransactionsAdapter(
+                afterTransactionStoredCallback = afterTransactionStoredCallback,
+                transactionStorage = transactionStorage)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,15 +68,6 @@ class WalletsActivity : AppCompatActivity() {
 
         update(ViewState.Loading())
         showWallets()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 666 && resultCode == Activity.RESULT_OK) {
-            val createdAmount: String = data?.getStringExtra("amount") ?: ""
-            if (createdAmount.isNotBlank()) {
-                toast("Transaction for $createdAmount created!")
-            }
-        }
     }
 
     private fun showWallets() {

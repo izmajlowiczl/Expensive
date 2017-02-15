@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
     android:clickable="true"
-    android:gravity="center_vertical"
     android:padding="@dimen/spacer"
     android:paddingLeft="@dimen/content_padding_left">
 
@@ -13,19 +13,61 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
+        android:gravity="center_horizontal"
         android:src="@drawable/ic_add_white_24dp"
         android:tint="@color/colorTextLight" />
 
     <TextView
+        android:id="@+id/vNewTransactionTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_alignBottom="@id/vNewTransactionPlaceholderImg"
+        android:layout_alignTop="@id/vNewTransactionPlaceholderImg"
         android:layout_toRightOf="@id/vNewTransactionPlaceholderImg"
+        android:gravity="center_vertical"
         android:paddingLeft="@dimen/medium_spacer"
         android:paddingRight="@dimen/small_spacer"
         android:text="Dodaj nowy wydatek"
         android:textColor="@color/colorTextLight" />
 
 
+    <LinearLayout
+        android:id="@+id/vNewTransactionParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/vNewTransactionTitle"
+        android:layout_below="@id/vNewTransactionPlaceholderImg"
+        android:layout_marginTop="@dimen/small_spacer"
+        android:background="@color/toolbar_bg"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/medium_spacer"
+        android:paddingRight="@dimen/small_spacer"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <EditText
+            android:id="@+id/vNewTransactionAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="$$$"
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/vNewTransactionDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:maxLines="2" />
+
+        <Button
+            android:id="@+id/vNewTransactionSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@color/colorAccent"
+            android:text="Add"
+            android:textColor="@color/white" />
+    </LinearLayout>
 </RelativeLayout>

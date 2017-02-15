@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import pl.expensive.R
 import pl.expensive.inflateLayout
 import pl.expensive.storage.Transaction
+import pl.expensive.storage.TransactionStorage
 import kotlin.properties.Delegates
 
-class TransactionsAdapter(val newTransactionClickListener: () -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TransactionsAdapter(val transactionStorage: TransactionStorage,
+                          val afterTransactionStoredCallback: (transaction: Transaction) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var data: List<Any> by Delegates.vetoable(emptyList()) { p, old, new ->
         notifyDataSetChanged()
         old != new
@@ -20,7 +22,10 @@ class TransactionsAdapter(val newTransactionClickListener: () -> Unit) : Recycle
                 R.layout.view_header_item ->
                     HeaderViewHolder(parent.inflateLayout(viewType))
                 R.layout.view_new_transaction_placeholder_item ->
-                    NewTransactionPlaceHolderViewHolder(parent.inflateLayout(viewType), newTransactionClickListener)
+                    NewTransactionPlaceHolderViewHolder(
+                            parent.inflateLayout(viewType),
+                            transactionStorage,
+                            afterTransactionStoredCallback)
                 else ->
                     throw IllegalArgumentException("Unknown view type $viewType")
             }
