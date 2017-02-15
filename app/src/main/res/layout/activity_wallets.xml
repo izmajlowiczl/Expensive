@@ -17,7 +17,8 @@
         android:gravity="bottom"
         android:paddingBottom="@dimen/small_spacer"
         android:paddingLeft="@dimen/content_padding_left"
-        app:titleTextColor="@color/toolbar_text" />
+        android:theme="@style/ExpensiveToolbar"
+        app:titleTextAppearance="@style/Toolbar.TitleText"/>
 
     <View
         android:id="@+id/toolbar_shadow"
@@ -59,7 +60,7 @@
             android:layout_gravity="right"
             android:background="@color/colorAccent"
             android:text="Add"
-            android:textColor="@color/colorText" />
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

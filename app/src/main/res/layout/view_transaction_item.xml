@@ -16,7 +16,6 @@
         android:layout_alignParentRight="true"
         android:paddingLeft="@dimen/spacer"
         android:paddingRight="@dimen/spacer"
-        android:textColor="@color/colorTextDark"
         android:textSize="@dimen/listItemTextMedium"
         tools:text="11:23" />
 
@@ -26,7 +25,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/transaction_time"
-        android:textColor="@color/colorTextDark"
         android:textSize="@dimen/listItemText"
         tools:text="-12.00 Eur" />
 
@@ -36,6 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/transaction_amount"
         android:paddingRight="@dimen/spacer"
+        android:textColor="@color/colorTextLight"
         android:textSize="@dimen/listItemTextSmall"
         tools:text="120.33 Eur" />
 </RelativeLayout>

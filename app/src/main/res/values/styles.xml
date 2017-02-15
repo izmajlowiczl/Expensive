@@ -9,4 +9,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ExpensiveToolbar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:background">@color/toolbar_bg</item>
+    </style>
+
+    <!-- This configures the styles for the title within the Toolbar  -->
+    <style name="Toolbar.TitleText" parent="Base.TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+
 </resources>
