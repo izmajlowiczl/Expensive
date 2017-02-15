@@ -1,5 +1,6 @@
 package pl.expensive.wallet
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -13,23 +14,15 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_wallets.*
-import org.jetbrains.anko.toast
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.TextStyle
 import pl.expensive.Injector
 import pl.expensive.R
-import pl.expensive.formatValue
-import pl.expensive.hideKeyboard
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage.WalletsStorage
-import pl.expensive.storage._Seeds
-import pl.expensive.transaction.Header
-import pl.expensive.transaction.NewTransactionPlaceHolder
-import pl.expensive.transaction.TransactionGrouper
-import pl.expensive.transaction.TransactionsAdapter
-import java.math.BigDecimal
+import pl.expensive.transaction.*
 import java.util.*
 
 
@@ -40,8 +33,11 @@ class WalletsActivity : AppCompatActivity() {
     private val transactionStorage: TransactionStorage by lazy(mode = LazyThreadSafetyMode.NONE) {
         Injector.app().transactions()
     }
+
     private val adapter by lazy(mode = LazyThreadSafetyMode.NONE) {
-        TransactionsAdapter()
+        TransactionsAdapter(newTransactionClickListener = {
+            startActivity(Intent(this@WalletsActivity, NewTransactionActivity::class.java))
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,28 +51,6 @@ class WalletsActivity : AppCompatActivity() {
         vRecycler.layoutManager = LinearLayoutManager(this)
         vRecycler.adapter = adapter
         vRecycler.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
-
-        vCreateTransaction.setOnClickListener {
-            val amountText = vCreateTransactionAmount.text.toString()
-            if (amountText.isNullOrEmpty()) {
-                vCreateTransactionAmount.error = "Mandatory"
-            } else {
-                vCreateTransactionAmount.error = null
-
-                update(ViewState.Loading())
-
-                val amount = BigDecimal(amountText)
-                val descText = vCreateTransactionDescription.text.toString()
-                transactionStorage.insert(Transaction.withdrawalWithAmount(amount = amount, desc = descText))
-                vCreateTransactionAmount.text.clear()
-                vCreateTransactionDescription.text.clear()
-                vCreateTransactionAmount.hideKeyboard()
-
-                toast("Transaction for ${_Seeds.EUR.formatValue(money = amount)} created!")
-
-                showWallets()
-            }
-        }
     }
 
     override fun onStart() {

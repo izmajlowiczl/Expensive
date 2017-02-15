@@ -18,7 +18,7 @@
         android:paddingBottom="@dimen/small_spacer"
         android:paddingLeft="@dimen/content_padding_left"
         android:theme="@style/ExpensiveToolbar"
-        app:titleTextAppearance="@style/Toolbar.TitleText"/>
+        app:titleTextAppearance="@style/Toolbar.TitleText" />
 
     <View
         android:id="@+id/toolbar_shadow"
@@ -27,48 +27,12 @@
         android:layout_below="@id/toolbar"
         android:background="@drawable/bottom_shadow" />
 
-    <LinearLayout
-        android:id="@+id/vCreateTransactionParent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar_shadow"
-        android:layout_marginTop="@dimen/small_spacer"
-        android:background="@color/toolbar_bg"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:padding="@dimen/spacer">
-
-        <EditText
-            android:id="@+id/vCreateTransactionAmount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="$$$"
-            android:inputType="numberDecimal"
-            android:maxLines="1" />
-
-        <EditText
-            android:id="@+id/vCreateTransactionDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Description"
-            android:maxLines="2" />
-
-        <Button
-            android:id="@+id/vCreateTransaction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@color/colorAccent"
-            android:text="Add"
-            android:textColor="@color/white" />
-    </LinearLayout>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/transactions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/vCreateTransactionParent"
+        android:layout_below="@id/toolbar_shadow"
         android:visibility="gone"
         tools:visibility="visible" />
 
