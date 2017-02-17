@@ -2,8 +2,7 @@ package pl.expensive.transaction
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import kotlinx.android.synthetic.main.view_new_transaction_placeholder_item.view.*
@@ -19,6 +18,8 @@ class NewTransactionPlaceHolderViewHolder(itemView: View,
                                           val transactionStorage: TransactionStorage,
                                           val afterTransactionStored: (transition: Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {
     fun update() = with(itemView) {
+        vNewTransactionPlaceholderSave.visibility = if (isOpen) VISIBLE else INVISIBLE
+        vNewTransactionParent.visibility = if (isOpen) VISIBLE else GONE
         vNewTransactionTitleHeader.setOnClickListener { toggleView() }
     }
 
