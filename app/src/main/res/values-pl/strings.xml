@@ -8,4 +8,6 @@
     <string name="add_new_spending">Nowy wydatek</string>
     <string name="enter_amount">Wprowadź wartość</string>
     <string name="description">Opis</string>
+    <string name="new_transaction_success_message">Dodano wydatek za %s!</string>
+    <string name="err_mandatory">Pole Wymagane!</string>
 </resources>

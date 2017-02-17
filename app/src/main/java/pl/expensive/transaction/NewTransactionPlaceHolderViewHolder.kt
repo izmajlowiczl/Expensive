@@ -92,7 +92,7 @@ class NewTransactionPlaceHolderViewHolder(itemView: View,
         with(itemView) {
             val amountText = vNewTransactionAmount.text.toString()
             if (amountText.isNullOrEmpty()) {
-                vNewTransactionAmount.error = "Mandatory"
+                vNewTransactionAmount.error = context.getString(R.string.err_mandatory)
                 isValid = false
             } else {
                 vNewTransactionAmount.error = null
