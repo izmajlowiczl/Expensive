@@ -6,7 +6,6 @@ import pl.expensive.R
 import pl.expensive.inflateLayout
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
-import pl.expensive.tr.NewTransactionPlaceHolderViewHolder
 import kotlin.properties.Delegates
 
 class TransactionsAdapter(val transactionStorage: TransactionStorage,
