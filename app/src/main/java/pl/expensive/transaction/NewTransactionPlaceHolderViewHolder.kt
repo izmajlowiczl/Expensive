@@ -33,6 +33,12 @@ class NewTransactionPlaceHolderViewHolder(itemView: View,
 
     private var isOpen = false
     private fun toggleView() = with(itemView) {
+
+        // If hiding clear error state (if any)
+        if (!isOpen) {
+            vNewTransactionAmount.error = null
+        }
+
         val (fromRot, toRot) = if (!isOpen) 0f to 45f else 45f to 0f
         val rotate = rotate(fromRot, toRot)
         vNewTransactionPlaceholderImg.startAnimation(rotate)
