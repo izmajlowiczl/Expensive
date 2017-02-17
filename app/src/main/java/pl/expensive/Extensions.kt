@@ -22,7 +22,7 @@ fun View.hideKeyboard() {
 fun ViewGroup.inflateLayout(@LayoutRes layout: Int): View =
         LayoutInflater.from(context).inflate(layout, this, false)
 
-fun View.expandDown() {
+fun View.expandDown(): Animation {
     measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     val targetHeight = measuredHeight
 
@@ -41,13 +41,14 @@ fun View.expandDown() {
 
         override fun willChangeBounds(): Boolean = true
     }
+    animation
 
     // 1dp/ms
     animation.duration = (targetHeight / context.resources.displayMetrics.density).toInt().toLong()
-    startAnimation(animation)
+    return animation
 }
 
-fun View.collapseUp() {
+fun View.collapseUp(): Animation {
     val initialHeight = measuredHeight
 
     val animation = object : Animation() {
@@ -66,7 +67,7 @@ fun View.collapseUp() {
 
     // 1dp/ms
     animation.duration = (initialHeight / context.resources.displayMetrics.density).toInt().toLong()
-    startAnimation(animation)
+    return animation
 }
 
 fun Currency.formatValue(locale: Locale = Locale.getDefault(), money: BigDecimal): String {

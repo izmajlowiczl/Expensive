@@ -2,6 +2,7 @@ package pl.expensive.transaction
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.view.animation.Animation
 import kotlinx.android.synthetic.main.view_new_transaction_placeholder_item.view.*
 import pl.expensive.collapseUp
 import pl.expensive.expandDown
@@ -33,16 +34,26 @@ class NewTransactionPlaceHolderViewHolder(itemView: View,
 
     private var isOpen = false
     private fun toggleView() {
-        itemView.vNewTransactionTitleHeader.isClickable = false
-        itemView.vNewTransactionPlaceholderImg.rotateBy(if (!isOpen) 45f else -45f) {
-            if (!isOpen) {
-                itemView.vNewTransactionParent.expandDown()
-            } else {
-                itemView.vNewTransactionParent.collapseUp()
+        val animListener: Animation.AnimationListener = object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
             }
-            isOpen = !isOpen
-            itemView.vNewTransactionTitleHeader.isClickable = true
+
+            override fun onAnimationEnd(animation: Animation?) {
+                isOpen = !isOpen
+                itemView.vNewTransactionTitleHeader.isClickable = true
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
         }
+        itemView.vNewTransactionTitleHeader.isClickable = false
+        itemView.vNewTransactionPlaceholderImg.rotateBy(45f, {
+            with(itemView.vNewTransactionParent) {
+                val anim = if (!isOpen) expandDown() else collapseUp()
+                anim.setAnimationListener(animListener)
+                startAnimation(anim)
+            }
+        })
     }
 
     private fun View.rotateBy(value: Float, endAction: () -> Unit) {
