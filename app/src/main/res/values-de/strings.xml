@@ -6,4 +6,6 @@
     <string name="total">Gesamt:\u00A0</string>
     <string name="current_month">Diese Monat</string>
     <string name="add_new_spending">Neue Ausgaben</string>
+    <string name="enter_amount">Geld hinzufügen</string>
+    <string name="description">Beschreibung</string>
 </resources>

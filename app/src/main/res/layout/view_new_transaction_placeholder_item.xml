@@ -23,7 +23,7 @@
             android:layout_marginLeft="@dimen/content_padding_left"
             android:layout_marginTop="@dimen/spacer"
             android:src="@drawable/ic_add_white_24dp"
-            android:tint="@color/colorTextLight" />
+            android:tint="@color/icons" />
 
         <ImageView
             android:id="@+id/vNewTransactionPlaceholderSave"
@@ -35,7 +35,7 @@
             android:gravity="center_vertical"
             android:padding="@dimen/spacer"
             android:src="@drawable/ic_done_white_24dp"
-            android:tint="@color/colorTextLight"
+            android:tint="@color/icons"
             android:visibility="invisible"
             tools:visibility="visible" />
 
@@ -49,47 +49,91 @@
             android:paddingLeft="@dimen/medium_spacer"
             android:paddingRight="@dimen/small_spacer"
             android:text="@string/add_new_spending"
-            android:textColor="@color/colorTextLight" />
+            android:textColor="@color/colorText" />
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/vNewTransactionParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/vNewTransactionTitleHeader"
         android:background="@color/toolbar_bg"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/small_spacer"
-        android:paddingLeft="48dp"
-        android:paddingRight="@dimen/small_spacer"
         android:paddingTop="@dimen/small_spacer"
         android:visibility="gone"
         tools:visibility="visible">
 
-        <EditText
-            android:id="@+id/vNewTransactionAmount"
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:hint="$$$"
-            android:padding="@dimen/spacer"
-            android:inputType="numberDecimal"
-            android:maxLines="1" />
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/small_spacer"
+            android:paddingTop="@dimen/small_spacer">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/header_bg" />
+            <ImageView
+                android:id="@+id/vNewTransactionAmountImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="@dimen/spacer"
+                android:layout_marginLeft="@dimen/content_padding_left"
+                android:src="@drawable/ic_attach_money_white_24dp"
+                android:tint="@color/icons" />
 
-        <EditText
-            android:id="@+id/vNewTransactionDescription"
+            <EditText
+                android:id="@+id/vNewTransactionAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/vNewTransactionAmountImg"
+                android:background="@color/transparent"
+                android:hint="@string/enter_amount"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:paddingBottom="@dimen/small_spacer"
+                android:paddingLeft="@dimen/medium_spacer"
+                android:paddingRight="@dimen/small_spacer"
+                android:paddingTop="@dimen/small_spacer"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorTextLight"
+                android:textSize="@dimen/listItemText" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:padding="@dimen/spacer"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:hint="Description"
-            android:maxLines="2" />
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/small_spacer"
+            android:paddingTop="@dimen/small_spacer">
+
+            <ImageView
+                android:id="@+id/vNewTransactionDescriptionImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="@dimen/spacer"
+                android:layout_marginLeft="@dimen/content_padding_left"
+                android:paddingTop="@dimen/small_spacer"
+                android:src="@drawable/ic_note_white_24dp"
+                android:tint="@color/icons" />
+
+            <EditText
+                android:id="@+id/vNewTransactionDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/vNewTransactionDescriptionImg"
+                android:background="@color/transparent"
+                android:hint="@string/description"
+                android:paddingBottom="@dimen/small_spacer"
+                android:paddingLeft="@dimen/medium_spacer"
+                android:paddingRight="@dimen/small_spacer"
+                android:paddingTop="@dimen/small_spacer"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorTextLight"
+                android:textSize="@dimen/listItemText" />
+        </RelativeLayout>
+
     </LinearLayout>
 
 </LinearLayout>
