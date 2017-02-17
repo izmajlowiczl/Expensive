@@ -5,4 +5,5 @@
     <string name="err_loading_wallets">Cannot load wallets</string>
     <string name="total">Total:\u00A0</string>
     <string name="current_month">Current month</string>
+    <string name="add_new_spending">New spending</string>
 </resources>

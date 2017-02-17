@@ -47,7 +47,7 @@
             android:layout_toRightOf="@id/vNewTransactionPlaceholderImg"
             android:paddingLeft="@dimen/medium_spacer"
             android:paddingRight="@dimen/small_spacer"
-            android:text="Dodaj nowy wydatek"
+            android:text="@string/add_new_spending"
             android:textColor="@color/colorTextLight" />
     </RelativeLayout>
 
