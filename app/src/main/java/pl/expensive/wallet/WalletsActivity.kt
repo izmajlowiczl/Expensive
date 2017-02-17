@@ -16,6 +16,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_wallets.*
 import org.jetbrains.anko.toast
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.Year
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.TextStyle
 import pl.expensive.Injector
@@ -116,12 +117,16 @@ class WalletsActivity : AppCompatActivity() {
     /**
      * Creates Spannable with month name at full size,
      * followed by short year  (eg '17 from 2017) with 60% text size (from month name)
+     *
+     * Year part is skipped for current year
      */
-    private fun Map.Entry<YearMonth, List<Transaction>>.formatHeader(): Spannable {
+    private fun Map.Entry<YearMonth, List<Transaction>>.formatHeader(): CharSequence {
         val month = key.month.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()
-        val year = if (key.year > 2000) key.year - 2000 else key.year
+        if (key.year == Year.now().value) {
+            return month
+        }
 
-        val span = SpannableString("$month '$year")
+        val span = SpannableString("$month '${if (key.year > 2000) key.year - 2000 else key.year}")
         val start = month.length
         val end = span.length
         span.setSpan(SuperscriptSpan(), start, end, 0)

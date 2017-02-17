@@ -38,13 +38,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/vNewTransactionTitleHeader"
-        android:layout_marginTop="@dimen/small_spacer"
         android:background="@color/toolbar_bg"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:paddingBottom="@dimen/small_spacer"
         android:paddingLeft="48dp"
         android:paddingRight="@dimen/small_spacer"
+        android:paddingTop="@dimen/small_spacer"
         android:visibility="gone"
         tools:visibility="visible">
 
