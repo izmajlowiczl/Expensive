@@ -16,7 +16,6 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_wallets.*
 import org.jetbrains.anko.toast
 import org.threeten.bp.LocalDateTime
-import org.threeten.bp.Year
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.TextStyle
 import pl.expensive.Injector
@@ -122,7 +121,11 @@ class WalletsActivity : AppCompatActivity() {
      */
     private fun Map.Entry<YearMonth, List<Transaction>>.formatHeader(): CharSequence {
         val month = key.month.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()
-        if (key.year == Year.now().value) {
+        val now = YearMonth.now()
+        if (key.year == now.year) {
+            if (key.month == now.month) {
+                return getString(R.string.current_month)
+            }
             return month
         }
 

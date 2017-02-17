@@ -4,4 +4,5 @@
 
     <string name="err_loading_wallets">Nie można pobrać portfeli</string>
     <string name="total">Razem:\u00A0</string>
+    <string name="current_month">Aktualny miesiąc</string>
 </resources>
