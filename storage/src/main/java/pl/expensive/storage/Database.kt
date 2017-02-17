@@ -63,7 +63,16 @@ class Database : SQLiteOpenHelper {
 
         // Categories
         db.storeCategory(_Seeds.OTHER)
+        db.storeCategory(_Seeds.GROCERY)
         db.storeCategory(_Seeds.FOOD)
+        db.storeCategory(_Seeds.TRAVEL)
+        db.storeCategory(_Seeds.TRANSPORT)
+        db.storeCategory(_Seeds.CAR)
+        db.storeCategory(_Seeds.SPORT)
+        db.storeCategory(_Seeds.HEALTH)
+        db.storeCategory(_Seeds.CLOTHES)
+        db.storeCategory(_Seeds.HOUSE)
+        db.storeCategory(_Seeds.BILLS)
     }
 
     private fun storeCurrency(db: SQLiteDatabase, currency: Currency) {

@@ -1,6 +1,15 @@
 <resources>
     <string name="cat_other">Inne</string>
     <string name="cat_food">Jedzenie</string>
+    <string name="cat_grocery">Zakupy</string>
+    <string name="cat_travel">Wakacje</string>
+    <string name="cat_transport">Transport Publiczny</string>
+    <string name="cat_car">Samochód</string>
+    <string name="cat_sport">Sport</string>
+    <string name="cat_health">Zdrowie</string>
+    <string name="cat_house">Dom</string>
+    <string name="cat_bills">Rachunki</string>
+    <string name="cat_clothes">Ubrania</string>
 
     <string name="err_loading_wallets">Nie można pobrać portfeli</string>
     <string name="total">Razem:\u00A0</string>
