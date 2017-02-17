@@ -94,7 +94,7 @@ class WalletsActivity : AppCompatActivity() {
             TransactionGrouper.group(viewState.viewModels.transactions.filter {
                 !it.toLocalDateTime().isAfter(today)
             }).apply {
-                result.add(NewTransactionPlaceHolder(expand = false))
+                result.add(NewTransactionPlaceHolder(shouldExpand = false))
             }.forEach {
                 result.add(Header(it.formatHeader(), formattedHeaderTotal(viewState.viewModels.currency, it.value)))
                 result.addAll(it.value)
@@ -106,7 +106,7 @@ class WalletsActivity : AppCompatActivity() {
         is ViewState.Empty -> {
             loading.visibility = GONE
             vTransactions.visibility = VISIBLE
-            adapter.data = mutableListOf(NewTransactionPlaceHolder(expand = true))
+            adapter.data = mutableListOf(NewTransactionPlaceHolder(shouldExpand = true))
         }
         is ViewState.Error -> {
             vTransactions.visibility = GONE

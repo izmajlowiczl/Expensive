@@ -17,17 +17,20 @@ class NewTransactionPlaceHolderViewHolder(itemView: View,
                                           val transactionStorage: TransactionStorage,
                                           val afterTransactionStored: (transition: Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {
 
-    var isOpen: Boolean = false
+    /**
+     * Whether expandable view is open or not
+     */
+    var isCurrentlyOpen: Boolean = false
 
     fun update(viewModel: NewTransactionPlaceHolder) = with(itemView) {
-        isOpen = !viewModel.expand
+        isCurrentlyOpen = !viewModel.shouldExpand
         toggleView()
 
         vNewTransactionTitleHeader.setOnClickListener { toggleView() }
         vNewTransactionAmount.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 // When is expanded and has all mandatory fields filled. Change color of save button
-                if (isOpen && vNewTransactionAmount.text.isNotBlank()) {
+                if (isCurrentlyOpen && vNewTransactionAmount.text.isNotBlank()) {
                     vNewTransactionPlaceholderSave.tint(R.color.ready)
                 } else {
                     vNewTransactionPlaceholderSave.tint(R.color.colorTextLight)
@@ -55,39 +58,52 @@ class NewTransactionPlaceHolderViewHolder(itemView: View,
     }
 
     private fun toggleView() = with(itemView) {
-
         // If hiding clear error state (if any)
-        if (!isOpen) {
+        if (!isCurrentlyOpen) {
             vNewTransactionAmount.error = null
         }
 
-        val (fromRot, toRot) = if (!isOpen) 0f to 45f else 45f to 0f
-        val rotate = rotate(fromRot, toRot)
-        vNewTransactionPlaceholderImg.startAnimation(rotate)
+        val (fromRot, toRot) = if (!isCurrentlyOpen) 0f to 45f else 45f to 0f
+        vNewTransactionPlaceholderImg.startAnimation(rotate(fromRot, toRot))
 
-        val expandOrCollapseAnim = if (!isOpen) vNewTransactionParent.expandDown() else vNewTransactionParent.collapseUp()
-        expandOrCollapseAnim.endAction {
-            isOpen = !isOpen
+        vNewTransactionParent.startAnimation(
+                if (!isCurrentlyOpen) {
+                    vNewTransactionParent.expandDown()
+                } else {
+                    vNewTransactionParent.collapseUp()
+                }.apply {
+                    endAction {
+                        isCurrentlyOpen = !isCurrentlyOpen
 
-            // View is already open and isOpen flag changed
-            val (fromScale, toScale) = if (isOpen) 0f to 1f else 1f to 0f
-            vNewTransactionPlaceholderSave.startAnimation(scaleFromMiddle(fromScale, toScale).apply {
-                setAnimationListener(object : Animation.AnimationListener {
-                    override fun onAnimationStart(animation: Animation?) {
-                        itemView.vNewTransactionPlaceholderSave.visibility = if (isOpen) VISIBLE else INVISIBLE
-                        itemView.vNewTransactionPlaceholderSave.setOnClickListener(if (isOpen) saveClickListener else null)
+                        // View is already open and isCurrentlyOpen flag changed
+                        val (fromScale, toScale) = if (isCurrentlyOpen) 0f to 1f else 1f to 0f
+                        vNewTransactionPlaceholderSave.startAnimation(scaleFromMiddle(fromScale, toScale).apply {
+                            setAnimationListener(object : Animation.AnimationListener {
+                                override fun onAnimationStart(animation: Animation?) {
+                                    if (isCurrentlyOpen) {
+                                        itemView.vNewTransactionPlaceholderSave.visibility = VISIBLE
+                                        itemView.vNewTransactionPlaceholderSave.setOnClickListener(saveClickListener)
+                                    } else {
+                                        itemView.vNewTransactionPlaceholderSave.visibility = INVISIBLE
+                                        itemView.vNewTransactionPlaceholderSave.setOnClickListener(null)
+                                    }
+                                }
+
+                                override fun onAnimationEnd(animation: Animation?) {
+                                    if (isCurrentlyOpen) {
+                                        itemView.vNewTransactionPlaceholderSave.visibility = INVISIBLE
+                                        itemView.vNewTransactionPlaceholderSave.setOnClickListener(null)
+                                    } else {
+                                        itemView.vNewTransactionPlaceholderSave.visibility = VISIBLE
+                                        itemView.vNewTransactionPlaceholderSave.setOnClickListener(saveClickListener)
+                                    }
+                                }
+
+                                override fun onAnimationRepeat(animation: Animation?) {}
+                            })
+                        })
                     }
-
-                    override fun onAnimationEnd(animation: Animation?) {
-                        itemView.vNewTransactionPlaceholderSave.visibility = if (isOpen) INVISIBLE else VISIBLE
-                        itemView.vNewTransactionPlaceholderSave.setOnClickListener(if (isOpen) saveClickListener else null)
-                    }
-
-                    override fun onAnimationRepeat(animation: Animation?) {}
                 })
-            })
-        }
-        vNewTransactionParent.startAnimation(expandOrCollapseAnim)
     }
 
 
