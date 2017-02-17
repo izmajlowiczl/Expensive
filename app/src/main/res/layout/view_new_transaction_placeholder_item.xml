@@ -115,7 +115,7 @@
                 android:layout_marginBottom="@dimen/spacer"
                 android:layout_marginLeft="@dimen/content_padding_left"
                 android:paddingTop="@dimen/small_spacer"
-                android:src="@drawable/ic_note_white_24dp"
+                android:src="@drawable/ic_subject_white_24dp"
                 android:tint="@color/icons" />
 
             <EditText
