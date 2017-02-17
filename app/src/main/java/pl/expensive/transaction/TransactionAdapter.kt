@@ -10,9 +10,20 @@ import kotlin.properties.Delegates
 
 class TransactionsAdapter(val transactionStorage: TransactionStorage,
                           val afterTransactionStoredCallback: (transaction: Transaction) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var data: List<Any> by Delegates.vetoable(emptyList()) { p, old, new ->
+    var data: MutableList<Any> by Delegates.vetoable(mutableListOf()) { p, old, new ->
         notifyDataSetChanged()
         old != new
+    }
+
+    fun plus(transaction: Transaction) {
+        val pos = calculatePosForNewTransaction(transaction)
+        data.add(pos, transaction)
+        notifyItemInserted(pos)
+    }
+
+    private fun calculatePosForNewTransaction(transaction: Transaction): Int {
+        // Add just below placeholder and header
+        return 2
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =

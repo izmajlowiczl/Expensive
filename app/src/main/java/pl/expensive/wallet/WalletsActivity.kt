@@ -41,8 +41,7 @@ class WalletsActivity : AppCompatActivity() {
 
     private val afterTransactionStoredCallback: (Transaction) -> Unit = {
         toast("Transaction for ${_Seeds.EUR.formatValue(money = it.amount)} created!")
-        // TODO: Instead just add to Adapter...
-        showWallets()
+        adapter.plus(it)
     }
     private val adapter by lazy(mode = LazyThreadSafetyMode.NONE) {
         TransactionsAdapter(
