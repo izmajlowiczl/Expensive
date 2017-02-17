@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -12,7 +11,6 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_wallets.*
 import org.jetbrains.anko.toast
 import org.threeten.bp.LocalDateTime
@@ -56,10 +54,9 @@ class WalletsActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-        val vRecycler = findViewById(R.id.transactions) as RecyclerView
-        vRecycler.layoutManager = LinearLayoutManager(this)
-        vRecycler.adapter = adapter
-        vRecycler.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+        vTransactions.layoutManager = LinearLayoutManager(this)
+        vTransactions.adapter = adapter
+        vTransactions.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
     }
 
     override fun onStart() {
@@ -82,11 +79,11 @@ class WalletsActivity : AppCompatActivity() {
 
     private fun update(viewState: ViewState) = when (viewState) {
         is ViewState.Loading -> {
-            transactions.visibility = GONE
+            vTransactions.visibility = GONE
             loading.visibility = VISIBLE
         }
         is ViewState.Wallets -> {
-            transactions.visibility = VISIBLE
+            vTransactions.visibility = VISIBLE
             loading.visibility = GONE
 
             val result = mutableListOf<Any>()
@@ -104,11 +101,11 @@ class WalletsActivity : AppCompatActivity() {
             supportActionBar!!.title = viewState.viewModels.formattedTitle()
         }
         is ViewState.Error -> {
-            transactions.visibility = GONE
+            vTransactions.visibility = GONE
             loading.visibility = GONE
 
             // TODO: show error view here instead toast
-            Toast.makeText(this, viewState.err, Toast.LENGTH_SHORT).show()
+            toast(viewState.err)
         }
     }
 
