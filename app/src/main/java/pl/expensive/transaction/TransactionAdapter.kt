@@ -38,7 +38,7 @@ class TransactionsAdapter(val transactionStorage: TransactionStorage,
                 is HeaderViewHolder ->
                     holder.update(data[position] as Header)
                 is NewTransactionPlaceHolderViewHolder ->
-                    holder.update()
+                    holder.update(data[position] as NewTransactionPlaceHolder)
                 else ->
                     throw IllegalArgumentException("Unknown view type ${holder.itemViewType}")
             }

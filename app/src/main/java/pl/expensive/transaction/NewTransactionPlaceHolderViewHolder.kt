@@ -4,7 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.View.*
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.animation.Animation
 import kotlinx.android.synthetic.main.view_new_transaction_placeholder_item.view.*
 import pl.expensive.*
@@ -15,9 +16,13 @@ import java.math.BigDecimal
 class NewTransactionPlaceHolderViewHolder(itemView: View,
                                           val transactionStorage: TransactionStorage,
                                           val afterTransactionStored: (transition: Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {
-    fun update() = with(itemView) {
-        vNewTransactionPlaceholderSave.visibility = if (isOpen) VISIBLE else INVISIBLE
-        vNewTransactionParent.visibility = if (isOpen) VISIBLE else GONE
+
+    var isOpen: Boolean = false
+
+    fun update(viewModel: NewTransactionPlaceHolder) = with(itemView) {
+        isOpen = !viewModel.expand
+        toggleView()
+
         vNewTransactionTitleHeader.setOnClickListener { toggleView() }
         vNewTransactionAmount.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -49,7 +54,6 @@ class NewTransactionPlaceHolderViewHolder(itemView: View,
         }
     }
 
-    private var isOpen = false
     private fun toggleView() = with(itemView) {
 
         // If hiding clear error state (if any)

@@ -69,12 +69,15 @@ class WalletsActivity : AppCompatActivity() {
     private fun showWallets() {
         val data = walletStorage.list().first()
         val transactionData = transactionStorage.select().sortedByDescending { it.date }
-        val viewModel = WalletViewModel(
-                data.name,
-                transactionData.filter { it.wallet == data.uuid },
-                data.currency)
 
-        update(ViewState.Wallets(viewModel))
+        if (transactionData.isEmpty()) {
+            update(ViewState.Empty())
+        } else {
+            update(ViewState.Wallets(WalletViewModel(
+                    data.name,
+                    transactionData.filter { it.wallet == data.uuid },
+                    data.currency)))
+        }
     }
 
     private fun update(viewState: ViewState) = when (viewState) {
@@ -91,7 +94,7 @@ class WalletsActivity : AppCompatActivity() {
             TransactionGrouper.group(viewState.viewModels.transactions.filter {
                 !it.toLocalDateTime().isAfter(today)
             }).apply {
-                result.add(NewTransactionPlaceHolder())
+                result.add(NewTransactionPlaceHolder(expand = false))
             }.forEach {
                 result.add(Header(it.formatHeader(), formattedHeaderTotal(viewState.viewModels.currency, it.value)))
                 result.addAll(it.value)
@@ -99,6 +102,11 @@ class WalletsActivity : AppCompatActivity() {
 
             adapter.data = result
             supportActionBar!!.title = viewState.viewModels.formattedTitle()
+        }
+        is ViewState.Empty -> {
+            loading.visibility = GONE
+            vTransactions.visibility = VISIBLE
+            adapter.data = mutableListOf(NewTransactionPlaceHolder(expand = true))
         }
         is ViewState.Error -> {
             vTransactions.visibility = GONE

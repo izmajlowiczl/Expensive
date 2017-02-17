@@ -1,4 +1,4 @@
 package pl.expensive.transaction
 
-class NewTransactionPlaceHolder
+class NewTransactionPlaceHolder(var expand: Boolean)
 
