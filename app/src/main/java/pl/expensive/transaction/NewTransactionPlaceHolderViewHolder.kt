@@ -32,37 +32,36 @@ class NewTransactionPlaceHolderViewHolder(itemView: View,
     }
 
     private var isOpen = false
-    private fun toggleView() {
+    private fun toggleView() = with(itemView) {
+        val (fromRot, toRot) = if (!isOpen) 0f to 45f else 45f to 0f
+        val rotate = rotate(fromRot, toRot)
+        vNewTransactionPlaceholderImg.startAnimation(rotate)
 
-        with(itemView) {
-            val expandOrCollapseAnim = if (!isOpen) vNewTransactionParent.expandDown() else vNewTransactionParent.collapseUp()
-            expandOrCollapseAnim.endAction {
-                isOpen = !isOpen
+        val expandOrCollapseAnim = if (!isOpen) vNewTransactionParent.expandDown() else vNewTransactionParent.collapseUp()
+        expandOrCollapseAnim.endAction {
+            isOpen = !isOpen
 
-                // View is already open and isOpen flag changed
-                val (from, to) = if (isOpen) 0f to 1f else 1f to 0f
-                vNewTransactionPlaceholderSave.startAnimation(scaleFromMiddle(from, to).apply {
-                    setAnimationListener(object : Animation.AnimationListener {
-                        override fun onAnimationStart(animation: Animation?) {
-                            itemView.vNewTransactionPlaceholderSave.visibility = if (isOpen) VISIBLE else INVISIBLE
-                            itemView.vNewTransactionPlaceholderSave.setOnClickListener(if (isOpen) saveClickListener else null)
-                        }
+            // View is already open and isOpen flag changed
+            val (fromScale, toScale) = if (isOpen) 0f to 1f else 1f to 0f
+            vNewTransactionPlaceholderSave.startAnimation(scaleFromMiddle(fromScale, toScale).apply {
+                setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(animation: Animation?) {
+                        itemView.vNewTransactionPlaceholderSave.visibility = if (isOpen) VISIBLE else INVISIBLE
+                        itemView.vNewTransactionPlaceholderSave.setOnClickListener(if (isOpen) saveClickListener else null)
+                    }
 
-                        override fun onAnimationEnd(animation: Animation?) {
-                            itemView.vNewTransactionPlaceholderSave.visibility = if (isOpen) INVISIBLE else VISIBLE
-                            itemView.vNewTransactionPlaceholderSave.setOnClickListener(if (isOpen) saveClickListener else null)
-                        }
+                    override fun onAnimationEnd(animation: Animation?) {
+                        itemView.vNewTransactionPlaceholderSave.visibility = if (isOpen) INVISIBLE else VISIBLE
+                        itemView.vNewTransactionPlaceholderSave.setOnClickListener(if (isOpen) saveClickListener else null)
+                    }
 
-                        override fun onAnimationRepeat(animation: Animation?) {}
-                    })
+                    override fun onAnimationRepeat(animation: Animation?) {}
                 })
-            }
-
-            val (from, to) = if (!isOpen) 0f to 45f else 45f to 0f
-            vNewTransactionPlaceholderImg.rotate(from, to)
-            vNewTransactionParent.startAnimation(expandOrCollapseAnim)
+            })
         }
+        vNewTransactionParent.startAnimation(expandOrCollapseAnim)
     }
+
 
     private fun validate(): Boolean {
         var isValid = true

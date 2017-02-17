@@ -9,6 +9,7 @@ fun View.rotate(from: Float, to: Float): Animation {
     return RotateAnimation(from, to, Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f).apply {
         duration = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
         fillAfter = true
+        fillBefore = true
     }
 }
 
