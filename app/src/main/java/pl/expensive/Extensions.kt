@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.view.inputmethod.InputMethodManager
@@ -29,19 +30,21 @@ fun View.expandDown(): Animation {
     // Older versions of android (pre API 21) cancel animations for views with a height of 0.
     layoutParams.height = 1
     visibility = View.VISIBLE
+
+    val interpolator = AccelerateDecelerateInterpolator()
+
     val animation = object : Animation() {
         override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
             layoutParams.height = if (interpolatedTime == 1f) {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             } else {
-                (targetHeight * interpolatedTime).toInt()
+                (targetHeight * interpolator.getInterpolation(interpolatedTime)).toInt()
             }
             requestLayout()
         }
 
         override fun willChangeBounds(): Boolean = true
     }
-    animation
 
     // 1dp/ms
     animation.duration = (targetHeight / context.resources.displayMetrics.density).toInt().toLong()
@@ -70,9 +73,20 @@ fun View.collapseUp(): Animation {
     return animation
 }
 
+fun Animation.endAction(action: () -> Unit) {
+    setAnimationListener(object : Animation.AnimationListener {
+        override fun onAnimationEnd(animation: Animation?) = action()
+
+        override fun onAnimationRepeat(animation: Animation?) {
+        }
+
+        override fun onAnimationStart(animation: Animation?) {
+        }
+    })
+}
+
 fun Currency.formatValue(locale: Locale = Locale.getDefault(), money: BigDecimal): String {
     val numberFormat = DecimalFormat.getInstance(locale) as DecimalFormat
     numberFormat.applyPattern(format)
     return numberFormat.format(money)
 }
-

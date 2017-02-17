@@ -1,10 +1,10 @@
-package pl.expensive.transaction
+package pl.expensive.tr
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.animation.Animation
 import kotlinx.android.synthetic.main.view_new_transaction_placeholder_item.view.*
 import pl.expensive.collapseUp
+import pl.expensive.endAction
 import pl.expensive.expandDown
 import pl.expensive.hideKeyboard
 import pl.expensive.storage.Transaction
@@ -34,34 +34,17 @@ class NewTransactionPlaceHolderViewHolder(itemView: View,
 
     private var isOpen = false
     private fun toggleView() {
-        val animListener: Animation.AnimationListener = object : Animation.AnimationListener {
-            override fun onAnimationRepeat(animation: Animation?) {
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
+        with(itemView) {
+            vNewTransactionTitleHeader.isClickable = false
+            val expandOrCollapseAnim = if (!isOpen) vNewTransactionParent.expandDown() else vNewTransactionParent.collapseUp()
+            expandOrCollapseAnim.endAction {
                 isOpen = !isOpen
                 itemView.vNewTransactionTitleHeader.isClickable = true
             }
 
-            override fun onAnimationStart(animation: Animation?) {
-            }
+            vNewTransactionPlaceholderImg.animate().rotationBy(45f).start()
+            vNewTransactionParent.startAnimation(expandOrCollapseAnim)
         }
-        itemView.vNewTransactionTitleHeader.isClickable = false
-        itemView.vNewTransactionPlaceholderImg.rotateBy(45f, {
-            with(itemView.vNewTransactionParent) {
-                val anim = if (!isOpen) expandDown() else collapseUp()
-                anim.setAnimationListener(animListener)
-                startAnimation(anim)
-            }
-        })
-    }
-
-    private fun View.rotateBy(value: Float, endAction: () -> Unit) {
-        animate()
-                .rotationBy(value)
-                .withEndAction {
-                    endAction()
-                }.start()
     }
 
     private fun validate(): Boolean {
