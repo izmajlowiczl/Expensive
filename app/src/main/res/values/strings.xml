@@ -3,4 +3,5 @@
     <string name="cat_food">Food</string>
 
     <string name="err_loading_wallets">Cannot load wallets</string>
+    <string name="total">Total:\u00A0</string>
 </resources>

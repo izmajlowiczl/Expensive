@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
 import android.view.View.GONE
@@ -19,11 +20,10 @@ import org.threeten.bp.YearMonth
 import org.threeten.bp.format.TextStyle
 import pl.expensive.Injector
 import pl.expensive.R
+import pl.expensive.calculateTotal
 import pl.expensive.formatValue
-import pl.expensive.storage.Transaction
-import pl.expensive.storage.TransactionStorage
-import pl.expensive.storage.WalletsStorage
-import pl.expensive.storage._Seeds
+import pl.expensive.storage.*
+import pl.expensive.storage.Currency
 import pl.expensive.transaction.Header
 import pl.expensive.transaction.NewTransactionPlaceHolder
 import pl.expensive.transaction.TransactionGrouper
@@ -97,7 +97,7 @@ class WalletsActivity : AppCompatActivity() {
             }).apply {
                 result.add(NewTransactionPlaceHolder())
             }.forEach {
-                result.add(Header(it.formatHeader()))
+                result.add(Header(it.formatHeader(), formattedHeaderTotal(viewState.viewModels.currency, it.value)))
                 result.addAll(it.value)
             }
 
@@ -138,6 +138,14 @@ class WalletsActivity : AppCompatActivity() {
         val span: Spannable = SpannableString("$name  ${formattedTotal()}")
         span.setSpan(RelativeSizeSpan(.6f), 0, name.length, 0)
         return span
+    }
+
+    private fun formattedHeaderTotal(currency: Currency, transactions: List<Transaction>): Spannable {
+        val relative: Spannable = SpannableString(getString(R.string.total))
+        relative.setSpan(RelativeSizeSpan(.6f), 0, relative.length, 0)
+        return SpannableStringBuilder()
+                .append(relative)
+                .append(currency.formatValue(money = transactions.calculateTotal()))
     }
 }
 

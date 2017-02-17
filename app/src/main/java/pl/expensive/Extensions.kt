@@ -11,6 +11,7 @@ import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.view.inputmethod.InputMethodManager
 import pl.expensive.storage.Currency
+import pl.expensive.storage.Transaction
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.util.*
@@ -89,4 +90,13 @@ fun Currency.formatValue(locale: Locale = Locale.getDefault(), money: BigDecimal
     val numberFormat = DecimalFormat.getInstance(locale) as DecimalFormat
     numberFormat.applyPattern(format)
     return numberFormat.format(money)
+}
+
+/**
+ * Calculate total of <b>absolute</b> amounts
+ */
+fun List<Transaction>.calculateTotal(): BigDecimal {
+    var total = BigDecimal.ZERO
+    map { total += it.amount.abs() }
+    return total
 }

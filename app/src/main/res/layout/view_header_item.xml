@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/vHeader"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/header_bg"
-    android:textColor="@color/header_text"
-    android:padding="@dimen/spacer"
-    android:paddingLeft="@dimen/content_padding_left"
-    android:textStyle="bold"
-    tools:text="January" />
+    android:paddingBottom="@dimen/spacer"
+    android:paddingTop="@dimen/spacer">
+
+    <TextView
+        android:id="@+id/vHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:background="@color/header_bg"
+        android:paddingLeft="@dimen/content_padding_left"
+        android:textColor="@color/header_text"
+        android:textStyle="bold"
+        tools:text="January" />
+
+    <TextView
+        android:id="@+id/vHeaderAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toLeftOf="@id/vHeader"
+        android:background="@color/header_bg"
+        android:paddingRight="@dimen/spacer"
+        android:textColor="@color/header_text"
+        android:textSize="@dimen/listItemTextMedium"
+        tools:text="125 E" />
+
+
+</RelativeLayout>

@@ -3,4 +3,5 @@
     <string name="cat_food">Essen</string>
 
     <string name="err_loading_wallets">Daten können nicht geladen werden</string>
+    <string name="total">Gesamt:\u00A0</string>
 </resources>
