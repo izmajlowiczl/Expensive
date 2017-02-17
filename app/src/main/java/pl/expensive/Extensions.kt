@@ -1,13 +1,16 @@
 package pl.expensive
 
 import android.content.Context
+import android.graphics.PorterDuff
 import android.support.annotation.LayoutRes
+import android.support.v4.content.res.ResourcesCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import pl.expensive.storage.Currency
 import pl.expensive.storage.Transaction
 import java.math.BigDecimal
@@ -30,6 +33,10 @@ fun Currency.formatValue(locale: Locale = Locale.getDefault(), money: BigDecimal
 
 fun View.show(value: Boolean) {
     visibility = if (value) VISIBLE else GONE
+}
+
+fun ImageView.tint(color: Int) {
+    setColorFilter(ResourcesCompat.getColor(context.resources, color, context.theme), PorterDuff.Mode.SRC_IN)
 }
 
 /**

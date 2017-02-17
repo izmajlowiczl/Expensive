@@ -1,6 +1,8 @@
 package pl.expensive.transaction
 
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.View.*
 import android.view.animation.Animation
@@ -17,6 +19,22 @@ class NewTransactionPlaceHolderViewHolder(itemView: View,
         vNewTransactionPlaceholderSave.visibility = if (isOpen) VISIBLE else INVISIBLE
         vNewTransactionParent.visibility = if (isOpen) VISIBLE else GONE
         vNewTransactionTitleHeader.setOnClickListener { toggleView() }
+        vNewTransactionAmount.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                // When is expanded and has all mandatory fields filled. Change color of save button
+                if (isOpen && vNewTransactionAmount.text.isNotBlank()) {
+                    vNewTransactionPlaceholderSave.tint(R.color.ready)
+                } else {
+                    vNewTransactionPlaceholderSave.tint(R.color.colorTextLight)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
     }
 
     val saveClickListener: (View) -> Unit = {

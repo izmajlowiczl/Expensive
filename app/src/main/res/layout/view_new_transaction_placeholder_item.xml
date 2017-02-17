@@ -71,14 +71,23 @@
             android:id="@+id/vNewTransactionAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/transparent"
             android:hint="$$$"
+            android:padding="@dimen/spacer"
             android:inputType="numberDecimal"
             android:maxLines="1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/header_bg" />
 
         <EditText
             android:id="@+id/vNewTransactionDescription"
             android:layout_width="match_parent"
+            android:padding="@dimen/spacer"
             android:layout_height="wrap_content"
+            android:background="@color/transparent"
             android:hint="Description"
             android:maxLines="2" />
     </LinearLayout>
