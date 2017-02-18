@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.RadioButton
 import kotlinx.android.synthetic.main.a_new_transaction.*
+import org.jetbrains.anko.find
 import pl.expensive.*
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
@@ -30,10 +32,27 @@ class NewTransactionActivity : AppCompatActivity() {
         }
 
         vNewTransactionRepeat.setOnClickListener {
-            // Show repeat optoins
+            toggleRepeatModes()
+        }
+        vNewTransactionRepeatModes.setOnCheckedChangeListener { group, checkedId ->
+            val selectedView = group.find<RadioButton>(checkedId)
+            vNewTransactionRepeatTitle.text = selectedView.text
+
+            toggleRepeatModes() // close modes
         }
     }
 
+    var isRepeatModesOpen = false
+    private fun toggleRepeatModes() {
+        with(vNewTransactionRepeatModes) {
+            if (isRepeatModesOpen) {
+                startAnimation(collapseUp())
+            } else {
+                startAnimation(expandDown())
+            }
+        }
+        isRepeatModesOpen = !isRepeatModesOpen
+    }
 
     private fun playEnterAnimation() {
         vNewTransactionClose.startAnimation(vNewTransactionClose.rotate(0f, 45f).apply {
