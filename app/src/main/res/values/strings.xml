@@ -19,4 +19,7 @@
     <string name="description">Description</string>
     <string name="new_transaction_success_message">Transaction for %s created!</string>
     <string name="err_mandatory">Mandatory</string>
+    <string name="repeat_no_repeat">Do not repeat</string>
+    <string name="repeat_daily">Daily</string>
+    <string name="repeat_monthly">Each month</string>
 </resources>

@@ -28,7 +28,12 @@ class NewTransactionActivity : AppCompatActivity() {
                 vNewTransactionSave.tint(pl.expensive.R.color.colorTextLight)
             }
         }
+
+        vNewTransactionRepeat.setOnClickListener {
+            // Show repeat optoins
+        }
     }
+
 
     private fun playEnterAnimation() {
         vNewTransactionClose.startAnimation(vNewTransactionClose.rotate(0f, 45f).apply {

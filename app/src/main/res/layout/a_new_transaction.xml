@@ -64,7 +64,6 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -105,7 +104,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/small_spacer"
             android:paddingTop="@dimen/small_spacer">
 
             <ImageView
@@ -135,6 +133,40 @@
                 android:textSize="@dimen/listItemText" />
         </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/vNewTransactionRepeat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/small_spacer">
+
+            <ImageView
+                android:id="@+id/vNewTransactionRepeatImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="@dimen/spacer"
+                android:layout_marginLeft="@dimen/content_padding_left"
+                android:paddingTop="@dimen/small_spacer"
+                android:src="@drawable/ic_update_white_24dp"
+                android:tint="@color/icons" />
+
+            <TextView
+                android:id="@+id/vNewTransactionRepeatTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/vNewTransactionRepeatImg"
+                android:background="@color/transparent"
+                android:paddingBottom="@dimen/small_spacer"
+                android:paddingLeft="@dimen/medium_spacer"
+                android:paddingRight="@dimen/small_spacer"
+                android:paddingTop="@dimen/small_spacer"
+                android:text="@string/repeat_no_repeat"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorTextLight"
+                android:textSize="@dimen/listItemText" />
+        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>
