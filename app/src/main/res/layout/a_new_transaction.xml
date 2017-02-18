@@ -203,6 +203,7 @@
                         android:paddingTop="@dimen/spacer"
                         android:text="@string/repeat_no_repeat"
                         android:textColor="@color/colorText"
+                        android:visibility="gone"
                         android:textSize="@dimen/listItemText" />
 
                     <RadioButton

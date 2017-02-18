@@ -34,10 +34,18 @@ class NewTransactionActivity : AppCompatActivity() {
         vNewTransactionRepeat.setOnClickListener {
             toggleRepeatModes()
         }
+
+        var prevSelection = R.id.vNewTransactionRepeatModesNoRepeat
         vNewTransactionRepeatModes.setOnCheckedChangeListener { group, checkedId ->
+            val prevSelectedView = group.find<RadioButton>(prevSelection)
+            prevSelectedView.show(true)
+
             val selectedView = group.find<RadioButton>(checkedId)
+            selectedView.show(false)
+
             vNewTransactionRepeatTitle.text = selectedView.text
 
+            prevSelection = checkedId
             toggleRepeatModes() // close modes
         }
     }
