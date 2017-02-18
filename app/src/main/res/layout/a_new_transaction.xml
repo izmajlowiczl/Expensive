@@ -175,8 +175,7 @@
                         android:paddingRight="@dimen/small_spacer"
                         android:paddingTop="@dimen/small_spacer"
                         android:text="@string/repeat_no_repeat"
-                        android:textColor="@color/colorText"
-                        android:textColorHint="@color/colorTextLight"
+                        android:textColor="@color/colorTextLight"
                         android:textSize="@dimen/listItemText" />
                 </RelativeLayout>
 
@@ -184,7 +183,6 @@
                     android:id="@+id/vNewTransactionRepeatModes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/vNewTransactionRepeatTitle"
                     android:animateLayoutChanges="false"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/small_spacer"
@@ -202,7 +200,7 @@
                         android:paddingRight="@dimen/small_spacer"
                         android:paddingTop="@dimen/spacer"
                         android:text="@string/repeat_no_repeat"
-                        android:textColor="@color/colorText"
+                        android:textColor="@color/colorTextLight"
                         android:visibility="gone"
                         android:textSize="@dimen/listItemText" />
 
@@ -217,7 +215,7 @@
                         android:paddingRight="@dimen/small_spacer"
                         android:paddingTop="@dimen/spacer"
                         android:text="@string/repeat_daily"
-                        android:textColor="@color/colorText"
+                        android:textColor="@color/colorTextLight"
                         android:textSize="@dimen/listItemText" />
 
                     <RadioButton
@@ -231,7 +229,7 @@
                         android:paddingRight="@dimen/small_spacer"
                         android:paddingTop="@dimen/spacer"
                         android:text="@string/repeat_monthly"
-                        android:textColor="@color/colorText"
+                        android:textColor="@color/colorTextLight"
                         android:textSize="@dimen/listItemText" />
                 </RadioGroup>
 
