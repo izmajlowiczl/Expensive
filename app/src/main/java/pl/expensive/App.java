@@ -14,10 +14,12 @@ public class App extends Application {
 
         AndroidThreeTen.init(this);
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
+        if (BuildConfig.DEBUG && BuildConfig.LEAK_CANARY_ENABLED) {
+            if (LeakCanary.isInAnalyzerProcess(this)) {
+                return;
+            }
+            LeakCanary.install(this);
         }
-        LeakCanary.install(this);
 
         AppComponent appComponent = DaggerAppComponent.builder()
                 .storageModule(new StorageModule(this))
