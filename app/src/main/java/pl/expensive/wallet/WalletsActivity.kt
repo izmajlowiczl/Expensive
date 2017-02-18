@@ -1,5 +1,7 @@
 package pl.expensive.wallet
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -20,10 +22,12 @@ import pl.expensive.Injector
 import pl.expensive.R
 import pl.expensive.calculateTotal
 import pl.expensive.formatValue
-import pl.expensive.storage.*
 import pl.expensive.storage.Currency
+import pl.expensive.storage.Transaction
+import pl.expensive.storage.TransactionStorage
+import pl.expensive.storage.WalletsStorage
 import pl.expensive.transaction.Header
-import pl.expensive.transaction.NewTransactionPlaceHolder
+import pl.expensive.transaction.NewTransactionActivity
 import pl.expensive.transaction.TransactionGrouper
 import pl.expensive.transaction.TransactionsAdapter
 import java.util.*
@@ -37,14 +41,8 @@ class WalletsActivity : AppCompatActivity() {
         Injector.app().transactions()
     }
 
-    private val afterTransactionStoredCallback: (Transaction) -> Unit = {
-        toast(getString(R.string.new_transaction_success_message, _Seeds.EUR.formatValue(money = it.amount)))
-        showWallets()
-    }
     private val adapter by lazy(mode = LazyThreadSafetyMode.NONE) {
-        TransactionsAdapter(
-                afterTransactionStoredCallback = afterTransactionStoredCallback,
-                transactionStorage = transactionStorage)
+        TransactionsAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +55,10 @@ class WalletsActivity : AppCompatActivity() {
         vTransactions.layoutManager = LinearLayoutManager(this)
         vTransactions.adapter = adapter
         vTransactions.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+
+        vNewTransactionHeader.setOnClickListener {
+            startActivityForResult(Intent(this@WalletsActivity, NewTransactionActivity::class.java), 666)
+        }
     }
 
     override fun onStart() {
@@ -64,6 +66,19 @@ class WalletsActivity : AppCompatActivity() {
 
         update(ViewState.Loading())
         showWallets()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 666 && resultCode == Activity.RESULT_OK) {
+
+            // No need to refresh adapter. onStart was called and did it
+
+            val storedTransactionAmount = data?.getStringExtra("storedTransaction") ?: ""
+            if (storedTransactionAmount.isNotBlank()) {
+                toast(getString(R.string.new_transaction_success_message, storedTransactionAmount))
+            }
+        }
     }
 
     private fun showWallets() {
@@ -93,9 +108,7 @@ class WalletsActivity : AppCompatActivity() {
             val today = LocalDateTime.now()
             TransactionGrouper.group(viewState.viewModels.transactions.filter {
                 !it.toLocalDateTime().isAfter(today)
-            }).apply {
-                result.add(NewTransactionPlaceHolder(shouldExpand = false))
-            }.forEach {
+            }).forEach {
                 result.add(Header(it.formatHeader(), formattedHeaderTotal(viewState.viewModels.currency, it.value)))
                 result.addAll(it.value)
             }
@@ -106,7 +119,7 @@ class WalletsActivity : AppCompatActivity() {
         is ViewState.Empty -> {
             loading.visibility = GONE
             vTransactions.visibility = VISIBLE
-            adapter.data = mutableListOf(NewTransactionPlaceHolder(shouldExpand = true))
+            // TODO: Add empty view
         }
         is ViewState.Error -> {
             vTransactions.visibility = GONE

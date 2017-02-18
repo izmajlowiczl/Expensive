@@ -5,11 +5,9 @@ import android.view.ViewGroup
 import pl.expensive.R
 import pl.expensive.inflateLayout
 import pl.expensive.storage.Transaction
-import pl.expensive.storage.TransactionStorage
 import kotlin.properties.Delegates
 
-class TransactionsAdapter(val transactionStorage: TransactionStorage,
-                          val afterTransactionStoredCallback: (transaction: Transaction) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TransactionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var data: MutableList<Any> by Delegates.vetoable(mutableListOf()) { p, old, new ->
         notifyDataSetChanged()
         old != new
@@ -21,11 +19,6 @@ class TransactionsAdapter(val transactionStorage: TransactionStorage,
                     TransactionViewHolder(parent.inflateLayout(viewType))
                 R.layout.view_header_item ->
                     HeaderViewHolder(parent.inflateLayout(viewType))
-                R.layout.view_new_transaction_placeholder_item ->
-                    NewTransactionPlaceHolderViewHolder(
-                            parent.inflateLayout(viewType),
-                            transactionStorage,
-                            afterTransactionStoredCallback)
                 else ->
                     throw IllegalArgumentException("Unknown view type $viewType")
             }
@@ -37,8 +30,6 @@ class TransactionsAdapter(val transactionStorage: TransactionStorage,
                     holder.update(data[position] as Transaction)
                 is HeaderViewHolder ->
                     holder.update(data[position] as Header)
-                is NewTransactionPlaceHolderViewHolder ->
-                    holder.update(data[position] as NewTransactionPlaceHolder)
                 else ->
                     throw IllegalArgumentException("Unknown view type ${holder.itemViewType}")
             }
@@ -50,8 +41,6 @@ class TransactionsAdapter(val transactionStorage: TransactionStorage,
                     R.layout.view_transaction_item
                 is Header ->
                     R.layout.view_header_item
-                is NewTransactionPlaceHolder ->
-                    R.layout.view_new_transaction_placeholder_item
                 else -> -1
             }
 

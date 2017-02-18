@@ -4,12 +4,15 @@ import android.content.Context
 import android.graphics.PorterDuff
 import android.support.annotation.LayoutRes
 import android.support.v4.content.res.ResourcesCompat
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageView
 import pl.expensive.storage.Currency
 import pl.expensive.storage.Transaction
@@ -33,6 +36,17 @@ fun Currency.formatValue(locale: Locale = Locale.getDefault(), money: BigDecimal
 
 fun View.show(value: Boolean) {
     visibility = if (value) VISIBLE else GONE
+}
+
+fun EditText.afterTextChanged(action: () -> Unit) {
+    addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            action()
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    })
 }
 
 fun ImageView.tint(color: Int) {
