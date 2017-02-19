@@ -22,7 +22,7 @@
 
     <style name="NewTransaction.Icon">
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginLeft">@dimen/content_padding_left</item>
+        <item name="android:layout_marginLeft">@dimen/extra_content_padding_left</item>
         <item name="android:layout_marginBottom">@dimen/spacer</item>
 
         <item name="android:tint">@color/icons</item>
@@ -42,7 +42,7 @@
     </style>
 
     <style name="NewTransaction.Item.Radio">
-        <item name="android:paddingLeft">@dimen/extra_content_padding_left</item>
+        <item name="android:paddingLeft">114dp</item>
         <item name="android:paddingTop">@dimen/small_spacer</item>
         <item name="android:paddingRight">@dimen/small_spacer</item>
         <item name="android:paddingBottom">@dimen/small_spacer</item>

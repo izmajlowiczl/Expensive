@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/medium_spacer"
             android:layout_marginTop="@dimen/medium_spacer"
-            android:paddingLeft="66dp"
+            android:paddingLeft="@dimen/extra_content_padding_left"
             android:paddingRight="@dimen/small_spacer"
             android:text="@string/add_new_spending"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
