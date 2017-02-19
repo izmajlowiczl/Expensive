@@ -11,17 +11,13 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import kotlinx.android.synthetic.main.activity_wallets.*
 import org.jetbrains.anko.toast
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.TextStyle
-import pl.expensive.Injector
-import pl.expensive.R
-import pl.expensive.calculateTotal
-import pl.expensive.formatValue
+import pl.expensive.*
 import pl.expensive.storage.Currency
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
@@ -56,7 +52,19 @@ class WalletsActivity : AppCompatActivity() {
         vTransactions.adapter = adapter
         vTransactions.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
 
-        vNewTransactionHeader.setOnClickListener {
+        vCreateTransactionFab.visibility = INVISIBLE
+        if (savedInstanceState == null) {
+            vCreateTransactionFab.startAnimation(vCreateTransactionFab.scaleFromMiddle(0f, 1f).apply {
+                startOffset = 300
+                endAction {
+                    vCreateTransactionFab.show(true)
+                }
+            })
+        } else {
+            vCreateTransactionFab.show(true)
+        }
+
+        vCreateTransactionFab.setOnClickListener {
             startActivityForResult(Intent(this@WalletsActivity, NewTransactionActivity::class.java), 666)
         }
     }
