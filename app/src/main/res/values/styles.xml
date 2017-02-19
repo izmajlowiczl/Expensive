@@ -18,4 +18,39 @@
         <item name="android:textColor">@color/colorText</item>
     </style>
 
+    <style name="NewTransaction" />
+
+    <style name="NewTransaction.Icon">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/content_padding_left</item>
+        <item name="android:layout_marginBottom">@dimen/spacer</item>
+
+        <item name="android:tint">@color/icons</item>
+    </style>
+
+    <style name="NewTransaction.Item">
+        <item name="android:layout_centerVertical">true</item>
+
+        <item name="android:paddingLeft">@dimen/medium_spacer</item>
+        <item name="android:paddingTop">@dimen/small_spacer</item>
+        <item name="android:paddingRight">@dimen/small_spacer</item>
+        <item name="android:paddingBottom">@dimen/small_spacer</item>
+        <item name="android:textSize">@dimen/listItemText</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textColorHint">@color/colorTextLight</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="NewTransaction.Item.Radio">
+        <item name="android:paddingLeft">@dimen/extra_content_padding_left</item>
+        <item name="android:paddingTop">@dimen/small_spacer</item>
+        <item name="android:paddingRight">@dimen/small_spacer</item>
+        <item name="android:paddingBottom">@dimen/small_spacer</item>
+        <item name="background">?selectableItemBackground</item>
+        <item name="android:textSize">@dimen/listItemText</item>
+        <item name="android:button">@null</item>
+        <item name="android:textColor">@color/colorTextLight</item>
+
+    </style>
+
 </resources>
