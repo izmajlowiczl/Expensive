@@ -14,4 +14,6 @@
 
     <dimen name="content_padding_left">@dimen/spacer</dimen>
     <dimen name="extra_content_padding_left">66dp</dimen>
+
+    <dimen name="fab_size">56dp</dimen>
 </resources>

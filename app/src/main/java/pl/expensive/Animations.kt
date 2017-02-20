@@ -1,5 +1,6 @@
 package pl.expensive
 
+import android.content.Context
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
@@ -80,4 +81,8 @@ fun Animation.endAction(action: () -> Unit) {
         }
     })
 }
+
+fun Context.shortAnim() = resources.getInteger(android.R.integer.config_shortAnimTime)
+fun Context.mediumAnim() = resources.getInteger(android.R.integer.config_mediumAnimTime)
+fun Context.longAnim() = resources.getInteger(android.R.integer.config_longAnimTime)
 

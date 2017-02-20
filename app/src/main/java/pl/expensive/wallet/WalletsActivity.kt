@@ -11,7 +11,10 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
-import android.view.View.*
+import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.view.animation.OvershootInterpolator
 import kotlinx.android.synthetic.main.activity_wallets.*
 import org.jetbrains.anko.toast
 import org.threeten.bp.LocalDateTime
@@ -41,10 +44,15 @@ class WalletsActivity : AppCompatActivity() {
         TransactionsAdapter()
     }
 
+    private var shouldAnimateFab = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wallets)
         Injector.app().inject(this)
+
+        // Animate FAB only once
+        shouldAnimateFab = savedInstanceState == null
 
         setSupportActionBar(toolbar)
 
@@ -52,20 +60,27 @@ class WalletsActivity : AppCompatActivity() {
         vTransactions.adapter = adapter
         vTransactions.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
 
-        vCreateTransactionFab.visibility = INVISIBLE
-        if (savedInstanceState == null) {
-            vCreateTransactionFab.startAnimation(vCreateTransactionFab.scaleFromMiddle(0f, 1f).apply {
-                startOffset = 300
-                endAction {
-                    vCreateTransactionFab.show(true)
-                }
-            })
-        } else {
-            vCreateTransactionFab.show(true)
-        }
+        startContentAnimation()
+    }
 
-        vCreateTransactionFab.setOnClickListener {
+    private fun startContentAnimation() {
+        val fabClickListener: (View) -> Unit = {
             startActivityForResult(Intent(this@WalletsActivity, NewTransactionActivity::class.java), 666)
+        }
+        with(vCreateTransactionFab) {
+            if (shouldAnimateFab) {
+                translationY = 2 * resources.getDimension(R.dimen.fab_size) // Hide below screen
+                animate() // Pop up from bottom
+                        .translationY(0f)
+                        .setInterpolator(OvershootInterpolator(1f))
+                        .setStartDelay(300)
+                        .setDuration(longAnim().toLong())
+                        .withEndAction { setOnClickListener(fabClickListener) }
+                        .start()
+            } else {
+                show(true)
+                setOnClickListener(fabClickListener)
+            }
         }
     }
 

@@ -42,14 +42,11 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/vCreateTransactionFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/spacer"
-        android:src="@drawable/ic_add_white_24dp"
-        android:visibility="gone"
-        app:fabSize="normal"
-        tools:visibility="visible" />
+        android:src="@drawable/ic_add_white_24dp" />
 
 </RelativeLayout>
