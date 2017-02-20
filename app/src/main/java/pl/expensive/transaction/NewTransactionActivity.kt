@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.RadioButton
+import android.widget.RadioGroup
 import kotlinx.android.synthetic.main.a_new_transaction.*
 import org.jetbrains.anko.find
 import pl.expensive.*
@@ -34,29 +35,52 @@ class NewTransactionActivity : AppCompatActivity() {
         vNewTransactionRepeat.setOnClickListener {
             toggleRepeatModes()
         }
+    }
 
-        var prevSelection = R.id.vNewTransactionRepeatModesNoRepeat
-        vNewTransactionRepeatModes.setOnCheckedChangeListener { group, checkedId ->
-            val prevSelectedView = group.find<RadioButton>(prevSelection)
-            prevSelectedView.show(true)
+    sealed class RepeatMode(val id: Int) {
+        class None : RepeatMode(R.id.vNewTransactionRepeatModesNoRepeat)
+        class RepeatDaily : RepeatMode(R.id.vNewTransactionRepeatModesDaily)
+        class RepeatMonthly : RepeatMode(R.id.vNewTransactionRepeatModesMonthly)
 
-            val selectedView = group.find<RadioButton>(checkedId)
-            selectedView.show(false)
-
-            vNewTransactionRepeatTitle.text = selectedView.text
-
-            prevSelection = checkedId
-            toggleRepeatModes() // close modes
+        companion object {
+            fun find(id: Int): RepeatMode = when (id) {
+                R.id.vNewTransactionRepeatModesDaily -> RepeatMode.RepeatDaily()
+                R.id.vNewTransactionRepeatModesMonthly -> RepeatMode.RepeatMonthly()
+                R.id.vNewTransactionRepeatModesNoRepeat -> RepeatMode.None()
+                else -> RepeatMode.None()
+            }
         }
     }
 
+    // TODO: This state should be persisted
+    private var currentRepeatMode: RepeatMode = RepeatMode.None()
     var isRepeatModesOpen = false
     private fun toggleRepeatModes() {
         with(vNewTransactionRepeatModes) {
             if (isRepeatModesOpen) {
-                startAnimation(collapseUp())
+                startAnimation(collapseUp().apply {
+                    endAction {
+                        vNewTransactionRepeatModes.setOnCheckedChangeListener(null)
+                    }
+                })
             } else {
-                startAnimation(expandDown())
+                startAnimation(expandDown().apply {
+                    endAction {
+                        val changeListener: (RadioGroup, Int) -> Unit = { group, checkedId ->
+                            group.find<RadioButton>(currentRepeatMode.id).apply {
+                                show(true)
+                            }
+                            group.find<RadioButton>(checkedId).apply {
+                                show(false)
+                                vNewTransactionRepeatTitle.text = text
+                            }
+
+                            currentRepeatMode = RepeatMode.find(checkedId)
+                            toggleRepeatModes() // close modes
+                        }
+                        vNewTransactionRepeatModes.setOnCheckedChangeListener(changeListener)
+                    }
+                })
             }
         }
         isRepeatModesOpen = !isRepeatModesOpen
@@ -74,6 +98,9 @@ class NewTransactionActivity : AppCompatActivity() {
                         val (amount, descText) = gatSaveParams()
                         val storedTransaction = Transaction.withdrawalWithAmount(amount = BigDecimal(amount), desc = descText)
                         transactionStorage.insert(storedTransaction)
+
+                        // TODO Handle repeat mode
+
 
                         clearViews()
                         finishWithResult(storedTransaction)
@@ -94,7 +121,6 @@ class NewTransactionActivity : AppCompatActivity() {
                 .putExtra("storedTransaction", transaction.currency.formatValue(money = transaction.amount)))
         finish()
     }
-
 
     private fun validate(): Boolean {
         var isValid = true
