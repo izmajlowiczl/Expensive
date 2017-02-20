@@ -13,8 +13,9 @@ fun View.rotate(from: Float, to: Float): Animation {
     }
 }
 
-fun View.scaleFromMiddle(from: Float, to: Float): Animation {
+fun View.scaleFromMiddle(from: Float, to: Float, interpolator: Interpolator = AccelerateDecelerateInterpolator()): Animation {
     return ScaleAnimation(from, to, from, to, Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f).apply {
+        setInterpolator(interpolator)
         duration = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
         fillAfter = true
     }
