@@ -4,8 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.annotation.VisibleForTesting
-
-import pl.expensive.storage._Seeds.CASH
+import pl.expensive.storage._Seeds.CASH_ID
 import pl.expensive.storage._Seeds.CHF
 import pl.expensive.storage._Seeds.CZK
 import pl.expensive.storage._Seeds.EUR
@@ -13,11 +12,16 @@ import pl.expensive.storage._Seeds.GBP
 import pl.expensive.storage._Seeds.PLN
 
 class Database : SQLiteOpenHelper {
+    private var ctx: Context
 
-    constructor(context: Context) : super(context, NAME, null, VERSION)
+    constructor(context: Context) : super(context, NAME, null, VERSION) {
+        ctx = context
+    }
 
     @VisibleForTesting
-    constructor(context: Context, dbName: String?) : super(context, dbName, null, VERSION)
+    constructor(context: Context, dbName: String?) : super(context, dbName, null, VERSION) {
+        ctx = context
+    }
 
     override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
         createSchema(sqLiteDatabase)
@@ -52,7 +56,7 @@ class Database : SQLiteOpenHelper {
 
     private fun applySeeds(db: SQLiteDatabase) {
         // Cash wallet
-        db.execSQL(String.format("INSERT INTO tbl_wallet VALUES('%s', '%s', '%s');", CASH.uuid, CASH.name, EUR.code))
+        db.execSQL(String.format("INSERT INTO tbl_wallet VALUES('%s', '%s', '%s');", CASH_ID, ctx.getString(R.string.wallet_name), ctx.getString(R.string.wallet_currency)))
 
         // Currencies
         storeCurrency(db, EUR)

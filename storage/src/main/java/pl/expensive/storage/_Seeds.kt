@@ -10,7 +10,8 @@ object _Seeds {
     val PLN = Currency("PLN", "##.##\u00a0zł")
     val CZK = Currency("CZK", "##.##\u00a0K\u010d")
 
-    val CASH = Wallet(UUID.fromString("c2ee3260-94eb-4cc2-8d5c-af38f964fbd5"), "Cash", EUR)
+    val CASH_ID = UUID.fromString("c2ee3260-94eb-4cc2-8d5c-af38f964fbd5")!!
+    val CASH = Wallet(CASH_ID, "Cash", EUR)
 
     val OTHER = Category("Other", "cat_other", "#00000000")
     val GROCERY = Category("Grocery", "cat_grocery", "#FF61BD4F")
