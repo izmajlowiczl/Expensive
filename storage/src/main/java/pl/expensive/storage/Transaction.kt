@@ -27,8 +27,9 @@ data class Transaction(val uuid: UUID,
                                  amount: BigDecimal,
                                  currency: Currency = _Seeds.EUR,
                                  time: Long = Date().time,
-                                 desc: String = ""): Transaction {
-            return Transaction(uuid, wallet, amount.negate(), currency, time, desc)
+                                 desc: String = "",
+                                 category: Category? = null): Transaction {
+            return Transaction(uuid, wallet, amount.negate(), currency, time, desc, category)
         }
 
         fun create(uuid: UUID, wallet: UUID, amount: BigDecimal, currency: Currency, date: LocalDateTime, desc: String): Transaction {

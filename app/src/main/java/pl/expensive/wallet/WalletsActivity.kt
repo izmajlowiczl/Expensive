@@ -33,14 +33,14 @@ import java.util.*
 
 
 class WalletsActivity : AppCompatActivity() {
-    private val walletStorage: WalletsStorage by lazy(mode = LazyThreadSafetyMode.NONE) {
+    private val walletStorage: WalletsStorage by lazy {
         Injector.app().wallets()
     }
-    private val transactionStorage: TransactionStorage by lazy(mode = LazyThreadSafetyMode.NONE) {
+    private val transactionStorage: TransactionStorage by lazy {
         Injector.app().transactions()
     }
 
-    private val adapter by lazy(mode = LazyThreadSafetyMode.NONE) {
+    private val adapter by lazy {
         TransactionsAdapter()
     }
 

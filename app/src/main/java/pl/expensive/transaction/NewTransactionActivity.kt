@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.a_new_transaction.*
 import pl.expensive.*
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
+import pl.expensive.storage._Seeds
 import java.math.BigDecimal
 
 class NewTransactionActivity : AppCompatActivity() {
@@ -41,7 +42,10 @@ class NewTransactionActivity : AppCompatActivity() {
                     if (validate()) {
                         val amountText = vNewTransactionAmount.text.toString()
                         val descText = vNewTransactionDescription.text.toString()
-                        val storedTransaction = Transaction.withdrawalWithAmount(amount = BigDecimal(amountText), desc = descText)
+                        val storedTransaction = Transaction.withdrawalWithAmount(
+                                amount = BigDecimal(amountText),
+                                desc = descText,
+                                category = _Seeds.GROCERY)
                         transactionStorage.insert(storedTransaction)
 
                         clearViews()
