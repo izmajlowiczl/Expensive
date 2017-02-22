@@ -109,7 +109,10 @@ class WalletsActivity : AppCompatActivity() {
         val transactionData = transactionStorage.select().sortedByDescending { it.date }
 
         if (transactionData.isEmpty()) {
-            update(ViewState.Empty())
+            update(ViewState.Empty(WalletViewModel(
+                    data.name,
+                    emptyList(),
+                    data.currency)))
         } else {
             update(ViewState.Wallets(WalletViewModel(
                     data.name,
@@ -142,7 +145,9 @@ class WalletsActivity : AppCompatActivity() {
         is ViewState.Empty -> {
             loading.visibility = GONE
             vTransactions.visibility = VISIBLE
-            // TODO: Add empty view
+
+            adapter.data = mutableListOf<Any>()
+            supportActionBar!!.title = viewState.viewModels.formattedTitle()
         }
         is ViewState.Error -> {
             vTransactions.visibility = GONE
