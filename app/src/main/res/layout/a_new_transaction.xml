@@ -128,69 +128,6 @@
                     android:hint="@string/description" />
             </RelativeLayout>
 
-            <!-- Repeat mode -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:id="@+id/vNewTransactionRepeat"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?selectableItemBackground"
-                    android:paddingTop="@dimen/small_spacer">
-
-                    <ImageView
-                        android:id="@+id/vNewTransactionRepeatImg"
-                        style="@style/NewTransaction.Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_update_white_24dp" />
-
-                    <TextView
-                        android:id="@+id/vNewTransactionRepeatTitle"
-                        style="@style/NewTransaction.Item"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/vNewTransactionRepeatImg"
-                        android:text="@string/repeat_no_repeat" />
-                </RelativeLayout>
-
-                <RadioGroup
-                    android:id="@+id/vNewTransactionRepeatModes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="@dimen/small_spacer"
-                    android:visibility="gone"
-                    tools:visibility="visible">
-
-                    <RadioButton
-                        android:id="@+id/vNewTransactionRepeatModesNoRepeat"
-                        style="@style/NewTransaction.Item.Radio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/repeat_no_repeat"
-                        android:visibility="gone" />
-
-                    <RadioButton
-                        android:id="@+id/vNewTransactionRepeatModesDaily"
-                        style="@style/NewTransaction.Item.Radio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/repeat_daily" />
-
-                    <RadioButton
-                        android:id="@+id/vNewTransactionRepeatModesMonthly"
-                        style="@style/NewTransaction.Item.Radio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/repeat_monthly" />
-                </RadioGroup>
-
-            </LinearLayout>
-
         </LinearLayout>
 
     </LinearLayout>
