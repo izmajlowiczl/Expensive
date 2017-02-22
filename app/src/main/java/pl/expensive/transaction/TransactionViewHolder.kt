@@ -7,8 +7,9 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.view_transaction_item.view.*
-import org.threeten.bp.format.DateTimeFormatter
+import pl.expensive.dateTimeFormat
 import pl.expensive.storage.Transaction
+import pl.expensive.timeFormat
 import java.text.DecimalFormat
 import java.util.*
 
@@ -22,13 +23,9 @@ class TransactionViewHolder(itemView: View, private val clickFun: (Transaction) 
             transaction_desc.visibility = VISIBLE
             transaction_desc.text = viewModel.description
         }
-        setOnClickListener {
-            clickFun(viewModel)
-        }
-    }
 
-    private val timeFormat = DateTimeFormatter.ofPattern("HH:mm")
-    private val dateTimeFormat = DateTimeFormatter.ofPattern("MMM d")
+        setOnClickListener { clickFun(viewModel) }
+    }
 
     /**
      * Formats transaction time to show date (eg Jan 12) in normal text size.

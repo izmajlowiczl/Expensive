@@ -26,7 +26,7 @@ data class Transaction(val uuid: UUID,
         fun withdrawalWithAmount(uuid: UUID = UUID.randomUUID(),
                                  wallet: UUID = _Seeds.CASH.uuid,
                                  amount: BigDecimal,
-                                 currency: Currency = _Seeds.EUR,
+                                 currency: Currency,
                                  time: Long = Date().time,
                                  desc: String = "",
                                  category: Category? = null): Transaction {

@@ -24,7 +24,6 @@ import pl.expensive.*
 import pl.expensive.storage.Currency
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
-import pl.expensive.storage.WalletsStorage
 import pl.expensive.transaction.Header
 import pl.expensive.transaction.NewTransactionActivity
 import pl.expensive.transaction.TransactionGrouper
@@ -33,12 +32,9 @@ import java.util.*
 
 
 class WalletsActivity : AppCompatActivity() {
-    private val walletStorage: WalletsStorage by lazy {
-        Injector.app().wallets()
-    }
-    private val transactionStorage: TransactionStorage by lazy {
-        Injector.app().transactions()
-    }
+    private val walletService: WalletsService by lazy { Injector.app().walletsService() }
+//    private val walletStorage: WalletsStorage by lazy { Injector.app().wallets() }
+    private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
 
     private val adapter by lazy {
         TransactionsAdapter({ transition ->
@@ -121,7 +117,7 @@ class WalletsActivity : AppCompatActivity() {
     }
 
     private fun showWallets() {
-        val data = walletStorage.list().first()
+        val data = walletService.primaryWallet()
         val transactionData = transactionStorage.select().sortedByDescending { it.date }
 
         if (transactionData.isEmpty()) {
@@ -137,40 +133,47 @@ class WalletsActivity : AppCompatActivity() {
         }
     }
 
-    private fun update(viewState: ViewState) = when (viewState) {
-        is ViewState.Loading -> {
-            vTransactions.visibility = GONE
-            loading.visibility = VISIBLE
-        }
-        is ViewState.Wallets -> {
-            vTransactions.visibility = VISIBLE
-            loading.visibility = GONE
+    private fun update(viewState: ViewState) {
+        val today = LocalDateTime.now()
 
-            val result = mutableListOf<Any>()
-            val today = LocalDateTime.now()
-            TransactionGrouper.group(viewState.viewModels.transactions.filter {
-                !it.toLocalDateTime().isAfter(today)
-            }).forEach {
-                result.add(Header(it.formatHeader(), formattedHeaderTotal(viewState.viewModels.currency, it.value)))
-                result.addAll(it.value)
+        when (viewState) {
+            is ViewState.Loading -> {
+                vTransactions.visibility = GONE
+                loading.visibility = VISIBLE
             }
+            is ViewState.Wallets -> {
+                vTransactions.visibility = VISIBLE
+                loading.visibility = GONE
 
-            adapter.data = result
-            supportActionBar!!.title = viewState.viewModels.formattedTitle()
-        }
-        is ViewState.Empty -> {
-            loading.visibility = GONE
-            vTransactions.visibility = VISIBLE
+                val transactions = viewState.viewModels.transactions
 
-            adapter.data = mutableListOf<Any>()
-            supportActionBar!!.title = viewState.viewModels.formattedTitle()
-        }
-        is ViewState.Error -> {
-            vTransactions.visibility = GONE
-            loading.visibility = GONE
+                val result = mutableListOf<Any>()
+                TransactionGrouper.group(transactions.filter {
+                    !it.toLocalDateTime().isAfter(today)
+                }).forEach {
+                    if (it.key != YearMonth.from(today)) {
+                        result.add(Header(it.formatHeader(), formattedHeaderTotal(viewState.viewModels.currency, it.value)))
+                    }
+                    result.addAll(it.value)
+                }
 
-            // TODO: show error view here instead toast
-            toast(viewState.err)
+                adapter.data = result
+                supportActionBar!!.title = getTitle(transactions.filter { YearMonth.from(it.toLocalDateTime()) == YearMonth.from(today) })
+            }
+            is ViewState.Empty -> {
+                loading.visibility = GONE
+                vTransactions.visibility = VISIBLE
+
+                adapter.data = mutableListOf<Any>()
+                supportActionBar!!.title = getTitle(viewState.viewModels.transactions)
+            }
+            is ViewState.Error -> {
+                vTransactions.visibility = GONE
+                loading.visibility = GONE
+
+                // TODO: show error view here instead toast
+                toast(viewState.err)
+            }
         }
     }
 
@@ -199,22 +202,22 @@ class WalletsActivity : AppCompatActivity() {
         return span
     }
 
-    /**
-     * Crates Spannable with wallet's name at 60% text size (from amount),
-     * followed by total amount at full text size.
-     */
-    private fun WalletViewModel.formattedTitle(): Spannable {
-        val span: Spannable = SpannableString("$name  ${formattedTotal()}")
-        span.setSpan(RelativeSizeSpan(.6f), 0, name.length, 0)
-        return span
-    }
-
     private fun formattedHeaderTotal(currency: Currency, transactions: List<Transaction>): Spannable {
         val relative: Spannable = SpannableString(getString(R.string.total))
         relative.setSpan(RelativeSizeSpan(.6f), 0, relative.length, 0)
         return SpannableStringBuilder()
                 .append(relative)
                 .append(currency.formatValue(money = transactions.calculateTotal()))
+    }
+
+    private fun getTitle(transactions: List<Transaction>): CharSequence {
+        val month = YearMonth.now().month.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()
+
+        val currentWallet = walletService.primaryWallet()
+        val span = SpannableString("$month ${currentWallet.currency.formatValue(money = transactions.calculateTotal())}")
+        span.setSpan(RelativeSizeSpan(.6f), 0, month.length, 0)
+
+        return span
     }
 }
 

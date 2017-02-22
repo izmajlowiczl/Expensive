@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import org.threeten.bp.format.DateTimeFormatter
 import pl.expensive.storage.Currency
 import pl.expensive.storage.Transaction
 import java.math.BigDecimal
@@ -61,3 +62,6 @@ fun List<Transaction>.calculateTotal(): BigDecimal {
     map { total += it.amount.abs() }
     return total
 }
+
+val timeFormat = DateTimeFormatter.ofPattern("HH:mm")
+val dateTimeFormat = DateTimeFormatter.ofPattern("MMM d")

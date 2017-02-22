@@ -9,11 +9,13 @@ import pl.expensive.*
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage._Seeds
+import pl.expensive.wallet.WalletsService
 import java.math.BigDecimal
 import java.util.*
 
 class NewTransactionActivity : AppCompatActivity() {
     private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
+    private val walletsService: WalletsService by lazy { Injector.app().walletsService() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +81,8 @@ class NewTransactionActivity : AppCompatActivity() {
                         val amountText = vNewTransactionAmount.text.toString()
                         val descText = vNewTransactionDescription.text.toString()
 
+                        val primaryWallet = walletsService.primaryWallet()
+
                         // In Edit Mode check if anything changed
                         val extras = intent.extras
                         if (isEditMode(extras)) {
@@ -90,7 +94,8 @@ class NewTransactionActivity : AppCompatActivity() {
                                         uuid = UUID.fromString(extras.getString("transaction_uuid")),
                                         amount = BigDecimal(amountText),
                                         desc = descText,
-                                        category = _Seeds.GROCERY)
+                                        category = _Seeds.GROCERY,
+                                        currency = primaryWallet.currency)
                                 transactionStorage.update(storedTransaction)
 
                                 clearViews()
@@ -101,7 +106,8 @@ class NewTransactionActivity : AppCompatActivity() {
                             val storedTransaction = Transaction.withdrawalWithAmount(
                                     amount = BigDecimal(amountText),
                                     desc = descText,
-                                    category = _Seeds.GROCERY)
+                                    category = _Seeds.GROCERY,
+                                    currency = primaryWallet.currency)
                             transactionStorage.insert(storedTransaction)
                             clearViews()
                             finishWithResult(storedTransaction)
