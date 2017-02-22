@@ -36,7 +36,7 @@ class Database : SQLiteOpenHelper {
     private fun createSchema(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE tbl_wallet (uuid TEXT NOT NULL, name TEXT NOT NULL UNIQUE, currency TEXT NOT NULL, PRIMARY KEY(uuid), FOREIGN KEY(currency) REFERENCES tbl_currency(code));")
         db.execSQL("CREATE TABLE tbl_currency (code TEXT NOT NULL, format TEXT NOT NULL, PRIMARY KEY(code));")
-        db.execSQL("CREATE TABLE tbl_category (name TEXT NOT NULL, name_res TEXT, PRIMARY KEY(name));")
+        db.execSQL("CREATE TABLE tbl_category (name TEXT NOT NULL, name_res TEXT, color TEXT, PRIMARY KEY(name));")
         db.execSQL("CREATE TABLE tbl_transaction (" +
                 "uuid TEXT NOT NULL, amount TEXT NOT NULL, " +
                 "currency TEXT NOT NULL, " +
@@ -80,7 +80,7 @@ class Database : SQLiteOpenHelper {
     }
 
     private fun SQLiteDatabase.storeCategory(category: Category) {
-        execSQL(String.format("INSERT INTO tbl_category VALUES('%s', '%s');", category.name, category.name_res))
+        execSQL(String.format("INSERT INTO tbl_category VALUES('%s', '%s', '%s');", category.name, category.name_res, category.color))
     }
 
     companion object {

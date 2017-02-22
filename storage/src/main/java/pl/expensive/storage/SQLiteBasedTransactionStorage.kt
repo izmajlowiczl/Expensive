@@ -10,8 +10,14 @@ class SQLiteBasedTransactionStorage(private val database: Database) : Transactio
 
     override fun select(wallet: UUID): List<Transaction> {
         val readableDatabase = database.readableDatabase
-        val columns = arrayOf("t.uuid", "t.wallet_uuid", "t.amount", "t.currency", "t.date", "t.description", "c.format")
-        val cursor = readableDatabase.query("tbl_transaction t , " + " tbl_currency c", columns, "wallet_uuid=? AND t.currency=c.code", arrayOf(wallet.toString()), null, null, null)
+        val tables = "tbl_transaction t " +
+                "LEFT JOIN tbl_currency AS cur ON t.currency=cur.code " +
+                "LEFT JOIN tbl_category AS cat on t.category=cat.name "
+        val columns = arrayOf(
+                "t.uuid", "t.wallet_uuid", "t.amount", "t.date", "t.description",
+                "cur.code", "cur.format",
+                "cat.name", "cat.name_res", "cat.color")
+        val cursor = readableDatabase.query(tables, columns, "t.wallet_uuid=?", arrayOf(wallet.toString()), null, null, null)
 
         val result = ArrayList<Transaction>()
         while (cursor.moveToNext()) {
@@ -48,13 +54,20 @@ class SQLiteBasedTransactionStorage(private val database: Database) : Transactio
     }
 
     private fun from(cursor: Cursor): Transaction {
-        val currency = Currency(cursor.getString(3), cursor.getString(6))
-        return Transaction.create(
+        val currency = Currency(cursor.getString(5), cursor.getString(6))
+        val category = try {
+            Category(cursor.getString(7), cursor.getString(8), cursor.getString(9))
+        } catch (ex: Exception) {
+            null
+        }
+
+        return Transaction(
                 UUID.fromString(cursor.getString(0)),
                 UUID.fromString(cursor.getString(1)),
                 BigDecimal(cursor.getString(2)),
                 currency,
-                cursor.getLong(4),
-                cursor.getString(5))
+                cursor.getLong(3),
+                cursor.getString(4),
+                category)
     }
 }
