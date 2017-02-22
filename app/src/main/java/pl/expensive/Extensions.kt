@@ -39,6 +39,14 @@ fun View.show(value: Boolean) {
     visibility = if (value) VISIBLE else GONE
 }
 
+fun View.middleOnScreen(): IntArray {
+    return IntArray(2).apply {
+        getLocationOnScreen(this)
+        this[0] += width / 2
+        this[1] += height / 2
+    }
+}
+
 fun EditText.afterTextChanged(action: () -> Unit) {
     addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {

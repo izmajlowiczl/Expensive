@@ -3,7 +3,9 @@ package pl.expensive.transaction
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.ViewTreeObserver
 import kotlinx.android.synthetic.main.a_new_transaction.*
 import pl.expensive.*
 import pl.expensive.storage.Transaction
@@ -13,7 +15,7 @@ import pl.expensive.wallet.WalletsService
 import java.math.BigDecimal
 import java.util.*
 
-class NewTransactionActivity : AppCompatActivity() {
+class NewTransactionActivity : AppCompatActivity(), RevealBackgroundView.OnStateChangeListener {
     private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
     private val walletsService: WalletsService by lazy { Injector.app().walletsService() }
 
@@ -30,8 +32,6 @@ class NewTransactionActivity : AppCompatActivity() {
         }
 
         vNewTransactionTitle.text = getString(if (isInEditMode) R.string.edit_spending else R.string.add_new_spending)
-
-        playEnterAnimation()
 
         vNewTransactionAmount.afterTextChanged({
             // When is expanded and has all mandatory fields filled. Change color of save button
@@ -51,6 +51,32 @@ class NewTransactionActivity : AppCompatActivity() {
                     vNewTransactionSave.tint(pl.expensive.R.color.colorTextLight)
                 }
             }
+        }
+
+        setupRevealBackground(savedInstanceState)
+    }
+
+    private fun setupRevealBackground(savedInstanceState: Bundle?) = with(revealLayer) {
+        setFillPaintColor(ResourcesCompat.getColor(resources, R.color.window_bg, theme))
+        setOnStateChangeListener(this@NewTransactionActivity)
+        if (savedInstanceState == null) {
+            val startingLocation = intent.getIntArrayExtra("loc")
+            viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    viewTreeObserver.removeOnPreDrawListener(this)
+                    startFromLocation(startingLocation)
+                    return true
+                }
+            })
+        } else {
+            setToFinishedFrame()
+        }
+    }
+
+    override fun onStateChange(state: Int) {
+        if (state == RevealBackgroundView.STATE_FINISHED) {
+            vNewTransactionScrollParent.show(true)
+            playEnterAnimation()
         }
     }
 

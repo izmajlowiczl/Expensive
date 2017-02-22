@@ -33,7 +33,7 @@ import java.util.*
 
 class WalletsActivity : AppCompatActivity() {
     private val walletService: WalletsService by lazy { Injector.app().walletsService() }
-//    private val walletStorage: WalletsStorage by lazy { Injector.app().wallets() }
+    //    private val walletStorage: WalletsStorage by lazy { Injector.app().wallets() }
     private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
 
     private val adapter by lazy {
@@ -84,7 +84,9 @@ class WalletsActivity : AppCompatActivity() {
 
     private fun startNewTransactionCreatorScreen() {
         val intent = Intent(this@WalletsActivity, NewTransactionActivity::class.java)
+                .putExtra("loc", vCreateTransactionFab.middleOnScreen())
         startActivityForResult(intent, 666)
+        overridePendingTransition(0, 0)
     }
 
     private fun startEditTransactionScreen(transaction: Transaction) {
@@ -92,6 +94,7 @@ class WalletsActivity : AppCompatActivity() {
                 .putExtra("transaction_uuid", transaction.uuid.toString())
                 .putExtra("transaction_amount", transaction.amount.abs().toString())
                 .putExtra("transaction_desc", transaction.description)
+                .putExtra("loc", vTransactions.middleOnScreen()) // TODO: This should be selected item, not whole RV
         startActivityForResult(intent, 666)
     }
 

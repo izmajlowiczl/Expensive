@@ -16,7 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".transaction.NewTransactionActivity"></activity>
+        <activity
+            android:name=".transaction.NewTransactionActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
     </application>
 
 </manifest>

@@ -18,6 +18,11 @@
         <item name="android:textColor">@color/colorText</item>
     </style>
 
+    <style name="AppTheme.TransparentActivity">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
     <style name="NewTransaction" />
 
     <style name="NewTransaction.Icon">
