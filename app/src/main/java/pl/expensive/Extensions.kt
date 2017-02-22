@@ -59,7 +59,7 @@ fun ImageView.tint(color: Int) {
  */
 fun List<Transaction>.calculateTotal(): BigDecimal {
     var total = BigDecimal.ZERO
-    map { total += it.amount.abs() }
+    map { total += it.amount }
     return total
 }
 
