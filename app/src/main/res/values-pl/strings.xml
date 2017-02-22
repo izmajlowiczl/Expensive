@@ -15,6 +15,7 @@
     <string name="total">Razem:\u00A0</string>
     <string name="current_month">Aktualny miesiąc</string>
     <string name="add_new_spending">Nowy wydatek</string>
+    <string name="edit_spending">Edytuj wydatek</string>
     <string name="enter_amount">Wprowadź wartość</string>
     <string name="description">Opis</string>
     <string name="new_transaction_success_message">Dodano wydatek za %s!</string>

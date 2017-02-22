@@ -14,12 +14,13 @@
     <string name="err_loading_wallets">Daten können nicht geladen werden</string>
     <string name="total">Gesamt:\u00A0</string>
     <string name="current_month">Diese Monat</string>
-    <string name="add_new_spending">Neue Ausgaben</string>
+    <string name="add_new_spending">Neue Kosten</string>
+    <string name="edit_spending">Bearbeiten Kosten</string>
     <string name="enter_amount">Geld hinzufügen</string>
     <string name="description">Beschreibung</string>
 
 
     <!-- TODO: Translate -->
     <string name="new_transaction_success_message">Transaction for %s created!</string>
-    <string name="err_mandatory">Mandatory</string>
+    <string name="err_mandatory">Pflichtfeld</string>
 </resources>

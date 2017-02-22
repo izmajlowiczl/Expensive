@@ -21,10 +21,13 @@ class NewTransactionActivity : AppCompatActivity() {
         Injector.app().inject(this)
 
         val extras = intent.extras
-        if (isEditMode(extras)) {
+        val isInEditMode = isEditMode(extras)
+        if (isInEditMode) {
             vNewTransactionAmount.setText(extras.getString("transaction_amount"))
             vNewTransactionDescription.setText(extras.getString("transaction_desc"))
         }
+
+        vNewTransactionTitle.text = getString(if (isInEditMode) R.string.edit_spending else R.string.add_new_spending)
 
         playEnterAnimation()
 
@@ -38,7 +41,7 @@ class NewTransactionActivity : AppCompatActivity() {
         })
 
         // In edit mode, mandatory fields has to be filled and some data changed to change color of save button
-        if (isEditMode(extras)) {
+        if (isInEditMode) {
             vNewTransactionDescription.afterTextChanged {
                 if (dataChangedInEditMode(extras)) {
                     vNewTransactionSave.tint(pl.expensive.R.color.ready)
