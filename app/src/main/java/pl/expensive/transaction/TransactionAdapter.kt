@@ -7,7 +7,7 @@ import pl.expensive.inflateLayout
 import pl.expensive.storage.Transaction
 import kotlin.properties.Delegates
 
-class TransactionsAdapter(private val transactionClickFun: (Transaction) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TransactionsAdapter(private val transactionClickFun: (IntArray, Transaction) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var data: MutableList<Any> by Delegates.vetoable(mutableListOf()) { p, old, new ->
         notifyDataSetChanged()
         old != new

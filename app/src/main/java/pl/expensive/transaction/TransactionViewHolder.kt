@@ -8,12 +8,13 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.view_transaction_item.view.*
 import pl.expensive.dateTimeFormat
+import pl.expensive.middleOnScreen
 import pl.expensive.storage.Transaction
 import pl.expensive.timeFormat
 import java.text.DecimalFormat
 import java.util.*
 
-class TransactionViewHolder(itemView: View, private val clickFun: (Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {
+class TransactionViewHolder(itemView: View, private val clickFun: (IntArray, Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {
     fun update(viewModel: Transaction) = with(itemView) {
         transaction_amount.text = viewModel.formatAmount()
         transaction_time.text = viewModel.formatTime()
@@ -24,7 +25,7 @@ class TransactionViewHolder(itemView: View, private val clickFun: (Transaction) 
             transaction_desc.text = viewModel.description
         }
 
-        setOnClickListener { clickFun(viewModel) }
+        setOnClickListener { clickFun(middleOnScreen(), viewModel) }
     }
 
     /**

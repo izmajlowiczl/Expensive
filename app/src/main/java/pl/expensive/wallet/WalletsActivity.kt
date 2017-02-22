@@ -37,8 +37,8 @@ class WalletsActivity : AppCompatActivity() {
     private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
 
     private val adapter by lazy {
-        TransactionsAdapter({ transition ->
-            startEditTransactionScreen(transition)
+        TransactionsAdapter({ touchPos, transition ->
+            startEditTransactionScreen(touchPos, transition)
         })
     }
 
@@ -89,12 +89,12 @@ class WalletsActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
     }
 
-    private fun startEditTransactionScreen(transaction: Transaction) {
+    private fun startEditTransactionScreen(touchPos: IntArray, transaction: Transaction) {
         val intent = Intent(this@WalletsActivity, NewTransactionActivity::class.java)
                 .putExtra("transaction_uuid", transaction.uuid.toString())
                 .putExtra("transaction_amount", transaction.amount.abs().toString())
                 .putExtra("transaction_desc", transaction.description)
-                .putExtra("loc", vTransactions.middleOnScreen()) // TODO: This should be selected item, not whole RV
+                .putExtra("loc", touchPos)
         startActivityForResult(intent, 666)
     }
 
