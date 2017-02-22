@@ -7,7 +7,6 @@ import java.math.BigDecimal
 import java.util.*
 
 class SQLiteBasedTransactionStorage(private val database: Database) : TransactionStorage {
-
     override fun select(wallet: UUID): List<Transaction> {
         val readableDatabase = database.readableDatabase
         val tables = "tbl_transaction t " +
@@ -39,6 +38,10 @@ class SQLiteBasedTransactionStorage(private val database: Database) : Transactio
             throw IllegalStateException("No wallet for transaction?")
         }
 
+    }
+
+    override fun update(transaction: Transaction) {
+        database.writableDatabase.replace("tbl_transaction", null, toContentValues(transaction))
     }
 
     private fun toContentValues(transaction: Transaction): ContentValues {

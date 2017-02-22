@@ -10,6 +10,7 @@ import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage._Seeds
 import java.math.BigDecimal
+import java.util.*
 
 class NewTransactionActivity : AppCompatActivity() {
     private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
@@ -19,16 +20,48 @@ class NewTransactionActivity : AppCompatActivity() {
         setContentView(R.layout.a_new_transaction)
         Injector.app().inject(this)
 
+        val extras = intent.extras
+        if (isEditMode(extras)) {
+            vNewTransactionAmount.setText(extras.getString("transaction_amount"))
+            vNewTransactionDescription.setText(extras.getString("transaction_desc"))
+        }
+
         playEnterAnimation()
 
-        vNewTransactionAmount.afterTextChanged {
+        vNewTransactionAmount.afterTextChanged({
             // When is expanded and has all mandatory fields filled. Change color of save button
             if (vNewTransactionAmount.text.isNotBlank()) {
                 vNewTransactionSave.tint(pl.expensive.R.color.ready)
             } else {
                 vNewTransactionSave.tint(pl.expensive.R.color.colorTextLight)
             }
+        })
+
+        // In edit mode, mandatory fields has to be filled and some data changed to change color of save button
+        if (isEditMode(extras)) {
+            vNewTransactionDescription.afterTextChanged {
+                if (dataChangedInEditMode(extras)) {
+                    vNewTransactionSave.tint(pl.expensive.R.color.ready)
+                } else {
+                    vNewTransactionSave.tint(pl.expensive.R.color.colorTextLight)
+                }
+            }
         }
+    }
+
+    private fun dataChangedInEditMode(extras: Bundle): Boolean {
+        val validInEditMode: Boolean = if (isEditMode(extras)) {
+            val oldAmount = extras.getString("transaction_amount")
+            val oldDesc = extras.getString("transaction_desc")
+            val amountText = vNewTransactionAmount.text.toString()
+            val descText = vNewTransactionDescription.text.toString()
+
+            amountText != oldAmount || descText != oldDesc
+        } else {
+            // Create mode, continue...
+            true
+        }
+        return validInEditMode
     }
 
     private fun playEnterAnimation() {
@@ -42,20 +75,42 @@ class NewTransactionActivity : AppCompatActivity() {
                     if (validate()) {
                         val amountText = vNewTransactionAmount.text.toString()
                         val descText = vNewTransactionDescription.text.toString()
-                        val storedTransaction = Transaction.withdrawalWithAmount(
-                                amount = BigDecimal(amountText),
-                                desc = descText,
-                                category = _Seeds.GROCERY)
-                        transactionStorage.insert(storedTransaction)
 
-                        clearViews()
-                        finishWithResult(storedTransaction)
+                        // In Edit Mode check if anything changed
+                        val extras = intent.extras
+                        if (isEditMode(extras)) {
+                            val oldAmount = extras.getString("transaction_amount")
+                            val oldDesc = extras.getString("transaction_desc")
+
+                            if (amountText != oldAmount || descText != oldDesc) {
+                                val storedTransaction = Transaction.withdrawalWithAmount(
+                                        uuid = UUID.fromString(extras.getString("transaction_uuid")),
+                                        amount = BigDecimal(amountText),
+                                        desc = descText,
+                                        category = _Seeds.GROCERY)
+                                transactionStorage.update(storedTransaction)
+
+                                clearViews()
+                                // TODO: Change message for edit confirmation
+                                finishWithResult(storedTransaction)
+                            }
+                        } else {
+                            val storedTransaction = Transaction.withdrawalWithAmount(
+                                    amount = BigDecimal(amountText),
+                                    desc = descText,
+                                    category = _Seeds.GROCERY)
+                            transactionStorage.insert(storedTransaction)
+                            clearViews()
+                            finishWithResult(storedTransaction)
+                        }
                     }
                 }
             }
         })
         vNewTransactionParent.startAnimation(vNewTransactionParent.expandDown())
     }
+
+    private fun isEditMode(extras: Bundle?) = extras != null && extras.containsKey("transaction_uuid")
 
     private fun finishCanceled() {
         setResult(Activity.RESULT_CANCELED)

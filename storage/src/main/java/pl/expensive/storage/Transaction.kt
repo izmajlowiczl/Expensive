@@ -7,6 +7,7 @@ import org.threeten.bp.ZoneOffset
 import java.math.BigDecimal
 import java.util.*
 
+// TODO MAke parcelable
 data class Transaction(val uuid: UUID,
                        val wallet: UUID,
                        val amount: BigDecimal,

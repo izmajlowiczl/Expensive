@@ -41,7 +41,9 @@ class WalletsActivity : AppCompatActivity() {
     }
 
     private val adapter by lazy {
-        TransactionsAdapter()
+        TransactionsAdapter({ transition ->
+            startEditTransactionScreen(transition)
+        })
     }
 
     private var shouldAnimateFab = true
@@ -65,7 +67,7 @@ class WalletsActivity : AppCompatActivity() {
 
     private fun startContentAnimation() {
         val fabClickListener: (View) -> Unit = {
-            startActivityForResult(Intent(this@WalletsActivity, NewTransactionActivity::class.java), 666)
+            startNewTransactionCreatorScreen()
         }
         with(vCreateTransactionFab) {
             if (shouldAnimateFab) {
@@ -84,6 +86,19 @@ class WalletsActivity : AppCompatActivity() {
         }
     }
 
+    private fun startNewTransactionCreatorScreen() {
+        val intent = Intent(this@WalletsActivity, NewTransactionActivity::class.java)
+        startActivityForResult(intent, 666)
+    }
+
+    private fun startEditTransactionScreen(transaction: Transaction) {
+        val intent = Intent(this@WalletsActivity, NewTransactionActivity::class.java)
+                .putExtra("transaction_uuid", transaction.uuid.toString())
+                .putExtra("transaction_amount", transaction.amount.abs().toString())
+                .putExtra("transaction_desc", transaction.description)
+        startActivityForResult(intent, 666)
+    }
+
     override fun onStart() {
         super.onStart()
 
@@ -97,6 +112,7 @@ class WalletsActivity : AppCompatActivity() {
 
             // No need to refresh adapter. onStart was called and did it
 
+            // TODO("Instead of passing string, pass value. Show deposit/wuthdrawal message")
             val storedTransactionAmount = data?.getStringExtra("storedTransaction") ?: ""
             if (storedTransactionAmount.isNotBlank()) {
                 toast(getString(R.string.new_transaction_success_message, storedTransactionAmount))

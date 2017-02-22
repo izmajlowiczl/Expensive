@@ -7,7 +7,7 @@ import pl.expensive.inflateLayout
 import pl.expensive.storage.Transaction
 import kotlin.properties.Delegates
 
-class TransactionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TransactionsAdapter(private val transactionClickFun: (Transaction) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var data: MutableList<Any> by Delegates.vetoable(mutableListOf()) { p, old, new ->
         notifyDataSetChanged()
         old != new
@@ -16,7 +16,7 @@ class TransactionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
             when (viewType) {
                 R.layout.view_transaction_item ->
-                    TransactionViewHolder(parent.inflateLayout(viewType))
+                    TransactionViewHolder(parent.inflateLayout(viewType), transactionClickFun)
                 R.layout.view_header_item ->
                     HeaderViewHolder(parent.inflateLayout(viewType))
                 else ->
