@@ -1,8 +1,6 @@
 package pl.expensive.transaction
 
 import android.support.v7.widget.RecyclerView
-import android.text.SpannableString
-import android.text.style.RelativeSizeSpan
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -10,7 +8,6 @@ import kotlinx.android.synthetic.main.view_transaction_item.view.*
 import pl.expensive.dateTimeFormat
 import pl.expensive.middleOnScreen
 import pl.expensive.storage.Transaction
-import pl.expensive.timeFormat
 import java.text.DecimalFormat
 import java.util.*
 
@@ -34,10 +31,7 @@ class TransactionViewHolder(itemView: View, private val clickFun: (IntArray, Tra
      */
     private fun Transaction.formatTime(): CharSequence {
         val localDateTime = toLocalDateTime()
-        val format = localDateTime.format(dateTimeFormat)
-        val span = SpannableString("$format \n ${localDateTime.format(timeFormat)}")
-        span.setSpan(RelativeSizeSpan(.7f), span.length - format.length, span.length, 0)
-        return span
+        return localDateTime.format(dateTimeFormat)
     }
 
     /**
