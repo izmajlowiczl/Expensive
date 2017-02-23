@@ -98,8 +98,8 @@ class WalletsActivity : AppCompatActivity() {
         startActivityForResult(intent, 666)
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
 
         update(ViewState.Loading())
         showWallets()
