@@ -155,7 +155,6 @@ class WalletsActivity : AppCompatActivity() {
                     !it.toLocalDateTime().isAfter(today)
                 }).forEach {
                     if (it.key == YearMonth.from(today)) {
-                        result.add(Header(it.formatHeader(), formattedHeaderTotal(viewState.viewModels.currency, it.value)))
                         result.addAll(it.value)
                     } else {
                         result.add(Header(it.formatHeader(), formattedHeaderTotal(viewState.viewModels.currency, it.value)))
