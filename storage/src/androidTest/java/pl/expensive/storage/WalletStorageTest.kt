@@ -1,16 +1,14 @@
 package pl.expensive.storage
 
 import android.support.test.runner.AndroidJUnit4
-
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import com.google.common.truth.Truth.assertThat
-import java.util.UUID.randomUUID
 import pl.expensive.storage._Seeds.CASH
 import pl.expensive.storage._Seeds.EUR
 import pl.expensive.storage._Seeds.PLN
+import java.util.UUID.randomUUID
 
 @RunWith(AndroidJUnit4::class)
 class WalletStorageTest {
@@ -46,9 +44,9 @@ class WalletStorageTest {
     @Test
     fun storeSingleWallet() {
         val bankWallet = Wallet(randomUUID(), "bank", PLN)
-        storage!!.insert(bankWallet)
+        storage.insert(bankWallet)
 
-        assertThat(storage!!.list())
+        assertThat(storage.list())
                 .containsExactly(CASH, bankWallet)
     }
 
@@ -59,7 +57,7 @@ class WalletStorageTest {
         storage.insert(bankWallet)
         storage.insert(ccWallet)
 
-        assertThat(storage!!.list())
+        assertThat(storage.list())
                 .containsExactly(CASH, bankWallet, ccWallet)
     }
 

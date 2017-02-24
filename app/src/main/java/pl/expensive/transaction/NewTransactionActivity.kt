@@ -10,7 +10,6 @@ import kotlinx.android.synthetic.main.a_new_transaction.*
 import pl.expensive.*
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
-import pl.expensive.storage._Seeds
 import pl.expensive.wallet.WalletsService
 import java.math.BigDecimal
 import java.util.*
@@ -120,7 +119,6 @@ class NewTransactionActivity : AppCompatActivity(), RevealBackgroundView.OnState
                                         uuid = UUID.fromString(extras.getString("transaction_uuid")),
                                         amount = BigDecimal(amountText),
                                         desc = descText,
-                                        category = _Seeds.GROCERY,
                                         currency = primaryWallet.currency)
                                 transactionStorage.update(storedTransaction)
 
@@ -132,7 +130,6 @@ class NewTransactionActivity : AppCompatActivity(), RevealBackgroundView.OnState
                             val storedTransaction = Transaction.withdrawalWithAmount(
                                     amount = BigDecimal(amountText),
                                     desc = descText,
-                                    category = _Seeds.GROCERY,
                                     currency = primaryWallet.currency)
                             transactionStorage.insert(storedTransaction)
                             clearViews()

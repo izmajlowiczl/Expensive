@@ -24,7 +24,7 @@ data class Transaction(val uuid: UUID,
 
     companion object {
         fun withdrawalWithAmount(uuid: UUID = UUID.randomUUID(),
-                                 wallet: UUID = _Seeds.CASH.uuid,
+                                 wallet: UUID = _Seeds.CASH_ID,
                                  amount: BigDecimal,
                                  currency: Currency,
                                  time: Long = Date().time,
