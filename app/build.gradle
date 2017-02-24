@@ -54,13 +54,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:design:$supportVersion"
 
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.0'
-
     compile "com.jakewharton.threetenabp:threetenabp:$threeTenAndroidVersion"
-
-    annotationProcessor "com.google.auto.value:auto-value:$autoValueVersion"
-    provided "com.jakewharton.auto.value:auto-value-annotations:$autoValueVersion"
 
     annotationProcessor "com.squareup:javapoet:1.8.0" // needs to be declared before dagger
     annotationProcessor "com.google.guava:guava:$guavaVersion" // required by dagger compiler
