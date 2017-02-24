@@ -63,7 +63,7 @@ class TransactionStorageTest {
     }
 
     fun withCategory() {
-        val cat = Category("Food")
+        val cat = Category(name = "Food")
         val beer = Transaction(UUID.randomUUID(), CASH_ID, BigDecimal("4.99"), EUR, Date().time, "Beer", cat)
         storage.insert(beer)
 

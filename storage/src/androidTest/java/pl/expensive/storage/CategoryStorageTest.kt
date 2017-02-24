@@ -21,7 +21,7 @@ class CategoryStorageTest {
 
     @Test
     fun storeCategory() {
-        val category = Category("FAKE", "R.string.fake")
+        val category = Category(name = "FAKE", color = "#FFFFFF")
 
         storage.insert(category)
 
@@ -31,7 +31,7 @@ class CategoryStorageTest {
 
     @Test
     fun storeCategoryWithoutTranslation() {
-        val category = Category("FAKE")
+        val category = Category(name = "FAKE")
 
         storage.insert(category)
 

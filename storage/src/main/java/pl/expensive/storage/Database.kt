@@ -1,6 +1,7 @@
 package pl.expensive.storage
 
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.annotation.VisibleForTesting
@@ -10,6 +11,8 @@ import pl.expensive.storage._Seeds.CZK
 import pl.expensive.storage._Seeds.EUR
 import pl.expensive.storage._Seeds.GBP
 import pl.expensive.storage._Seeds.PLN
+import java.math.BigDecimal
+import java.util.*
 
 class Database : SQLiteOpenHelper {
     private var ctx: Context
@@ -40,7 +43,7 @@ class Database : SQLiteOpenHelper {
     private fun createSchema(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE tbl_wallet (uuid TEXT NOT NULL, name TEXT NOT NULL UNIQUE, currency TEXT NOT NULL, PRIMARY KEY(uuid), FOREIGN KEY(currency) REFERENCES tbl_currency(code));")
         db.execSQL("CREATE TABLE tbl_currency (code TEXT NOT NULL, format TEXT NOT NULL, PRIMARY KEY(code));")
-        db.execSQL("CREATE TABLE tbl_category (name TEXT NOT NULL, name_res TEXT, color TEXT, PRIMARY KEY(name));")
+        db.execSQL("CREATE TABLE tbl_category (uuid TEXT NOT NULL, name TEXT NOT NULL, name_res TEXT, color TEXT, PRIMARY KEY(uuid));")
         db.execSQL("CREATE TABLE tbl_transaction (" +
                 "uuid TEXT NOT NULL, amount TEXT NOT NULL, " +
                 "currency TEXT NOT NULL, " +
@@ -51,7 +54,7 @@ class Database : SQLiteOpenHelper {
                 "PRIMARY KEY(uuid), " +
                 "FOREIGN KEY(wallet_uuid) REFERENCES tbl_wallet(uuid), " +
                 "FOREIGN KEY(currency) REFERENCES tbl_currency(code), " +
-                "FOREIGN KEY(category) REFERENCES tbl_category(name));")
+                "FOREIGN KEY(category) REFERENCES tbl_category(uuid));")
     }
 
     private fun applySeeds(db: SQLiteDatabase) {
@@ -84,11 +87,19 @@ class Database : SQLiteOpenHelper {
     }
 
     private fun SQLiteDatabase.storeCategory(category: Category) {
-        execSQL(String.format("INSERT INTO tbl_category VALUES('%s', '%s', '%s');", category.name, category.name_res, category.color))
+        execSQL(String.format("INSERT INTO tbl_category VALUES('%s', '%s', '%s', '%s');", category.uuid, category.name, category.name_res, category.color))
     }
 
     companion object {
         private val VERSION = 1
         private val NAME = "expensive.db"
     }
+}
+
+fun Cursor.getUUID(columnIndex: Int): UUID {
+    return UUID.fromString(getString(columnIndex))
+}
+
+fun Cursor.getBigDecimal(columnIndex: Int): BigDecimal {
+    return BigDecimal(getString(columnIndex))
 }
