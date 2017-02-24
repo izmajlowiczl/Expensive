@@ -13,13 +13,13 @@ import java.util.*
 
 class TransactionViewHolder(itemView: View, private val clickFun: (IntArray, Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {
     fun update(viewModel: Transaction) = with(itemView) {
-        transaction_amount.text = viewModel.formatAmount()
-        transaction_time.text = viewModel.formatTime()
+        vTransactionItemAmount.text = viewModel.formatAmount()
+        vTransactionItemTime.text = viewModel.formatTime()
         if (viewModel.description.isNullOrBlank()) {
-            transaction_desc.visibility = GONE
+            vTransactionItemDesc.visibility = GONE
         } else {
-            transaction_desc.visibility = VISIBLE
-            transaction_desc.text = viewModel.description
+            vTransactionItemDesc.visibility = VISIBLE
+            vTransactionItemDesc.text = viewModel.description
         }
 
         setOnClickListener { clickFun(middleOnScreen(), viewModel) }

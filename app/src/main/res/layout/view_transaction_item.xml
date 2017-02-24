@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/spacer">
 
     <TextView
-        android:id="@+id/transaction_time"
+        android:id="@+id/vTransactionItemTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -20,19 +20,19 @@
         tools:text="11:23" />
 
     <TextView
-        android:id="@+id/transaction_amount"
+        android:id="@+id/vTransactionItemAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/transaction_time"
+        android:layout_toLeftOf="@id/vTransactionItemTime"
         android:textSize="@dimen/listItemText"
         tools:text="-12.00 Eur" />
 
     <TextView
-        android:id="@+id/transaction_desc"
+        android:id="@+id/vTransactionItemDesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/transaction_amount"
+        android:layout_below="@id/vTransactionItemAmount"
         android:paddingRight="@dimen/spacer"
         android:textColor="@color/colorTextLight"
         android:textSize="@dimen/listItemTextSmall"
