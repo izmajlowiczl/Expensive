@@ -16,7 +16,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.OvershootInterpolator
 import kotlinx.android.synthetic.main.activity_wallets.*
-import org.jetbrains.anko.toast
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.TextStyle

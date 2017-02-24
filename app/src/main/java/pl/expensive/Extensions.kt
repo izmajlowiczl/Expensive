@@ -1,5 +1,6 @@
 package pl.expensive
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.PorterDuff
 import android.support.annotation.LayoutRes
@@ -14,6 +15,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import org.threeten.bp.format.DateTimeFormatter
 import pl.expensive.storage.Currency
 import pl.expensive.storage.Transaction
@@ -69,6 +71,10 @@ fun List<Transaction>.calculateTotal(): BigDecimal {
     var total = BigDecimal.ZERO
     map { total += it.amount }
     return total
+}
+
+fun Activity.toast(msg: String) {
+    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }
 
 val timeFormat = DateTimeFormatter.ofPattern("HH:mm")
