@@ -1,16 +1,4 @@
 <resources>
-    <string name="cat_other">Other</string>
-    <string name="cat_grocery">Grocery</string>
-    <string name="cat_food">Food</string>
-    <string name="cat_travel">Travel</string>
-    <string name="cat_transport">Public Transport</string>
-    <string name="cat_car">Car</string>
-    <string name="cat_sport">Sport</string>
-    <string name="cat_health">Health</string>
-    <string name="cat_house">Household</string>
-    <string name="cat_bills">Bills</string>
-    <string name="cat_clothes">Clothes</string>
-
     <string name="total">Total:\u00A0</string>
     <string name="current_month">Current month</string>
     <string name="add_new_spending">New spending</string>
@@ -19,6 +7,7 @@
     <string name="description">Description</string>
     <string name="new_transaction_success_message">Transaction for %s created!</string>
     <string name="err_mandatory">Mandatory</string>
+
     <string name="repeat_no_repeat">Do not repeat</string>
     <string name="repeat_daily">Daily</string>
     <string name="repeat_monthly">Each month</string>

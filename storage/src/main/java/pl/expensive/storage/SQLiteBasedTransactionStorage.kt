@@ -15,7 +15,7 @@ class SQLiteBasedTransactionStorage(private val database: Database) : Transactio
         val columns = arrayOf(
                 "t.uuid", "t.wallet_uuid", "t.amount", "t.date", "t.description",
                 "cur.code", "cur.format",
-                "cat.uuid", "cat.name", "cat.name_res", "cat.color")
+                "cat.uuid", "cat.name", "cat.color")
         val cursor = readableDatabase.query(tables, columns, "t.wallet_uuid=?", arrayOf(wallet.toString()), null, null, null)
 
         val result = ArrayList<Transaction>()
@@ -59,7 +59,7 @@ class SQLiteBasedTransactionStorage(private val database: Database) : Transactio
     private fun from(cursor: Cursor): Transaction {
         val currency = Currency(cursor.getString(5), cursor.getString(6))
         val category = try {
-            Category(cursor.getUUID(7), cursor.getString(8), cursor.getString(9), cursor.getString(10))
+            Category(cursor.getUUID(7), cursor.getString(8), cursor.getString(9))
         } catch (ex: Exception) {
             null
         }

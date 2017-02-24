@@ -1,16 +1,4 @@
 <resources>
-    <string name="cat_other">Andere</string>
-    <string name="cat_food">Essen</string>
-    <string name="cat_grocery">Lebensmittel</string>
-    <string name="cat_travel">Urlaub</string>
-    <string name="cat_transport">Verkehrsmittel</string>
-    <string name="cat_car">Auto</string>
-    <string name="cat_sport">Sport</string>
-    <string name="cat_health">Gesundheit</string>
-    <string name="cat_house">Haushalt</string>
-    <string name="cat_bills">Rechnungen</string>
-    <string name="cat_clothes">Kleider</string>
-
     <string name="total">Gesamt:\u00A0</string>
     <string name="current_month">Diese Monat</string>
     <string name="add_new_spending">Neue Kosten</string>
@@ -18,11 +6,13 @@
     <string name="enter_amount">Geld hinzufügen</string>
     <string name="description">Beschreibung</string>
 
-    <!-- TODO: Translate -->
-    <string name="repeat_no_repeat">Do not repeat</string>
-    <string name="repeat_daily">Daily</string>
-    <string name="repeat_monthly">Each month</string>
+    <!-- Repeat modes -->
+    <string name="repeat_no_repeat">Nicht wiederholen</string>
+    <string name="repeat_daily">Täglich</string>
+    <string name="repeat_monthly">Monatlich</string>
 
-    <string name="new_transaction_success_message">Transaction for %s created!</string>
     <string name="err_mandatory">Pflichtfeld</string>
+
+    <!-- TODO: Translate -->
+    <string name="new_transaction_success_message">Transaction for %s created!</string>
 </resources>

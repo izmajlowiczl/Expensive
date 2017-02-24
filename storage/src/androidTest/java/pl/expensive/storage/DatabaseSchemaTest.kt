@@ -39,6 +39,6 @@ class DatabaseSchemaTest {
         val columns = getTableColumns(database.readableDatabase, "tbl_category")
 
         assertThat(columns)
-                .containsExactly("uuid", "color", "name", "name_res")
+                .containsExactly("uuid", "name", "color")
     }
 }
