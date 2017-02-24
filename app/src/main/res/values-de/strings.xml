@@ -19,8 +19,11 @@
     <string name="enter_amount">Geld hinzufügen</string>
     <string name="description">Beschreibung</string>
 
-
     <!-- TODO: Translate -->
+    <string name="repeat_no_repeat">Do not repeat</string>
+    <string name="repeat_daily">Daily</string>
+    <string name="repeat_monthly">Each month</string>
+
     <string name="new_transaction_success_message">Transaction for %s created!</string>
     <string name="err_mandatory">Pflichtfeld</string>
 </resources>

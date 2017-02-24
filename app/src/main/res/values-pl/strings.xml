@@ -20,4 +20,8 @@
     <string name="description">Opis</string>
     <string name="new_transaction_success_message">Dodano wydatek za %s!</string>
     <string name="err_mandatory">Pole Wymagane!</string>
+
+    <string name="repeat_no_repeat">Nie powtarzaj</string>
+    <string name="repeat_daily">Codziennie</string>
+    <string name="repeat_monthly"><Miesięcznie></Miesięcznie></string>
 </resources>
