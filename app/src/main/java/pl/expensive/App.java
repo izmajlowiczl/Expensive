@@ -22,6 +22,7 @@ public class App extends Application {
         }
 
         AppComponent appComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplicationContext()))
                 .storageModule(new StorageModule(this))
                 .build();
         Injector.initAppComponent(appComponent);
