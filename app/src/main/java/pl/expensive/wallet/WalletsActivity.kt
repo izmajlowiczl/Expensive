@@ -88,15 +88,6 @@ class WalletsActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
     }
 
-    private fun startEditTransactionScreen(touchPos: IntArray, transaction: Transaction) {
-        val intent = Intent(this@WalletsActivity, NewTransactionActivity::class.java)
-                .putExtra("transaction_uuid", transaction.uuid.toString())
-                .putExtra("transaction_amount", transaction.amount.abs().toString())
-                .putExtra("transaction_desc", transaction.description)
-                .putExtra("loc", touchPos)
-        startActivityForResult(intent, 666)
-    }
-
     override fun onResume() {
         super.onResume()
 
@@ -110,7 +101,7 @@ class WalletsActivity : AppCompatActivity() {
 
             // No need to refresh adapter. onStart was called and did it
 
-            // TODO("Instead of passing string, pass value. Show deposit/wuthdrawal message")
+            // TODO("Instead of passing string, pass value. Show deposit/withdrawal message")
             val storedTransactionAmount = data?.getStringExtra("storedTransaction") ?: ""
             if (storedTransactionAmount.isNotBlank()) {
                 toast(getString(R.string.new_transaction_success_message, storedTransactionAmount))
