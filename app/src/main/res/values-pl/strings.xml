@@ -11,7 +11,6 @@
     <string name="cat_bills">Rachunki</string>
     <string name="cat_clothes">Ubrania</string>
 
-    <string name="err_loading_wallets">Nie można pobrać portfeli</string>
     <string name="total">Razem:\u00A0</string>
     <string name="current_month">Aktualny miesiąc</string>
     <string name="add_new_spending">Nowy wydatek</string>
@@ -23,5 +22,5 @@
 
     <string name="repeat_no_repeat">Nie powtarzaj</string>
     <string name="repeat_daily">Codziennie</string>
-    <string name="repeat_monthly"><Miesięcznie></Miesięcznie></string>
+    <string name="repeat_monthly">Miesięcznie</string>
 </resources>

@@ -11,7 +11,6 @@
     <string name="cat_bills">Rechnungen</string>
     <string name="cat_clothes">Kleider</string>
 
-    <string name="err_loading_wallets">Daten können nicht geladen werden</string>
     <string name="total">Gesamt:\u00A0</string>
     <string name="current_month">Diese Monat</string>
     <string name="add_new_spending">Neue Kosten</string>
