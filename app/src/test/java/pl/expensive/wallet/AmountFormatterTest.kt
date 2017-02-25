@@ -9,6 +9,7 @@ import pl.expensive.storage._Seeds.EUR
 import pl.expensive.storage._Seeds.GBP
 import pl.expensive.storage._Seeds.PLN
 import java.math.BigDecimal
+import java.util.*
 
 class AmountFormatterTest {
     @Test
@@ -20,7 +21,10 @@ class AmountFormatterTest {
                 "9,99 Kč" to CZK)
                 .forEach {
                     assertThat(it.key).isEqualTo(
-                            it.value.formatValue(money = BigDecimal("9.99")))
+                            it.value.formatValue(
+                                    money = BigDecimal("9.99"),
+                                    locale = Locale.GERMANY
+                            ))
                 }
     }
 }
