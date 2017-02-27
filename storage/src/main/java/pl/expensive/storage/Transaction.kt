@@ -1,28 +1,47 @@
 package pl.expensive.storage
 
-import org.threeten.bp.Instant
+import android.os.Parcel
+import android.os.Parcelable
 import org.threeten.bp.LocalDateTime
-import org.threeten.bp.ZoneId
 import org.threeten.bp.ZoneOffset
 import java.math.BigDecimal
 import java.util.*
 
-// TODO MAke parcelable
 data class Transaction(val uuid: UUID,
                        val wallet: UUID,
                        val amount: BigDecimal,
                        val currency: Currency,
                        val date: Long, // time in millis
                        val description: String,
-                       var category: Category? = null) {
+                       var category: Category? = null) : Parcelable {
 
-    fun toLocalDateTime(): LocalDateTime {
-        return Instant.ofEpochMilli(date)
-                .atZone(ZoneId.of("UTC"))
-                .toLocalDateTime()
+    constructor(parcelIn: Parcel) : this(
+            parcelIn.readString().toUUID(),
+            parcelIn.readString().toUUID(),
+            parcelIn.readString().asBigDecimal(),
+            parcelIn.readParcelable(Currency.CREATOR),
+            parcelIn.readLong(),
+            parcelIn.readString(),
+            parcelIn.readParcelable(Category.CREATOR))
+
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        with(dest) {
+            writeString(uuid.toString())
+            writeString(wallet.toString())
+            writeString(amount.toString())
+            writeParcelable(currency, 0)
+            writeLong(date)
+            writeString(description)
+            writeParcelable(category, 0)
+        }
     }
 
+    override fun describeContents() = 0
+
     companion object {
+        @JvmField @Suppress("unused")
+        val CREATOR = createParcel(::Transaction)
+
         fun withdrawalWithAmount(uuid: UUID = UUID.randomUUID(),
                                  wallet: UUID = _Seeds.CASH_ID,
                                  amount: BigDecimal,
