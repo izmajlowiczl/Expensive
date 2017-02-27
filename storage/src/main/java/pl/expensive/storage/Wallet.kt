@@ -11,7 +11,7 @@ data class Wallet(val uuid: UUID,
     constructor(parcelIn: Parcel) : this(
             parcelIn.readString().toUUID(),
             parcelIn.readString(),
-            parcelIn.readParcelable(Currency.CREATOR))
+            parcelIn.readParcelable(Currency.CREATOR)!!)
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         with(dest) {

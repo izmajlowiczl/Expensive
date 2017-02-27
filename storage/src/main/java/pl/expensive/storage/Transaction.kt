@@ -19,7 +19,7 @@ data class Transaction(val uuid: UUID,
             parcelIn.readString().toUUID(),
             parcelIn.readString().toUUID(),
             parcelIn.readString().asBigDecimal(),
-            parcelIn.readParcelable(Currency.CREATOR),
+            parcelIn.readParcelable(Currency.CREATOR)!!,
             parcelIn.readLong(),
             parcelIn.readString(),
             parcelIn.readParcelable(Category.CREATOR))
@@ -41,6 +41,16 @@ data class Transaction(val uuid: UUID,
     companion object {
         @JvmField @Suppress("unused")
         val CREATOR = createParcel(::Transaction)
+
+        fun depositWithAmount(uuid: UUID = UUID.randomUUID(),
+                              wallet: UUID = _Seeds.CASH_ID,
+                              amount: BigDecimal,
+                              currency: Currency,
+                              time: Long = Date().time,
+                              desc: String = "",
+                              category: Category? = null): Transaction {
+            return Transaction(uuid, wallet, amount, currency, time, desc, category)
+        }
 
         fun withdrawalWithAmount(uuid: UUID = UUID.randomUUID(),
                                  wallet: UUID = _Seeds.CASH_ID,
