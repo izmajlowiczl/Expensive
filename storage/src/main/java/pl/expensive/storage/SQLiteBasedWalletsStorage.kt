@@ -34,7 +34,7 @@ class SQLiteBasedWalletsStorage(private val database: Database) : WalletsStorage
     private fun fromCursor(cursor: Cursor): Wallet {
         val currency = Currency(cursor.getString(2), cursor.getString(3))
         return Wallet(
-                UUID.fromString(cursor.getString(0)),
+                cursor.uuid(0),
                 cursor.getString(1),
                 currency)
     }

@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.view_transaction_item.view.*
 import pl.expensive.dateTimeFormat
 import pl.expensive.middleOnScreen
 import pl.expensive.storage.Transaction
+import pl.expensive.storage.toLocalDateTime
 import java.text.DecimalFormat
 import java.util.*
 

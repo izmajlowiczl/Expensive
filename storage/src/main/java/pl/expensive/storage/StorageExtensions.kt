@@ -1,9 +1,9 @@
 package pl.expensive.storage
 
+import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import org.threeten.bp.Instant
-import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import java.math.BigDecimal
 import java.util.*
@@ -19,11 +19,12 @@ inline fun <reified T : Parcelable> createParcel(
             override fun newArray(size: Int): Array<out T?> = arrayOfNulls(size)
         }
 
-fun Transaction.toLocalDateTime(): LocalDateTime {
-    return Instant.ofEpochMilli(date)
-            .atZone(ZoneId.of("UTC"))
-            .toLocalDateTime()
-}
-fun String.toUUID(): UUID = UUID.fromString(this)
-fun String.asBigDecimal(): BigDecimal= BigDecimal(this)
+fun Transaction.toLocalDateTime() = Instant.ofEpochMilli(date)
+        .atZone(ZoneId.of("UTC"))
+        .toLocalDateTime()
 
+fun String.toUUID(): UUID = UUID.fromString(this)
+fun String.asBigDecimal(): BigDecimal = BigDecimal(this)
+
+fun Cursor.uuid(columnIndex: Int) = UUID.fromString(getString(columnIndex))
+fun Cursor.bigDecimal(columnIndex: Int) = BigDecimal(getString(columnIndex))

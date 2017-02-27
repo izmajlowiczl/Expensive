@@ -15,6 +15,7 @@ import pl.expensive.formatValue
 import pl.expensive.storage.Currency
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
+import pl.expensive.storage.toLocalDateTime
 import pl.expensive.transaction.Header
 import pl.expensive.transaction.TransactionGrouper
 import java.math.BigDecimal

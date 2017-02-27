@@ -3,7 +3,6 @@ package pl.expensive.storage
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteConstraintException
-import java.math.BigDecimal
 import java.util.*
 
 class SQLiteBasedTransactionStorage(private val database: Database) : TransactionStorage {
@@ -59,15 +58,15 @@ class SQLiteBasedTransactionStorage(private val database: Database) : Transactio
     private fun from(cursor: Cursor): Transaction {
         val currency = Currency(cursor.getString(5), cursor.getString(6))
         val category = try {
-            Category(cursor.getUUID(7), cursor.getString(8), cursor.getString(9))
+            Category(cursor.uuid(7), cursor.getString(8), cursor.getString(9))
         } catch (ex: Exception) {
             null
         }
 
         return Transaction(
-                UUID.fromString(cursor.getString(0)),
-                UUID.fromString(cursor.getString(1)),
-                BigDecimal(cursor.getString(2)),
+                cursor.uuid(0),
+                cursor.uuid(1),
+                cursor.bigDecimal(2),
                 currency,
                 cursor.getLong(3),
                 cursor.getString(4),

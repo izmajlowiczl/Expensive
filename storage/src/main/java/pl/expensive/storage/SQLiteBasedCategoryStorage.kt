@@ -10,7 +10,7 @@ class SQLiteBasedCategoryStorage(private val db: Database) : CategoryStorage {
 
         val result = ArrayList<Category>()
         while (cursor.moveToNext()) {
-            result.add(Category(cursor.getUUID(0), cursor.getString(1), cursor.getString(2)))
+            result.add(Category(cursor.uuid(0), cursor.getString(1), cursor.getString(2)))
         }
 
         cursor.close()

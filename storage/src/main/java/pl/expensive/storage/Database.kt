@@ -1,7 +1,6 @@
 package pl.expensive.storage
 
 import android.content.Context
-import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.annotation.VisibleForTesting
@@ -11,8 +10,6 @@ import pl.expensive.storage._Seeds.CZK
 import pl.expensive.storage._Seeds.EUR
 import pl.expensive.storage._Seeds.GBP
 import pl.expensive.storage._Seeds.PLN
-import java.math.BigDecimal
-import java.util.*
 
 class Database : SQLiteOpenHelper {
     private var ctx: Context
@@ -94,12 +91,4 @@ class Database : SQLiteOpenHelper {
         private val VERSION = 1
         private val NAME = "expensive.db"
     }
-}
-
-fun Cursor.getUUID(columnIndex: Int): UUID {
-    return UUID.fromString(getString(columnIndex))
-}
-
-fun Cursor.getBigDecimal(columnIndex: Int): BigDecimal {
-    return BigDecimal(getString(columnIndex))
 }
