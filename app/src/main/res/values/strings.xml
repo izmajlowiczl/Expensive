@@ -3,9 +3,12 @@
     <string name="current_month">Current month</string>
     <string name="add_new_spending">New spending</string>
     <string name="edit_spending">Edit spending</string>
+    <string name="add_new_deposit">New deposit</string>
+    <string name="edit_deposit">Edit deposit</string>
     <string name="enter_amount">Enter amount</string>
     <string name="description">Description</string>
-    <string name="new_transaction_success_message">Transaction for %s created!</string>
+    <string name="new_deposit_success_message">Deposit for %s created!</string>
+    <string name="new_withdrawal_success_message">Spending for %s created!</string>
     <string name="err_mandatory">Mandatory</string>
 
     <string name="repeat_no_repeat">Do not repeat</string>

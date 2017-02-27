@@ -10,13 +10,17 @@ import kotlinx.android.synthetic.main.a_new_transaction.*
 import pl.expensive.*
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
+import pl.expensive.storage.asBigDecimal
 import pl.expensive.wallet.WalletsService
-import java.math.BigDecimal
 import java.util.*
 
 class NewTransactionActivity : AppCompatActivity(), RevealBackgroundView.OnStateChangeListener {
     private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
     private val walletsService: WalletsService by lazy { Injector.app().walletsService() }
+
+
+    private var isDepositTransaction: Boolean = false
+    private var isInEditMode: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,35 +28,53 @@ class NewTransactionActivity : AppCompatActivity(), RevealBackgroundView.OnState
         Injector.app().inject(this)
 
         val extras = intent.extras
-        val isInEditMode = isEditMode(extras)
+        isDepositTransaction = intent.getBooleanExtra("is_deposit", false)
+        isInEditMode = isEditMode(extras)
+
+        updateTitleView()
+        updateAmountView(extras)
+        updateDescriptionView(extras)
+
+        setupRevealBackground(savedInstanceState)
+    }
+
+    private fun updateTitleView() {
+        vNewTransactionTitle.text =
+                if (isDepositTransaction) {
+                    getString(if (isInEditMode) R.string.edit_deposit else R.string.add_new_deposit)
+                } else {
+                    getString(if (isInEditMode) R.string.edit_spending else R.string.add_new_spending)
+                }
+    }
+
+    private fun updateAmountView(extras: Bundle) {
         if (isInEditMode) {
             vNewTransactionAmount.setText(extras.getString("transaction_amount"))
-            vNewTransactionDescription.setText(extras.getString("transaction_desc"))
         }
-
-        vNewTransactionTitle.text = getString(if (isInEditMode) R.string.edit_spending else R.string.add_new_spending)
-
         vNewTransactionAmount.afterTextChanged({
             // When is expanded and has all mandatory fields filled. Change color of save button
             if (vNewTransactionAmount.text.isNotBlank()) {
-                vNewTransactionSave.tint(pl.expensive.R.color.ready)
+                vNewTransactionSave.tint(R.color.ready)
             } else {
-                vNewTransactionSave.tint(pl.expensive.R.color.colorTextLight)
+                vNewTransactionSave.tint(R.color.colorTextLight)
             }
         })
+    }
 
+    private fun updateDescriptionView(extras: Bundle) {
         // In edit mode, mandatory fields has to be filled and some data changed to change color of save button
+        if (isInEditMode) {
+            vNewTransactionDescription.setText(extras.getString("transaction_desc"))
+        }
         if (isInEditMode) {
             vNewTransactionDescription.afterTextChanged {
                 if (dataChangedInEditMode(extras)) {
-                    vNewTransactionSave.tint(pl.expensive.R.color.ready)
+                    vNewTransactionSave.tint(R.color.ready)
                 } else {
-                    vNewTransactionSave.tint(pl.expensive.R.color.colorTextLight)
+                    vNewTransactionSave.tint(R.color.colorTextLight)
                 }
             }
         }
-
-        setupRevealBackground(savedInstanceState)
     }
 
     private fun setupRevealBackground(savedInstanceState: Bundle?) = with(revealLayer) {
@@ -102,44 +124,65 @@ class NewTransactionActivity : AppCompatActivity(), RevealBackgroundView.OnState
             endAction {
                 vNewTransactionSave.show(true)
                 vNewTransactionSave.setOnClickListener {
-                    if (validate()) {
-                        val amountText = vNewTransactionAmount.text.toString()
-                        val descText = vNewTransactionDescription.text.toString()
-
-                        val primaryWallet = walletsService.primaryWallet()
-
-                        // In Edit Mode check if anything changed
-                        val extras = intent.extras
-                        if (isEditMode(extras)) {
-                            val oldAmount = extras.getString("transaction_amount")
-                            val oldDesc = extras.getString("transaction_desc")
-
-                            if (amountText != oldAmount || descText != oldDesc) {
-                                val storedTransaction = Transaction.withdrawalWithAmount(
-                                        uuid = UUID.fromString(extras.getString("transaction_uuid")),
-                                        amount = BigDecimal(amountText),
-                                        desc = descText,
-                                        currency = primaryWallet.currency)
-                                transactionStorage.update(storedTransaction)
-
-                                clearViews()
-                                // TODO: Change message for edit confirmation
-                                finishWithResult(storedTransaction)
-                            }
-                        } else {
-                            val storedTransaction = Transaction.withdrawalWithAmount(
-                                    amount = BigDecimal(amountText),
-                                    desc = descText,
-                                    currency = primaryWallet.currency)
-                            transactionStorage.insert(storedTransaction)
-                            clearViews()
-                            finishWithResult(storedTransaction)
-                        }
-                    }
+                    handleSaveButtonClick()
                 }
             }
         })
         vNewTransactionParent.startAnimation(vNewTransactionParent.expandDown())
+    }
+
+    private fun handleSaveButtonClick() {
+        if (validate()) {
+            val amountText = vNewTransactionAmount.text.toString()
+            val descText = vNewTransactionDescription.text.toString()
+
+            val primaryWallet = walletsService.primaryWallet()
+
+            // In Edit Mode check if anything changed
+            val extras = intent.extras
+            if (isEditMode(extras)) {
+                val oldAmount = extras.getString("transaction_amount")
+                val oldDesc = extras.getString("transaction_desc")
+
+                if (amountText != oldAmount || descText != oldDesc) {
+                    val storedTransaction =
+                            if (isDepositTransaction) {
+                                Transaction.depositWithAmount(
+                                        uuid = UUID.fromString(extras.getString("transaction_uuid")),
+                                        amount = amountText.asBigDecimal(),
+                                        desc = descText,
+                                        currency = primaryWallet.currency)
+                            } else {
+                                Transaction.withdrawalWithAmount(
+                                        uuid = UUID.fromString(extras.getString("transaction_uuid")),
+                                        amount = amountText.asBigDecimal(),
+                                        desc = descText,
+                                        currency = primaryWallet.currency)
+                            }
+                    transactionStorage.update(storedTransaction)
+
+                    clearViews()
+                    // TODO: Change message for edit confirmation
+                    finishWithResult(storedTransaction)
+                }
+            } else {
+                val storedTransaction = if (isDepositTransaction) {
+                    Transaction.depositWithAmount(
+                            amount = amountText.asBigDecimal(),
+                            desc = descText,
+                            currency = primaryWallet.currency)
+                } else {
+                    Transaction.withdrawalWithAmount(
+                            amount = amountText.asBigDecimal(),
+                            desc = descText,
+                            currency = primaryWallet.currency)
+                }
+                transactionStorage.insert(storedTransaction)
+
+                clearViews()
+                finishWithResult(storedTransaction)
+            }
+        }
     }
 
     private fun isEditMode(extras: Bundle?) = extras != null && extras.containsKey("transaction_uuid")
@@ -150,8 +193,9 @@ class NewTransactionActivity : AppCompatActivity(), RevealBackgroundView.OnState
     }
 
     private fun finishWithResult(transaction: Transaction) {
-        setResult(Activity.RESULT_OK, Intent()
-                .putExtra("storedTransaction", transaction.currency.formatValue(money = transaction.amount)))
+        val extras = Bundle()
+        extras.putParcelable("storedTransaction", transaction)
+        setResult(Activity.RESULT_OK, Intent().putExtras(extras))
         finish()
     }
 
@@ -159,7 +203,7 @@ class NewTransactionActivity : AppCompatActivity(), RevealBackgroundView.OnState
         var isValid = true
         val amountText = vNewTransactionAmount.text.toString()
         if (amountText.isNullOrEmpty()) {
-            vNewTransactionAmount.error = getString(pl.expensive.R.string.err_mandatory)
+            vNewTransactionAmount.error = getString(R.string.err_mandatory)
             isValid = false
         } else {
             vNewTransactionAmount.error = null

@@ -10,13 +10,14 @@ import android.view.View
 import android.view.animation.OvershootInterpolator
 import kotlinx.android.synthetic.main.activity_wallets.*
 import pl.expensive.*
-import pl.expensive.transaction.NewTransactionActivity
+import pl.expensive.storage.Transaction
 import pl.expensive.transaction.TransactionsAdapter
+import java.math.BigDecimal
 
 class TransactionsActivity : AppCompatActivity() {
     private val adapter by lazy {
         TransactionsAdapter({ touchPos, transition ->
-            startEditTransactionScreen(touchPos, transition)
+            startEditTransactionScreen(touchPos, transition, transition.amount > BigDecimal.ZERO)
         })
     }
 
@@ -65,9 +66,20 @@ class TransactionsActivity : AppCompatActivity() {
     }
 
     private fun startContentAnimation() {
-        val fabClickListener: (View) -> Unit = {
-            startNewTransactionCreatorScreen()
+        val createWithdrawalAction: (View) -> Unit = {
+            startNewTransactionCreatorScreen(
+                    isDeposit = false,
+                    touchPos = vCreateTransactionFab.middleOnScreen())
         }
+
+        // TODO: This is a temp solution
+        val createDepositAction: (View) -> Boolean = {
+            startNewTransactionCreatorScreen(
+                    isDeposit = true,
+                    touchPos = vCreateTransactionFab.middleOnScreen())
+            true
+        }
+
         with(vCreateTransactionFab) {
             if (shouldAnimateFab) {
                 translationY = 2 * resources.getDimension(R.dimen.fab_size) // Hide below screen
@@ -76,34 +88,30 @@ class TransactionsActivity : AppCompatActivity() {
                         .setInterpolator(OvershootInterpolator(1f))
                         .setStartDelay(300)
                         .setDuration(longAnim().toLong())
-                        .withEndAction { setOnClickListener(fabClickListener) }
+                        .withEndAction {
+                            setOnClickListener(createWithdrawalAction)
+                            setOnLongClickListener(createDepositAction)
+                        }
                         .start()
             } else {
                 show(true)
-                setOnClickListener(fabClickListener)
+                setOnClickListener(createWithdrawalAction)
+                setOnLongClickListener(createDepositAction)
             }
         }
-    }
-
-    private fun startNewTransactionCreatorScreen() {
-        val intent = Intent(this@TransactionsActivity, NewTransactionActivity::class.java)
-                .putExtra("loc", vCreateTransactionFab.middleOnScreen())
-        startActivityForResult(intent, 666)
-        overridePendingTransition(0, 0)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 666 && resultCode == Activity.RESULT_OK) {
-
             // No need to refresh adapter. onResume was called and did it
 
-            // TODO("Instead of passing string, pass value. Show deposit/withdrawal message")
-            val storedTransactionAmount = data?.getStringExtra("storedTransaction") ?: ""
-            if (storedTransactionAmount.isNotBlank()) {
-                toast(getString(R.string.new_transaction_success_message, storedTransactionAmount))
+            if (data != null && data.hasExtra("storedTransaction")) {
+                val transaction: Transaction = data.getParcelableExtra<Transaction>("storedTransaction")
+                toast(getString(if (transaction.amount > BigDecimal.ZERO)
+                    R.string.new_deposit_success_message else
+                    R.string.new_withdrawal_success_message, transaction.amount.abs()))
             }
         }
     }
 }
-
