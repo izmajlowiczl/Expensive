@@ -10,7 +10,6 @@ import android.view.View
 import android.view.animation.OvershootInterpolator
 import kotlinx.android.synthetic.main.activity_wallets.*
 import pl.expensive.*
-import pl.expensive.storage.Transaction
 import pl.expensive.transaction.TransactionsAdapter
 import java.math.BigDecimal
 
@@ -106,11 +105,8 @@ class TransactionsActivity : AppCompatActivity() {
         if (requestCode == 666 && resultCode == Activity.RESULT_OK) {
             // No need to refresh adapter. onResume was called and did it
 
-            if (data != null && data.hasExtra("storedTransaction")) {
-                val transaction: Transaction = data.getParcelableExtra<Transaction>("storedTransaction")
-                toast(getString(if (transaction.amount > BigDecimal.ZERO)
-                    R.string.new_deposit_success_message else
-                    R.string.new_withdrawal_success_message, transaction.amount.abs()))
+            if (data != null && data.hasExtra("message")) {
+                toast(data.getStringExtra("message"))
             }
         }
     }

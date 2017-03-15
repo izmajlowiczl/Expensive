@@ -7,8 +7,12 @@
     <string name="edit_deposit">Edytuj wpłatę</string>
     <string name="enter_amount">Wprowadź wartość</string>
     <string name="description">Opis</string>
+
+    <string name="deposit_edited_success_message">Zmieniono wpłatę za %s!</string>
+    <string name="withdrawal_edited_success_message">Zmieniono wydatek za %s!</string>
     <string name="new_deposit_success_message">Dodano wpłatę za %s!</string>
     <string name="new_withdrawal_success_message">Dodano wydatek za %s!</string>
+
     <string name="err_mandatory">Pole Wymagane!</string>
 
     <string name="repeat_no_repeat">Nie powtarzaj</string>
