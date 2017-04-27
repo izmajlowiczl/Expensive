@@ -3,9 +3,7 @@ package pl.expensive.transaction
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
-import android.view.ViewTreeObserver
 import kotlinx.android.synthetic.main.a_new_transaction.*
 import pl.expensive.*
 import pl.expensive.R
@@ -31,7 +29,7 @@ sealed class ViewState {
                val description: CharSequence?) : ViewState()
 }
 
-class NewTransactionActivity : AppCompatActivity(), RevealBackgroundView.OnStateChangeListener {
+class NewTransactionActivity : AppCompatActivity() {
     private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
     private val walletsService: WalletsService by lazy { Injector.app().walletsService() }
 
@@ -61,7 +59,7 @@ class NewTransactionActivity : AppCompatActivity(), RevealBackgroundView.OnState
                 }
         updateViewState(currentState)
 
-        setupRevealBackground(savedInstanceState)
+        playEnterAnimation()
     }
 
     private val updateViewState: (ViewState) -> Unit = { state ->
@@ -115,29 +113,6 @@ class NewTransactionActivity : AppCompatActivity(), RevealBackgroundView.OnState
         }
     }
 
-    private fun setupRevealBackground(savedInstanceState: Bundle?) = with(revealLayer) {
-        setFillPaintColor(ResourcesCompat.getColor(resources, R.color.window_bg, theme))
-        setOnStateChangeListener(this@NewTransactionActivity)
-        if (savedInstanceState == null) {
-            val startingLocation = intent.getIntArrayExtra("loc")
-            viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    viewTreeObserver.removeOnPreDrawListener(this)
-                    startFromLocation(startingLocation)
-                    return true
-                }
-            })
-        } else {
-            setToFinishedFrame()
-        }
-    }
-
-    override fun onStateChange(state: Int) {
-        if (state == RevealBackgroundView.STATE_FINISHED) {
-            vNewTransactionScrollParent.show(true)
-            playEnterAnimation()
-        }
-    }
 
     private fun playEnterAnimation() {
         vNewTransactionClose.startAnimation(vNewTransactionClose.rotate(0f, 45f).apply {
