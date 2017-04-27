@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.animation.OvershootInterpolator
 import kotlinx.android.synthetic.main.activity_wallets.*
 import pl.expensive.*
@@ -52,14 +54,17 @@ class TransactionsActivity : AppCompatActivity() {
                 vTransactions.show(true)
 
                 adapter.data = it.adapterData
+
+                supportActionBar!!.show()
                 supportActionBar!!.title = it.title
+                toolbar_shadow.visibility = VISIBLE
             }
 
             is ViewState.Empty -> {
                 vTransactions.show(false)
 
-                adapter.data = mutableListOf<Any>()
-                supportActionBar!!.title = it.title
+                toolbar_shadow.visibility = GONE
+                supportActionBar!!.hide()
             }
         }
     }
