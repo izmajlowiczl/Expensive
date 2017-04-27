@@ -20,4 +20,5 @@
     <string name="new_withdrawal_success_message">Spending for %s created!</string>
     <string name="add_new_deposit">New deposit</string>
     <string name="edit_deposit">Edit deposit</string>
+    <string name="empty_transactions_msg">Click on the plus button to create first transaction!</string>
 </resources>

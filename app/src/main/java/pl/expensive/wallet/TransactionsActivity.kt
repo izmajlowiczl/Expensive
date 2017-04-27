@@ -58,6 +58,8 @@ class TransactionsActivity : AppCompatActivity() {
                 supportActionBar!!.show()
                 supportActionBar!!.title = it.title
                 toolbar_shadow.visibility = VISIBLE
+
+                vTransactionsEmptyMsg.visibility = GONE
             }
 
             is ViewState.Empty -> {
@@ -65,6 +67,8 @@ class TransactionsActivity : AppCompatActivity() {
 
                 toolbar_shadow.visibility = GONE
                 supportActionBar!!.hide()
+
+                vTransactionsEmptyMsg.visibility = VISIBLE
             }
         }
     }

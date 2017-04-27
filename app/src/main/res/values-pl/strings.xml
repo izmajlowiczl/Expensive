@@ -18,4 +18,6 @@
     <string name="repeat_no_repeat">Nie powtarzaj</string>
     <string name="repeat_daily">Codziennie</string>
     <string name="repeat_monthly">Miesięcznie</string>
+
+    <string name="empty_transactions_msg">Kliknij na przycisk plus: żeby dodać pierwszą tranzakcję!</string>
 </resources>
