@@ -13,17 +13,10 @@ import pl.expensive.wallet.WalletsService
 import java.math.BigDecimal
 import java.util.*
 
-sealed class TransactionCreateMode {
-    class Deposit : TransactionCreateMode()
-    class Withdrawal : TransactionCreateMode()
-}
-
 sealed class ViewState {
-    class Create(val mode: TransactionCreateMode,
-                 val currency: Currency) : ViewState()
+    class Create(val currency: Currency) : ViewState()
 
-    class Edit(val mode: TransactionCreateMode,
-               val transaction: UUID,
+    class Edit(val transaction: UUID,
                val amount: BigDecimal,
                val currency: Currency,
                val description: CharSequence?) : ViewState()
@@ -41,21 +34,15 @@ class NewTransactionActivity : AppCompatActivity() {
         Injector.app().inject(this)
 
         val extras = intent.extras
-        val mode =
-                if (intent.getBooleanExtra("is_deposit", false))
-                    TransactionCreateMode.Deposit()
-                else
-                    TransactionCreateMode.Withdrawal()
         currentState =
-                if (extras != null && extras.containsKey("transaction_uuid")) {
-                    ViewState.Edit(mode,
+                if (extras != null) {
+                    ViewState.Edit(
                             transaction = extras.getString("transaction_uuid").toUUID(),
                             amount = extras.getString("transaction_amount").asBigDecimal(),
                             currency = walletsService.primaryWallet().currency,
                             description = extras.getString("transaction_desc"))
                 } else {
-                    ViewState.Create(mode,
-                            currency = walletsService.primaryWallet().currency)
+                    ViewState.Create(currency = walletsService.primaryWallet().currency)
                 }
         updateViewState(currentState)
 
@@ -67,11 +54,7 @@ class NewTransactionActivity : AppCompatActivity() {
 
         when (state) {
             is ViewState.Create -> {
-                vNewTransactionTitle.text =
-                        when (state.mode) {
-                            is TransactionCreateMode.Deposit -> getString(R.string.add_new_deposit)
-                            is TransactionCreateMode.Withdrawal -> getString(R.string.add_new_spending)
-                        }
+                vNewTransactionTitle.text = getString(R.string.add_new_spending)
 
                 vNewTransactionAmount.afterTextChanged({
                     if (vNewTransactionAmount.text.isNotBlank()) {
@@ -83,11 +66,7 @@ class NewTransactionActivity : AppCompatActivity() {
 
             }
             is ViewState.Edit -> {
-                vNewTransactionTitle.text =
-                        when (state.mode) {
-                            is TransactionCreateMode.Deposit -> getString(R.string.edit_deposit)
-                            is TransactionCreateMode.Withdrawal -> getString(R.string.edit_spending)
-                        }
+                vNewTransactionTitle.text = getString(R.string.edit_spending)
 
                 with(vNewTransactionAmount) {
                     setText(state.amount.toString())
@@ -135,61 +114,35 @@ class NewTransactionActivity : AppCompatActivity() {
         val amountText = vNewTransactionAmount.text.toString()
         val descText = vNewTransactionDescription.text.toString()
 
-        val primaryWallet = walletsService.primaryWallet()
-
         when (currentState) {
             is ViewState.Create -> {
                 val state = currentState as ViewState.Create
-                val storedTransaction =
-                        when (state.mode) {
-                            is TransactionCreateMode.Deposit -> Transaction.depositWithAmount(
-                                    amount = amountText.asBigDecimal(),
-                                    desc = descText,
-                                    currency = state.currency)
+                val storedTransaction = Transaction.withdrawalWithAmount(
+                        amount = amountText.asBigDecimal(),
+                        desc = descText,
+                        currency = state.currency)
 
-                            is TransactionCreateMode.Withdrawal -> Transaction.withdrawalWithAmount(
-                                    amount = amountText.asBigDecimal(),
-                                    desc = descText,
-                                    currency = state.currency)
 
-                        }
                 transactionStorage.insert(storedTransaction)
 
                 clearViews()
-                val message = when (state.mode) {
-                    is TransactionCreateMode.Deposit -> getString(R.string.new_deposit_success_message, storedTransaction.amount.abs())
-                    is TransactionCreateMode.Withdrawal -> getString(R.string.new_withdrawal_success_message, storedTransaction.amount.abs())
-                }
-                finishWithResult(msg = message)
+                finishWithResult(msg = getString(R.string.new_withdrawal_success_message, storedTransaction.amount.abs()))
             }
 
             is ViewState.Edit -> {
                 val state = currentState as ViewState.Edit
-                val storedTransaction =
-                        when (state.mode) {
-                            is TransactionCreateMode.Deposit -> Transaction.depositWithAmount(
-                                    uuid = state.transaction,
-                                    amount = amountText.asBigDecimal(),
-                                    desc = descText,
-                                    currency = state.currency)
-                            is TransactionCreateMode.Withdrawal -> Transaction.withdrawalWithAmount(
-                                    uuid = state.transaction,
-                                    amount = amountText.asBigDecimal(),
-                                    desc = descText,
-                                    currency = primaryWallet.currency)
-                        }
+                val storedTransaction = Transaction.withdrawalWithAmount(
+                        uuid = state.transaction,
+                        amount = amountText.asBigDecimal(),
+                        desc = descText,
+                        currency = state.currency)
+
 
                 transactionStorage.update(storedTransaction)
 
                 clearViews()
-
-                val message = when (state.mode) {
-                    is TransactionCreateMode.Deposit -> getString(R.string.deposit_edited_success_message, storedTransaction.amount.abs())
-                    is TransactionCreateMode.Withdrawal -> getString(R.string.withdrawal_edited_success_message, storedTransaction.amount.abs())
-                }
-                finishWithResult(msg = message)
+                finishWithResult(msg = getString(R.string.withdrawal_edited_success_message, storedTransaction.amount.abs()))
             }
-
         }
     }
 

@@ -1,12 +1,15 @@
 package pl.expensive.storage
 
 import android.content.ContentValues
+import android.content.res.Resources
 import android.database.sqlite.SQLiteConstraintException
 import java.util.*
 
-class SQLiteBasedCategoryStorage(private val db: Database) : CategoryStorage {
+class SQLiteBasedCategoryStorage(private val db: Database,
+                                 private val resources: Resources) : CategoryStorage {
     override fun list(): List<Category> {
-        val cursor = db.readableDatabase.query("tbl_category", arrayOf("uuid", "name", "color"), null, null, null, null, null)
+        val cursor = db.readableDatabase.query(
+                findTableName(resources), arrayOf("uuid", "name", "color"), null, null, null, null, null)
 
         val result = ArrayList<Category>()
         while (cursor.moveToNext()) {
@@ -24,9 +27,12 @@ class SQLiteBasedCategoryStorage(private val db: Database) : CategoryStorage {
         cv.put("color", dbo.name)
 
         try {
-            db.writableDatabase.insertOrThrow("tbl_category", null, cv)
+            db.writableDatabase.insertOrThrow(findTableName(resources), null, cv)
         } catch (ex: SQLiteConstraintException) {
             throw IllegalStateException("Trying to store category, which already exist. Category -> " + dbo)
         }
     }
+
+    private fun findTableName(resources: Resources): String =
+            resources.getString(R.string.category_table)
 }

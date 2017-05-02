@@ -13,9 +13,9 @@ object _Seeds {
     val CASH_ID = UUID.fromString("c2ee3260-94eb-4cc2-8d5c-af38f964fbd5")!!
     val CASH = Wallet(CASH_ID, "Cash", EUR)
 
-    val OTHER = Category(    color = "#00000000")
-    val GROCERY = Category( color = "#FF61BD4F")
-    val FOOD = Category(    color = "#FFF2D600")
+    val OTHER = Category(color = "#00000000")
+    val GROCERY = Category(color = "#FF61BD4F")
+    val FOOD = Category(color = "#FFF2D600")
     val TRAVEL = Category(color = "#FFFFAB4A")
     val TRANSPORT = Category(color = "#EB5A46")
     val CAR = Category(color = "#C377E0")

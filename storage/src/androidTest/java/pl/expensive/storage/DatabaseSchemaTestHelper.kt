@@ -9,6 +9,17 @@ import java.util.*
 
 internal object DatabaseSchemaTestHelper {
 
+    fun SQLiteDatabase.doesTableExist(tableName: String): Boolean {
+        val sql = "SELECT name FROM sqlite_master WHERE type='table';"
+        val c = rawQuery(sql, null)
+        while (c.moveToNext()) {
+            if (c.getString(0) == tableName) return true
+            else continue
+        }
+
+        return false
+    }
+
     fun getTableColumns(db: SQLiteDatabase, tableName: String): List<String> {
         var c: Cursor? = null
         try {

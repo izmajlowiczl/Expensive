@@ -1,5 +1,6 @@
 package pl.expensive.storage
 
+import android.content.res.Resources
 import android.database.sqlite.SQLiteDatabase
 import android.support.test.runner.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
@@ -11,12 +12,14 @@ import org.junit.runner.RunWith
 class CategoryStorageTest {
     private lateinit var storage: CategoryStorage
     private lateinit var db: SQLiteDatabase
+    private lateinit var resources: Resources
 
     @Before
     fun setUp() {
         val inMemDatabase = Injector.provideDatabase()
         db = inMemDatabase.writableDatabase
-        storage = SQLiteBasedCategoryStorage(inMemDatabase)
+        resources = Injector.provideContext().resources
+        storage = SQLiteBasedCategoryStorage(inMemDatabase, resources)
     }
 
     @Test

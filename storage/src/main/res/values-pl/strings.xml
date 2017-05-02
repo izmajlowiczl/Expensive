@@ -2,4 +2,6 @@
 <resources>
     <string name="wallet_currency">PLN</string>
     <string name="wallet_name">Gotówka</string>
+
+    <string name="category_table">tbl_category_pl</string>
 </resources>

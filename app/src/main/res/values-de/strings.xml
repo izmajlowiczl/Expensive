@@ -14,11 +14,7 @@
     <string name="err_mandatory">Pflichtfeld</string>
 
     <!-- TODO: Translate -->
-    <string name="deposit_edited_success_message">Deposit for %s updated!</string>
     <string name="withdrawal_edited_success_message">Spending for %s updated!</string>
-    <string name="new_deposit_success_message">Deposit for %s created!</string>
     <string name="new_withdrawal_success_message">Spending for %s created!</string>
-    <string name="add_new_deposit">New deposit</string>
-    <string name="edit_deposit">Edit deposit</string>
     <string name="empty_transactions_msg">Click on the plus button to create first transaction!</string>
 </resources>

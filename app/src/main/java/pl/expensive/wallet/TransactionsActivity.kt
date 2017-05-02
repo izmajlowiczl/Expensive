@@ -13,12 +13,11 @@ import android.view.animation.OvershootInterpolator
 import kotlinx.android.synthetic.main.activity_wallets.*
 import pl.expensive.*
 import pl.expensive.transaction.TransactionsAdapter
-import java.math.BigDecimal
 
 class TransactionsActivity : AppCompatActivity() {
     private val adapter by lazy {
         TransactionsAdapter({ touchPos, transition ->
-            startEditTransactionScreen(touchPos, transition, transition.amount > BigDecimal.ZERO)
+            startEditTransactionScreen(transition)
         })
     }
 
@@ -75,9 +74,7 @@ class TransactionsActivity : AppCompatActivity() {
 
     private fun startContentAnimation() {
         val createWithdrawalAction: (View) -> Unit = {
-            startNewTransactionCreatorScreen(
-                    isDeposit = false,
-                    touchPos = vCreateTransactionFab.middleOnScreen())
+            startNewTransactionCreatorScreen()
         }
 
         with(vCreateTransactionFab) {
