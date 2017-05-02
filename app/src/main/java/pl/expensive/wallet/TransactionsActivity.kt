@@ -80,14 +80,6 @@ class TransactionsActivity : AppCompatActivity() {
                     touchPos = vCreateTransactionFab.middleOnScreen())
         }
 
-        // TODO: This is a temp solution
-        val createDepositAction: (View) -> Boolean = {
-            startNewTransactionCreatorScreen(
-                    isDeposit = true,
-                    touchPos = vCreateTransactionFab.middleOnScreen())
-            true
-        }
-
         with(vCreateTransactionFab) {
             if (shouldAnimateFab) {
                 translationY = 2 * resources.getDimension(R.dimen.fab_size) // Hide below screen
@@ -98,13 +90,11 @@ class TransactionsActivity : AppCompatActivity() {
                         .setDuration(longAnim().toLong())
                         .withEndAction {
                             setOnClickListener(createWithdrawalAction)
-                            setOnLongClickListener(createDepositAction)
                         }
                         .start()
             } else {
                 show(true)
                 setOnClickListener(createWithdrawalAction)
-                setOnLongClickListener(createDepositAction)
             }
         }
     }
