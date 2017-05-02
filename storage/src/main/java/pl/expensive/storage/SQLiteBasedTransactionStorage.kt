@@ -10,7 +10,7 @@ class SQLiteBasedTransactionStorage(private val database: Database) : Transactio
         val readableDatabase = database.readableDatabase
         val tables = "tbl_transaction t " +
                 "LEFT JOIN tbl_currency AS cur ON t.currency=cur.code " +
-                "LEFT JOIN tbl_category AS cat on t.category=cat.name "
+                "LEFT JOIN tbl_category AS cat on t.category=cat.uuid "
         val columns = arrayOf(
                 "t.uuid", "t.wallet_uuid", "t.amount", "t.date", "t.description",
                 "cur.code", "cur.format",
@@ -51,7 +51,7 @@ class SQLiteBasedTransactionStorage(private val database: Database) : Transactio
         cv.put("currency", transaction.currency.code)
         cv.put("date", transaction.date)
         cv.put("description", transaction.description)
-        cv.put("category", transaction.category?.name)
+        cv.put("category", transaction.category?.uuid.toString())
         return cv
     }
 
