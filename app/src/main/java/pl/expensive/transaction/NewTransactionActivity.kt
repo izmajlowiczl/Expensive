@@ -33,17 +33,8 @@ class NewTransactionActivity : AppCompatActivity() {
         setContentView(R.layout.a_new_transaction)
         Injector.app().inject(this)
 
-        val extras = intent.extras
-        currentState =
-                if (extras != null) {
-                    ViewState.Edit(
-                            transaction = extras.getString("transaction_uuid").toUUID(),
-                            amount = extras.getString("transaction_amount").asBigDecimal(),
-                            currency = walletsService.primaryWallet().currency,
-                            description = extras.getString("transaction_desc"))
-                } else {
-                    ViewState.Create(currency = walletsService.primaryWallet().currency)
-                }
+        currentState = intent.extras?.toEditViewState()
+                ?: ViewState.Create(walletsService.primaryWallet().currency)
         updateViewState(currentState)
 
         playEnterAnimation()
@@ -55,37 +46,28 @@ class NewTransactionActivity : AppCompatActivity() {
         when (state) {
             is ViewState.Create -> {
                 vNewTransactionTitle.text = getString(R.string.add_new_spending)
-
                 vNewTransactionAmount.afterTextChanged({
-                    if (vNewTransactionAmount.text.isNotBlank()) {
-                        vNewTransactionSave.tint(R.color.ready)
-                    } else {
-                        vNewTransactionSave.tint(R.color.colorTextLight)
-                    }
+                    val color = if (vNewTransactionAmount.text.isNotBlank()) R.color.ready else R.color.colorTextLight
+                    vNewTransactionSave.tint(color)
                 })
-
             }
+
             is ViewState.Edit -> {
                 vNewTransactionTitle.text = getString(R.string.edit_spending)
 
                 with(vNewTransactionAmount) {
                     setText(state.amount.toString())
                     afterTextChanged({
-                        if (text.toString() != state.amount.toString()) {
-                            vNewTransactionSave.tint(R.color.ready)
-                        } else {
-                            vNewTransactionSave.tint(R.color.colorTextLight)
-                        }
+                        val color = if (text.toString() != state.amount.toString()) R.color.ready else R.color.colorTextLight
+                        vNewTransactionSave.tint(color)
                     })
                 }
                 with(vNewTransactionDescription) {
                     setText(state.description)
                     afterTextChanged {
-                        if (text.toString() != state.description ?: "") {
-                            vNewTransactionSave.tint(R.color.ready)
-                        } else {
-                            vNewTransactionSave.tint(R.color.colorTextLight)
-                        }
+                        val shouldEnableSaveButton = text.toString() != state.description ?: ""
+                        val color = if (shouldEnableSaveButton) R.color.ready else R.color.colorTextLight
+                        vNewTransactionSave.tint(color)
                     }
                 }
             }
@@ -122,11 +104,10 @@ class NewTransactionActivity : AppCompatActivity() {
                         desc = descText,
                         currency = state.currency)
 
-
                 transactionStorage.insert(storedTransaction)
 
                 clearViews()
-                finishWithResult(msg = getString(R.string.new_withdrawal_success_message, storedTransaction.amount.abs()))
+                finishWithResult(getString(R.string.new_withdrawal_success_message, storedTransaction.amount.abs()))
             }
 
             is ViewState.Edit -> {
@@ -137,11 +118,10 @@ class NewTransactionActivity : AppCompatActivity() {
                         desc = descText,
                         currency = state.currency)
 
-
                 transactionStorage.update(storedTransaction)
 
                 clearViews()
-                finishWithResult(msg = getString(R.string.withdrawal_edited_success_message, storedTransaction.amount.abs()))
+                finishWithResult(getString(R.string.withdrawal_edited_success_message, storedTransaction.amount.abs()))
             }
         }
     }
@@ -175,4 +155,10 @@ class NewTransactionActivity : AppCompatActivity() {
         vNewTransactionDescription.text.clear()
         vNewTransactionAmount.hideKeyboard()
     }
+
+    private fun Bundle.toEditViewState(): ViewState.Edit = ViewState.Edit(
+            transaction = getString("transaction_uuid").toUUID(),
+            amount = getString("transaction_amount").asBigDecimal(),
+            currency = walletsService.primaryWallet().currency,
+            description = getString("transaction_desc"))
 }
