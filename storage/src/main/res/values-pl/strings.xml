@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="wallet_currency">PLN</string>
-    <string name="wallet_name">Gotówka</string>
-
     <string name="category_table">tbl_category_pl</string>
 </resources>

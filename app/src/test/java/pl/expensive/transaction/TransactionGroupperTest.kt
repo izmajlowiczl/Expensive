@@ -60,7 +60,7 @@ class TransactionGroupperTest {
     }
 
     private fun transactionAt(today: LocalDateTime): Transaction {
-        return Transaction.create(UUID.randomUUID(), UUID.randomUUID(), BigDecimal.TEN, EUR, today, "")
+        return Transaction.create(UUID.randomUUID(), BigDecimal.TEN, EUR, today, "")
     }
 
     companion object {

@@ -9,14 +9,14 @@ class TransactionTest {
 
     @Test
     fun createDeposit() {
-        val deposit = Transaction.deposit(_Seeds.CASH_ID, BigDecimal("4.99"), EUR, "")
+        val deposit = Transaction.deposit(BigDecimal("4.99"), EUR, "")
 
         assertThat(deposit.amount).isEqualTo(BigDecimal("4.99"))
     }
 
     @Test
     fun createWithdrawal() {
-        val deposit = Transaction.withdrawal(_Seeds.CASH_ID, BigDecimal("4.99"), EUR, "")
+        val deposit = Transaction.withdrawal(BigDecimal("4.99"), EUR, "")
 
         assertThat(deposit.amount).isEqualTo(BigDecimal("-4.99"))
     }

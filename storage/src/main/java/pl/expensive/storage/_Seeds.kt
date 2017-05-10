@@ -1,7 +1,5 @@
 package pl.expensive.storage
 
-import java.util.*
-
 object _Seeds {
 
     val EUR = Currency("EUR", "##.##\u00a0\u20ac")
@@ -9,9 +7,6 @@ object _Seeds {
     val CHF = Currency("CHF", "##.##\u00a0CHF")
     val PLN = Currency("PLN", "##.##\u00a0zł")
     val CZK = Currency("CZK", "##.##\u00a0K\u010d")
-
-    val CASH_ID = UUID.fromString("c2ee3260-94eb-4cc2-8d5c-af38f964fbd5")!!
-    val CASH = Wallet(CASH_ID, "Cash", EUR)
 
     val OTHER = Category(color = "#00000000")
     val GROCERY = Category(color = "#FF61BD4F")

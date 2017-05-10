@@ -23,12 +23,6 @@ public class StorageModule {
 
     @Singleton
     @Provides
-    WalletsStorage walletModel(Database database) {
-        return new SQLiteBasedWalletsStorage(database);
-    }
-
-    @Singleton
-    @Provides
     TransactionStorage transactionStorage(Database database) {
         return new SQLiteBasedTransactionStorage(database);
     }

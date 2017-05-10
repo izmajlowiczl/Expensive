@@ -12,19 +12,11 @@ class DatabaseSchemaTest {
     private val database = Injector.provideDatabase()
 
     @Test
-    fun columnsForWalletTable() {
-        val columns = getTableColumns(database.readableDatabase, "tbl_wallet")
-
-        assertThat(columns)
-                .containsExactly("uuid", "name", "currency")
-    }
-
-    @Test
     fun columnsForTransactionTable() {
         val columns = getTableColumns(database.readableDatabase, "tbl_transaction")
 
         assertThat(columns)
-                .containsExactly("uuid", "amount", "currency", "date", "description", "wallet_uuid", "category")
+                .containsExactly("uuid", "amount", "currency", "date", "description", "category")
     }
 
     @Test

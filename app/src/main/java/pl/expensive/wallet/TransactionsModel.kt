@@ -15,19 +15,18 @@ import pl.expensive.formatValue
 import pl.expensive.storage.Currency
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
+import pl.expensive.storage._Seeds.EUR
 import pl.expensive.storage.toLocalDateTime
 import pl.expensive.transaction.Header
 import pl.expensive.transaction.TransactionGrouper
 import java.math.BigDecimal
 import java.util.*
 
-class TransactionsModel(private val walletService: WalletsService,
-                        private val transactionStorage: TransactionStorage,
+class TransactionsModel(private val transactionStorage: TransactionStorage,
                         private val res: Resources) {
 
     fun showWallets(viewCallback: (ViewState) -> Unit) {
-        val wallet = walletService.primaryWallet()
-        val transactionData = transactionStorage.select().sortedByDescending { it.date }
+        val transactionData = transactionStorage.list().sortedByDescending { it.date }
 
         val viewState = if (transactionData.isEmpty()) {
             ViewState.Empty(formattedScreenTitle(BigDecimal.ZERO))
@@ -42,7 +41,7 @@ class TransactionsModel(private val walletService: WalletsService,
                         if (it.key == YearMonth.from(today)) { // This month
                             result.addAll(it.value)
                         } else {
-                            result.add(Header(it.formattedHeaderTitle(res), formattedHeaderTotal(res, wallet.currency, it.value)))
+                            result.add(Header(it.formattedHeaderTitle(res), formattedHeaderTotal(res, EUR, it.value)))
                         }
                     }
 
@@ -101,8 +100,7 @@ class TransactionsModel(private val walletService: WalletsService,
     private fun formattedScreenTitle(total: BigDecimal): CharSequence {
         val month = YearMonth.now().month.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()
 
-        val currentWallet = walletService.primaryWallet()
-        val span = SpannableString("$month ${currentWallet.currency.formatValue(money = total)}")
+        val span = SpannableString("$month ${EUR.formatValue(money = total)}")
         span.setSpan(RelativeSizeSpan(.6f), 0, month.length, 0)
 
         return span

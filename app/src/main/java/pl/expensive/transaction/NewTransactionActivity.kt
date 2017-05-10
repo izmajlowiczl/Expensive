@@ -9,22 +9,22 @@ import pl.expensive.*
 import pl.expensive.R
 import pl.expensive.storage.*
 import pl.expensive.storage.Currency
-import pl.expensive.wallet.WalletsService
+import pl.expensive.storage._Seeds.EUR
+import pl.expensive.storage._Seeds.OTHER
 import java.math.BigDecimal
 import java.util.*
 
 sealed class ViewState {
-    class Create(val currency: Currency) : ViewState()
+    class Create(val currency: Currency = EUR) : ViewState()
 
     class Edit(val transaction: UUID,
                val amount: BigDecimal,
-               val currency: Currency,
+               val currency: Currency = EUR,
                val description: CharSequence?) : ViewState()
 }
 
 class NewTransactionActivity : AppCompatActivity() {
     private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
-    private val walletsService: WalletsService by lazy { Injector.app().walletsService() }
 
     private lateinit var currentState: ViewState
 
@@ -34,7 +34,7 @@ class NewTransactionActivity : AppCompatActivity() {
         Injector.app().inject(this)
 
         currentState = intent.extras?.toEditViewState()
-                ?: ViewState.Create(walletsService.primaryWallet().currency)
+                ?: ViewState.Create()
         updateViewState(currentState)
 
         playEnterAnimation()
@@ -102,6 +102,7 @@ class NewTransactionActivity : AppCompatActivity() {
                 val storedTransaction = Transaction.withdrawalWithAmount(
                         amount = amountText.asBigDecimal(),
                         desc = descText,
+                        category = OTHER,
                         currency = state.currency)
 
                 transactionStorage.insert(storedTransaction)
@@ -116,6 +117,7 @@ class NewTransactionActivity : AppCompatActivity() {
                         uuid = state.transaction,
                         amount = amountText.asBigDecimal(),
                         desc = descText,
+                        category = OTHER,
                         currency = state.currency)
 
                 transactionStorage.update(storedTransaction)
@@ -159,6 +161,5 @@ class NewTransactionActivity : AppCompatActivity() {
     private fun Bundle.toEditViewState(): ViewState.Edit = ViewState.Edit(
             transaction = getString("transaction_uuid").toUUID(),
             amount = getString("transaction_amount").asBigDecimal(),
-            currency = walletsService.primaryWallet().currency,
             description = getString("transaction_desc"))
 }

@@ -4,7 +4,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.google.common.truth.Truth.assertThat
 import junit.framework.Assert
-import org.junit.Assert.fail
 import java.util.*
 
 internal object DatabaseSchemaTestHelper {
@@ -38,23 +37,6 @@ internal object DatabaseSchemaTestHelper {
 
     }
 
-    fun getStoredWalletNames(db: SQLiteDatabase): List<String> {
-        val cursor = db.rawQuery(selectNameFrom("tbl_wallet"), null)
-        if (cursor == null) {
-            fail("Wallet was not stored")
-            cursor!!.close()
-        }
-        val storedWalletNames = ArrayList<String>()
-        while (cursor.moveToNext()) {
-            storedWalletNames.add(cursor.getString(0))
-        }
-        return storedWalletNames
-    }
-
-    private fun selectNameFrom(table: String): String {
-        return String.format("SELECT name FROM %s", table)
-    }
-
     // Currencies
 
     fun assertCurrencyCodeStored(db: SQLiteDatabase, code: String) {
@@ -69,21 +51,5 @@ internal object DatabaseSchemaTestHelper {
 
     fun queryForCurrencyCode(code: String): String {
         return String.format("SELECT code FROM tbl_currency WHERE code='%s';", code)
-    }
-
-    // -- Currencies
-
-    fun assertCategoryNameStored(db: SQLiteDatabase, name: String) {
-        val cursor = db.rawQuery(queryForCategoryName(name), null)
-        if (cursor == null || !cursor.moveToNext()) {
-            Assert.fail("Cannot find category")
-        }
-
-        assertThat(cursor!!.getString(0))
-                .isEqualTo(name)
-    }
-
-    fun queryForCategoryName(name: String): String {
-        return String.format("SELECT name FROM tbl_category WHERE name='%s';", name)
     }
 }

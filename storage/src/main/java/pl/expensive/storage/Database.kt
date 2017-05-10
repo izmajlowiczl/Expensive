@@ -4,7 +4,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.annotation.VisibleForTesting
-import pl.expensive.storage._Seeds.CASH_ID
 import pl.expensive.storage._Seeds.CHF
 import pl.expensive.storage._Seeds.CZK
 import pl.expensive.storage._Seeds.EUR
@@ -40,17 +39,15 @@ class Database : SQLiteOpenHelper {
     private val supportedLanguages by lazy { listOf("pl", "de") }
 
     private fun createSchema(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE tbl_wallet (uuid TEXT NOT NULL, name TEXT NOT NULL UNIQUE, currency TEXT NOT NULL, PRIMARY KEY(uuid), FOREIGN KEY(currency) REFERENCES tbl_currency(code));")
         db.execSQL("CREATE TABLE tbl_currency (code TEXT NOT NULL, format TEXT NOT NULL, PRIMARY KEY(code));")
         db.execSQL("CREATE TABLE tbl_transaction (" +
-                "uuid TEXT NOT NULL, amount TEXT NOT NULL, " +
+                "uuid TEXT NOT NULL, " +
+                "amount TEXT NOT NULL, " +
                 "currency TEXT NOT NULL, " +
                 "date INTEGER NOT NULL, " +
                 "description TEXT, " +
-                "wallet_uuid TEXT NOT NULL, " +
                 "category TEXT, " +
                 "PRIMARY KEY(uuid), " +
-                "FOREIGN KEY(wallet_uuid) REFERENCES tbl_wallet(uuid), " +
                 "FOREIGN KEY(currency) REFERENCES tbl_currency(code), " +
                 "FOREIGN KEY(category) REFERENCES tbl_category(uuid));")
 
@@ -69,9 +66,6 @@ class Database : SQLiteOpenHelper {
     }
 
     private fun applySeeds(db: SQLiteDatabase) {
-        // Cash wallet
-        db.execSQL(String.format("INSERT INTO tbl_wallet VALUES('%s', '%s', '%s');", CASH_ID, ctx.getString(R.string.wallet_name), ctx.getString(R.string.wallet_currency)))
-
         // Currencies
         storeCurrency(db, EUR)
         storeCurrency(db, GBP)
