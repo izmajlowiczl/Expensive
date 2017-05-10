@@ -34,7 +34,7 @@ class TransactionsModel(private val transactionStorage: TransactionStorage,
 
             // Transactions grouped by month with headers
             val result = mutableListOf<Any>()
-            TransactionGrouper.group(transactionsUntilToday)
+            group(transactionsUntilToday)
                     .forEach {
                         if (it.key == YearMonth.from(today)) { // This month
                             result.addAll(it.value)
@@ -105,3 +105,6 @@ class TransactionsModel(private val transactionStorage: TransactionStorage,
     }
 }
 
+fun group(sortedTransactions: List<Transaction>): Map<YearMonth, List<Transaction>> {
+    return sortedTransactions.groupBy { YearMonth.of(it.toLocalDateTime().year, it.toLocalDateTime().month) }
+}
