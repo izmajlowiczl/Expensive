@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import kotlinx.android.synthetic.main.a_new_transaction.*
+import kotlinx.android.synthetic.main.activity_transaction_details.*
 import pl.expensive.*
 import pl.expensive.R
 import pl.expensive.storage.*
@@ -30,7 +30,7 @@ class NewTransactionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.a_new_transaction)
+        setContentView(R.layout.activity_transaction_details)
         Injector.app().inject(this)
 
         currentState = intent.extras?.toEditViewState()

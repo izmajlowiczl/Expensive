@@ -10,7 +10,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.OvershootInterpolator
-import kotlinx.android.synthetic.main.activity_wallets.*
+import kotlinx.android.synthetic.main.activity_transactions.*
 import pl.expensive.*
 
 sealed class ViewState {
@@ -33,7 +33,7 @@ class TransactionsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_wallets)
+        setContentView(R.layout.activity_transactions)
         Injector.app().inject(this)
 
         // Animate FAB only once
