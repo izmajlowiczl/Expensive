@@ -7,14 +7,9 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.view_header_item.view.*
 import kotlinx.android.synthetic.main.view_transaction_item.view.*
-import pl.expensive.R
-import pl.expensive.dateTimeFormat
-import pl.expensive.inflateLayout
-import pl.expensive.middleOnScreen
+import pl.expensive.*
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.toLocalDateTime
-import java.text.DecimalFormat
-import java.util.*
 import kotlin.properties.Delegates
 
 data class Header(val header: CharSequence, val formattedTotal: CharSequence)
@@ -29,7 +24,7 @@ class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 // TODO: Do not use Transaction directly.. create viewModel for it
 class TransactionViewHolder(itemView: View, private val clickFun: (IntArray, Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {
     fun update(viewModel: Transaction) = with(itemView) {
-        vTransactionItemAmount.text = viewModel.formatAmount()
+        vTransactionItemAmount.text = viewModel.currency.formatValue(money = viewModel.amount)
         vTransactionItemTime.text = viewModel.formatTime()
         if (viewModel.description.isNullOrBlank()) {
             vTransactionItemDesc.visibility = GONE
@@ -48,15 +43,6 @@ class TransactionViewHolder(itemView: View, private val clickFun: (IntArray, Tra
     private fun Transaction.formatTime(): CharSequence {
         val localDateTime = toLocalDateTime()
         return localDateTime.format(dateTimeFormat)
-    }
-
-    /**
-     * Formats transaction's amount to use localised currency symbol
-     */
-    private fun Transaction.formatAmount(locale: Locale = Locale.getDefault()): String {
-        val numberFormat = DecimalFormat.getInstance(locale) as DecimalFormat
-        numberFormat.applyPattern(currency.format)
-        return numberFormat.format(amount)
     }
 }
 
