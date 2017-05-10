@@ -23,7 +23,7 @@ sealed class ViewState {
                val description: CharSequence?) : ViewState()
 }
 
-class NewTransactionActivity : AppCompatActivity() {
+class TransactionDetailsActivity : AppCompatActivity() {
     private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
 
     private lateinit var currentState: ViewState
