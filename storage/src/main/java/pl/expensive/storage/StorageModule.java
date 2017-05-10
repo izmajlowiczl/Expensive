@@ -1,6 +1,7 @@
 package pl.expensive.storage;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import javax.inject.Singleton;
 
@@ -15,10 +16,16 @@ public class StorageModule {
         this.context = context;
     }
 
+    @Provides
+    @Singleton
+    SharedPreferences preferences() {
+        return context.getSharedPreferences("expensive_prefs", 0);
+    }
+
     @Singleton
     @Provides
-    Database database() {
-        return new Database(context);
+    Database database(SharedPreferences prefs) {
+        return new Database(context, prefs);
     }
 
     @Singleton

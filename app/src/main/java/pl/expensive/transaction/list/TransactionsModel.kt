@@ -1,5 +1,6 @@
 package pl.expensive.transaction.list
 
+import android.content.SharedPreferences
 import android.content.res.Resources
 import android.text.Spannable
 import android.text.SpannableString
@@ -12,22 +13,21 @@ import org.threeten.bp.format.TextStyle
 import pl.expensive.R
 import pl.expensive.calculateTotal
 import pl.expensive.formatValue
+import pl.expensive.storage.*
 import pl.expensive.storage.Currency
-import pl.expensive.storage.Transaction
-import pl.expensive.storage.TransactionStorage
-import pl.expensive.storage._Seeds.EUR
-import pl.expensive.storage.toLocalDateTime
 import java.math.BigDecimal
 import java.util.*
 
 class TransactionsModel(private val transactionStorage: TransactionStorage,
-                        private val res: Resources) {
+                        private val res: Resources,
+                        private val prefs: SharedPreferences) {
 
     fun showWallets(viewCallback: (ViewState) -> Unit) {
         val transactionData = transactionStorage.list().sortedByDescending { it.date }
 
+        val currency = getDefaultCurrency(prefs)
         val viewState = if (transactionData.isEmpty()) {
-            ViewState.Empty(formattedScreenTitle(BigDecimal.ZERO))
+            ViewState.Empty(formattedScreenTitle(BigDecimal.ZERO, currency))
         } else {
             val today = LocalDateTime.now()
             val transactionsUntilToday = transactionData.filter { !it.toLocalDateTime().isAfter(today) }
@@ -39,14 +39,14 @@ class TransactionsModel(private val transactionStorage: TransactionStorage,
                         if (it.key == YearMonth.from(today)) { // This month
                             result.addAll(it.value)
                         } else {
-                            result.add(Header(it.formattedHeaderTitle(res), formattedHeaderTotal(res, EUR, it.value)))
+                            result.add(Header(it.formattedHeaderTitle(res), formattedHeaderTotal(res, currency, it.value)))
                         }
                     }
 
             // Month name with total
             val title = formattedScreenTitle(transactionsUntilToday
                     .filter { YearMonth.from(it.toLocalDateTime()) == YearMonth.from(today) }
-                    .calculateTotal())
+                    .calculateTotal(), currency)
 
             ViewState.Wallets(result, title)
         }
@@ -95,10 +95,10 @@ class TransactionsModel(private val transactionStorage: TransactionStorage,
     /**
      * Generates title for screen by showing current month name with total amount per current month
      */
-    private fun formattedScreenTitle(total: BigDecimal): CharSequence {
+    private fun formattedScreenTitle(total: BigDecimal, currency: Currency): CharSequence {
         val month = YearMonth.now().month.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()
 
-        val span = SpannableString("$month ${EUR.formatValue(money = total)}")
+        val span = SpannableString("$month ${currency.formatValue(money = total)}")
         span.setSpan(RelativeSizeSpan(.6f), 0, month.length, 0)
 
         return span

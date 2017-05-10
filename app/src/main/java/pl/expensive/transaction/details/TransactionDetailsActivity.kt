@@ -2,6 +2,7 @@ package pl.expensive.transaction.details
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_transaction_details.*
@@ -9,21 +10,21 @@ import pl.expensive.*
 import pl.expensive.R
 import pl.expensive.storage.*
 import pl.expensive.storage.Currency
-import pl.expensive.storage._Seeds.EUR
 import java.math.BigDecimal
 import java.util.*
 
 sealed class ViewState {
-    class Create(val currency: Currency = EUR) : ViewState()
+    class Create(val currency: Currency) : ViewState()
 
     class Edit(val transaction: UUID,
                val amount: BigDecimal,
-               val currency: Currency = EUR,
+               val currency: Currency,
                val description: CharSequence?) : ViewState()
 }
 
 class TransactionDetailsActivity : AppCompatActivity() {
     private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
+    private val sharedPreferences: SharedPreferences by lazy { Injector.app().prefs() }
 
     private lateinit var currentState: ViewState
 
@@ -33,7 +34,7 @@ class TransactionDetailsActivity : AppCompatActivity() {
         Injector.app().inject(this)
 
         currentState = intent.extras?.toEditViewState()
-                ?: ViewState.Create()
+                ?: ViewState.Create(getDefaultCurrency(sharedPreferences))
         updateViewState(currentState)
 
         playEnterAnimation()
@@ -158,5 +159,6 @@ class TransactionDetailsActivity : AppCompatActivity() {
     private fun Bundle.toEditViewState(): ViewState.Edit = ViewState.Edit(
             transaction = getString("transaction_uuid").toUUID(),
             amount = getString("transaction_amount").asBigDecimal(),
-            description = getString("transaction_desc"))
+            description = getString("transaction_desc"),
+            currency = getDefaultCurrency(sharedPreferences))
 }

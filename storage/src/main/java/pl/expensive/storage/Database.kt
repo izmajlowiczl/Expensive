@@ -1,6 +1,7 @@
 package pl.expensive.storage
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.annotation.VisibleForTesting
@@ -12,14 +13,17 @@ import pl.expensive.storage._Seeds.PLN
 
 class Database : SQLiteOpenHelper {
     private var ctx: Context
+    private var prefs: SharedPreferences
 
-    constructor(context: Context) : super(context, NAME, null, VERSION) {
+    constructor(context: Context, preferences: SharedPreferences) : super(context, NAME, null, VERSION) {
         ctx = context
+        prefs = preferences
     }
 
     @VisibleForTesting
-    constructor(context: Context, dbName: String?) : super(context, dbName, null, VERSION) {
+    constructor(context: Context, preferences: SharedPreferences, dbName: String?) : super(context, dbName, null, VERSION) {
         ctx = context
+        prefs = preferences
     }
 
     override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
@@ -55,6 +59,8 @@ class Database : SQLiteOpenHelper {
         storeCurrency(db, CHF)
         storeCurrency(db, PLN)
         storeCurrency(db, CZK)
+
+        setDefaultCurrency(PLN, prefs)
     }
 
     private fun storeCurrency(db: SQLiteDatabase, currency: Currency) {

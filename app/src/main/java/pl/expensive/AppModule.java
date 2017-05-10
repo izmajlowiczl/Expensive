@@ -1,6 +1,7 @@
 package pl.expensive;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 
 import javax.inject.Singleton;
@@ -20,8 +21,9 @@ public class AppModule {
 
     @Provides
     TransactionsModel transactionsModel(Resources resources,
-                                        TransactionStorage transactionStorage) {
-        return new TransactionsModel(transactionStorage, resources);
+                                        TransactionStorage transactionStorage,
+                                        SharedPreferences preferences) {
+        return new TransactionsModel(transactionStorage, resources, preferences);
     }
 
     @Provides

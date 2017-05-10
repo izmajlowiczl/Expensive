@@ -1,5 +1,7 @@
 package pl.expensive;
 
+import android.content.SharedPreferences;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -19,4 +21,6 @@ public interface AppComponent {
     TransactionsModel transactionsModel();
 
     TransactionStorage transactions();
+
+    SharedPreferences prefs();
 }
