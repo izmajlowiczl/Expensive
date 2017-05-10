@@ -2,8 +2,8 @@ package pl.expensive
 
 import android.content.Intent
 import pl.expensive.storage.Transaction
-import pl.expensive.transaction.NewTransactionActivity
-import pl.expensive.wallet.TransactionsActivity
+import pl.expensive.transaction.details.NewTransactionActivity
+import pl.expensive.transaction.list.TransactionsActivity
 
 fun TransactionsActivity.startNewTransactionCreatorScreen() {
     val intent = Intent(this, NewTransactionActivity::class.java)

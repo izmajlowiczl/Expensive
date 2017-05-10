@@ -1,4 +1,4 @@
-package pl.expensive.transaction
+package pl.expensive.transaction.list
 
 import org.threeten.bp.YearMonth
 import pl.expensive.storage.Transaction

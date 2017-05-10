@@ -10,7 +10,7 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".wallet.TransactionsActivity">
+        <activity android:name=".transaction.list.TransactionsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -18,7 +18,7 @@
         </activity>
 
         <activity
-            android:name=".transaction.NewTransactionActivity"/>
+            android:name=".transaction.details.NewTransactionActivity"/>
     </application>
 
 </manifest>

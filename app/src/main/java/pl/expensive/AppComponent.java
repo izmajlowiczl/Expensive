@@ -5,9 +5,9 @@ import javax.inject.Singleton;
 import dagger.Component;
 import pl.expensive.storage.StorageModule;
 import pl.expensive.storage.TransactionStorage;
-import pl.expensive.transaction.NewTransactionActivity;
-import pl.expensive.wallet.TransactionsActivity;
-import pl.expensive.wallet.TransactionsModel;
+import pl.expensive.transaction.details.NewTransactionActivity;
+import pl.expensive.transaction.list.TransactionsActivity;
+import pl.expensive.transaction.list.TransactionsModel;
 
 @Singleton
 @Component(modules = {StorageModule.class, AppModule.class})

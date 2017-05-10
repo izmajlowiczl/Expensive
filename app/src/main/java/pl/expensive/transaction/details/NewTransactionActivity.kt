@@ -1,4 +1,4 @@
-package pl.expensive.transaction
+package pl.expensive.transaction.details
 
 import android.app.Activity
 import android.content.Intent

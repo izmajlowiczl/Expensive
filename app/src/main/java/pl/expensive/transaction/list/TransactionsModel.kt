@@ -1,4 +1,4 @@
-package pl.expensive.wallet
+package pl.expensive.transaction.list
 
 import android.content.res.Resources
 import android.text.Spannable
@@ -17,8 +17,6 @@ import pl.expensive.storage.Transaction
 import pl.expensive.storage.TransactionStorage
 import pl.expensive.storage._Seeds.EUR
 import pl.expensive.storage.toLocalDateTime
-import pl.expensive.transaction.Header
-import pl.expensive.transaction.TransactionGrouper
 import java.math.BigDecimal
 import java.util.*
 

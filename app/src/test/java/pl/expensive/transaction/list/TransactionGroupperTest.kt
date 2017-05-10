@@ -1,4 +1,4 @@
-package pl.expensive.transaction
+package pl.expensive.transaction.list
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test

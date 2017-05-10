@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import pl.expensive.storage.TransactionStorage;
-import pl.expensive.wallet.TransactionsModel;
+import pl.expensive.transaction.list.TransactionsModel;
 
 @Module
 public class AppModule {

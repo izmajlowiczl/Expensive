@@ -1,4 +1,4 @@
-package pl.expensive.wallet
+package pl.expensive.transaction.list
 
 import android.app.Activity
 import android.content.Intent
@@ -12,7 +12,13 @@ import android.view.View.VISIBLE
 import android.view.animation.OvershootInterpolator
 import kotlinx.android.synthetic.main.activity_wallets.*
 import pl.expensive.*
-import pl.expensive.transaction.TransactionsAdapter
+
+sealed class ViewState {
+    class Wallets(val adapterData: MutableList<Any>,
+                  val title: CharSequence) : ViewState()
+
+    class Empty(val title: CharSequence) : ViewState()
+}
 
 class TransactionsActivity : AppCompatActivity() {
     private val adapter by lazy {

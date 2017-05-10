@@ -1,4 +1,4 @@
-package pl.expensive.wallet
+package pl.expensive.transaction.details
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
