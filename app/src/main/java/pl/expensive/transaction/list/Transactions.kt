@@ -7,7 +7,10 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.view_header_item.view.*
 import kotlinx.android.synthetic.main.view_transaction_item.view.*
-import pl.expensive.*
+import pl.expensive.R
+import pl.expensive.dateTimeFormat
+import pl.expensive.formatValue
+import pl.expensive.inflateLayout
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.toLocalDateTime
 import kotlin.properties.Delegates
@@ -22,7 +25,7 @@ class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 }
 
 // TODO: Do not use Transaction directly.. create viewModel for it
-class TransactionViewHolder(itemView: View, private val clickFun: (IntArray, Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {
+class TransactionViewHolder(itemView: View, private val clickFun: (Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {
     fun update(viewModel: Transaction) = with(itemView) {
         vTransactionItemAmount.text = viewModel.currency.formatValue(money = viewModel.amount)
         vTransactionItemTime.text = viewModel.formatTime()
@@ -33,7 +36,7 @@ class TransactionViewHolder(itemView: View, private val clickFun: (IntArray, Tra
             vTransactionItemDesc.text = viewModel.description
         }
 
-        setOnClickListener { clickFun(middleOnScreen(), viewModel) }
+        setOnClickListener { clickFun(viewModel) }
     }
 
     /**
@@ -46,7 +49,7 @@ class TransactionViewHolder(itemView: View, private val clickFun: (IntArray, Tra
     }
 }
 
-class TransactionsAdapter(private val transactionClickFun: (IntArray, Transaction) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TransactionsAdapter(private val transactionClickFun: (Transaction) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var data: MutableList<Any> by Delegates.vetoable(mutableListOf()) { p, old, new ->
         notifyDataSetChanged()
         old != new

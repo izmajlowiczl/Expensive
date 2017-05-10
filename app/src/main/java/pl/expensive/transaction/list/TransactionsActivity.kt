@@ -22,7 +22,7 @@ sealed class ViewState {
 
 class TransactionsActivity : AppCompatActivity() {
     private val adapter by lazy {
-        TransactionsAdapter({ touchPos, transition ->
+        TransactionsAdapter({ transition ->
             startEditTransactionScreen(transition)
         })
     }
