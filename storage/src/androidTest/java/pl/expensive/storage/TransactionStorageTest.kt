@@ -7,7 +7,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import pl.expensive.storage._Seeds.EUR
-import pl.expensive.storage._Seeds.OTHER
 import java.math.BigDecimal
 import java.util.*
 
@@ -25,7 +24,7 @@ class TransactionStorageTest {
 
     @Test
     fun storeSingleTransaction() {
-        val beer = Transaction(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer", OTHER)
+        val beer = Transaction(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer")
 
         storage.insert(beer)
 
@@ -35,7 +34,7 @@ class TransactionStorageTest {
 
     @Test
     fun listTransactions() {
-        val beer = Transaction(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer", OTHER)
+        val beer = Transaction(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer")
         storage.insert(beer)
 
         assertThat(storage.list())
@@ -44,28 +43,8 @@ class TransactionStorageTest {
 
     @Test(expected = IllegalStateException::class)
     fun withoutStoredCurrency() {
-        val beer = Transaction(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer", OTHER)
+        val beer = Transaction(UUID.randomUUID(), BigDecimal("4.99"), Currency("FAKE", "##-$$"), Date().time, "Beer")
 
         storage.insert(beer)
-    }
-
-    fun withCategory() {
-        val cat = Category(name = "Food")
-        val beer = Transaction(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer", cat)
-        storage.insert(beer)
-
-        val transactions = storage.list()
-        assertThat(transactions).containsExactly(beer)
-        assertThat(transactions.first().category).isEqualTo(cat)
-    }
-
-    fun categoryIsOptional() {
-        val cat = null
-        val beer = Transaction(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer", cat)
-        storage.insert(beer)
-
-        val transactions = storage.list()
-        assertThat(transactions).containsExactly(beer)
-        assertThat(transactions.first().category).isNull()
     }
 }

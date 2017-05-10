@@ -36,8 +36,6 @@ class Database : SQLiteOpenHelper {
         db.execSQL("PRAGMA foreign_keys=ON;")
     }
 
-    private val supportedLanguages by lazy { listOf("pl", "de") }
-
     private fun createSchema(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE tbl_currency (code TEXT NOT NULL, format TEXT NOT NULL, PRIMARY KEY(code));")
         db.execSQL("CREATE TABLE tbl_transaction (" +
@@ -46,23 +44,8 @@ class Database : SQLiteOpenHelper {
                 "currency TEXT NOT NULL, " +
                 "date INTEGER NOT NULL, " +
                 "description TEXT, " +
-                "category TEXT, " +
                 "PRIMARY KEY(uuid), " +
-                "FOREIGN KEY(currency) REFERENCES tbl_currency(code), " +
-                "FOREIGN KEY(category) REFERENCES tbl_category(uuid));")
-
-        // Categories
-        db.createCategoryTablesForLanguages(supportedLanguages)
-    }
-
-    private fun SQLiteDatabase.createCategoryTablesForLanguages(supportedLanguages: List<String>) {
-        // Default
-        execSQL("CREATE TABLE tbl_category (uuid TEXT NOT NULL, name TEXT NOT NULL, color TEXT, PRIMARY KEY(uuid));")
-
-        // Localised
-        supportedLanguages.forEach { name ->
-            execSQL("CREATE TABLE tbl_category_$name (uuid TEXT NOT NULL, name TEXT NOT NULL, color TEXT, PRIMARY KEY(uuid));")
-        }
+                "FOREIGN KEY(currency) REFERENCES tbl_currency(code));")
     }
 
     private fun applySeeds(db: SQLiteDatabase) {
@@ -72,35 +55,10 @@ class Database : SQLiteOpenHelper {
         storeCurrency(db, CHF)
         storeCurrency(db, PLN)
         storeCurrency(db, CZK)
-
-        // Categories
-        try {
-            db.beginTransaction()
-
-            db.storeCategory(_Seeds.OTHER)
-            db.storeCategory(_Seeds.GROCERY)
-            db.storeCategory(_Seeds.FOOD)
-            db.storeCategory(_Seeds.TRAVEL)
-            db.storeCategory(_Seeds.TRANSPORT)
-            db.storeCategory(_Seeds.CAR)
-            db.storeCategory(_Seeds.SPORT)
-            db.storeCategory(_Seeds.HEALTH)
-            db.storeCategory(_Seeds.CLOTHES)
-            db.storeCategory(_Seeds.HOUSE)
-            db.storeCategory(_Seeds.BILLS)
-
-            db.setTransactionSuccessful()
-        } finally {
-            db.endTransaction()
-        }
     }
 
     private fun storeCurrency(db: SQLiteDatabase, currency: Currency) {
         db.execSQL(String.format("INSERT INTO tbl_currency VALUES('%s', '%s');", currency.code, currency.format))
-    }
-
-    private fun SQLiteDatabase.storeCategory(category: Category) {
-        execSQL(String.format("INSERT INTO tbl_category VALUES('%s', '%s', '%s');", category.uuid, category.name, category.color))
     }
 
     companion object {

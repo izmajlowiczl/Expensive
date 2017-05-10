@@ -4,7 +4,6 @@ import android.support.test.runner.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import pl.expensive.storage.DatabaseSchemaTestHelper.doesTableExist
 import pl.expensive.storage.DatabaseSchemaTestHelper.getTableColumns
 
 @RunWith(AndroidJUnit4::class)
@@ -16,7 +15,7 @@ class DatabaseSchemaTest {
         val columns = getTableColumns(database.readableDatabase, "tbl_transaction")
 
         assertThat(columns)
-                .containsExactly("uuid", "amount", "currency", "date", "description", "category")
+                .containsExactly("uuid", "amount", "currency", "date", "description")
     }
 
     @Test
@@ -25,27 +24,5 @@ class DatabaseSchemaTest {
 
         assertThat(columns)
                 .containsExactly("code", "format")
-    }
-
-    @Test
-    fun columnsForCategoryTable() {
-        val columns = getTableColumns(database.readableDatabase, "tbl_category")
-
-        assertThat(columns).containsExactly("uuid", "name", "color")
-    }
-
-    @Test
-    fun createDefaultCategoriesTable() {
-        assertThat(database.readableDatabase.doesTableExist("tbl_category")).isTrue()
-    }
-
-    @Test
-    fun createPolishCategoriesTable() {
-        assertThat(database.readableDatabase.doesTableExist("tbl_category_pl")).isTrue()
-    }
-
-    @Test
-    fun createGermanCategoriesTable() {
-        assertThat(database.readableDatabase.doesTableExist("tbl_category_de")).isTrue()
     }
 }

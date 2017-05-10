@@ -9,7 +9,7 @@ interface Storage<DBO> {
     fun list(): List<DBO>
 
     /**
-     * Stores [Wallet] object.
+     * Stores database objects.
 
      * @param dbo There is no validation of object performed. Check for nulls or invalid values before using.
      * *

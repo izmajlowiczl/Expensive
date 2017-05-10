@@ -10,7 +10,6 @@ import pl.expensive.R
 import pl.expensive.storage.*
 import pl.expensive.storage.Currency
 import pl.expensive.storage._Seeds.EUR
-import pl.expensive.storage._Seeds.OTHER
 import java.math.BigDecimal
 import java.util.*
 
@@ -102,7 +101,6 @@ class TransactionDetailsActivity : AppCompatActivity() {
                 val storedTransaction = withdrawal(
                         amount = amountText.asBigDecimal(),
                         desc = descText,
-                        category = OTHER,
                         currency = state.currency)
 
                 transactionStorage.insert(storedTransaction)
@@ -117,7 +115,6 @@ class TransactionDetailsActivity : AppCompatActivity() {
                         uuid = state.transaction,
                         amount = amountText.asBigDecimal(),
                         desc = descText,
-                        category = OTHER,
                         currency = state.currency)
 
                 transactionStorage.update(storedTransaction)
