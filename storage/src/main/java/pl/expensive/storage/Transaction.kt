@@ -2,10 +2,16 @@ package pl.expensive.storage
 
 import android.os.Parcel
 import android.os.Parcelable
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.ZoneOffset
 import java.math.BigDecimal
 import java.util.*
+
+fun withdrawal(uuid: UUID = UUID.randomUUID(),
+               amount: BigDecimal,
+               currency: Currency,
+               time: Long = Date().time,
+               desc: String = "",
+               category: Category? = null) =
+        Transaction(uuid, amount.negate(), currency, time, desc, category)
 
 data class Transaction(val uuid: UUID,
                        val amount: BigDecimal,
@@ -39,43 +45,5 @@ data class Transaction(val uuid: UUID,
     companion object {
         @JvmField @Suppress("unused")
         val CREATOR = createParcel(::Transaction)
-
-        fun depositWithAmount(uuid: UUID = UUID.randomUUID(),
-                              amount: BigDecimal,
-                              currency: Currency,
-                              time: Long = Date().time,
-                              desc: String = "",
-                              category: Category? = null): Transaction {
-            return Transaction(uuid, amount, currency, time, desc, category)
-        }
-
-        fun withdrawalWithAmount(uuid: UUID = UUID.randomUUID(),
-                                 amount: BigDecimal,
-                                 currency: Currency,
-                                 time: Long = Date().time,
-                                 desc: String = "",
-                                 category: Category? = null): Transaction {
-            return Transaction(uuid, amount.negate(), currency, time, desc, category)
-        }
-
-        fun create(uuid: UUID, amount: BigDecimal, currency: Currency, date: LocalDateTime, desc: String): Transaction {
-            return Transaction(uuid, amount, currency, toMillisUTC(date), desc)
-        }
-
-        fun create(uuid: UUID, amount: BigDecimal, currency: Currency, time: Long, desc: String): Transaction {
-            return Transaction(uuid, amount, currency, time, desc)
-        }
-
-        fun withdrawal(amount: BigDecimal, currency: Currency, desc: String): Transaction {
-            return create(UUID.randomUUID(), amount.negate(), currency, toMillisUTC(LocalDateTime.now()), desc)
-        }
-
-        fun deposit(amount: BigDecimal, currency: Currency, desc: String): Transaction {
-            return create(UUID.randomUUID(), amount, currency, toMillisUTC(LocalDateTime.now()), desc)
-        }
-
-        private fun toMillisUTC(date: LocalDateTime): Long {
-            return date.toInstant(ZoneOffset.UTC).toEpochMilli()
-        }
     }
 }

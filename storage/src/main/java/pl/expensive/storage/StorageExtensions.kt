@@ -4,7 +4,9 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
+import org.threeten.bp.ZoneOffset
 import java.math.BigDecimal
 import java.util.*
 
@@ -21,6 +23,8 @@ inline fun <reified T : Parcelable> createParcel(crossinline createFromParcel: (
 fun Transaction.toLocalDateTime() = Instant.ofEpochMilli(date)
         .atZone(ZoneId.of("UTC"))
         .toLocalDateTime()
+
+fun LocalDateTime.toMillisUTC(): Long = toInstant(ZoneOffset.UTC).toEpochMilli()
 
 
 fun String.toUUID(): UUID = UUID.fromString(this)

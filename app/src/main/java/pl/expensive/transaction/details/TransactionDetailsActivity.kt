@@ -99,7 +99,7 @@ class NewTransactionActivity : AppCompatActivity() {
         when (currentState) {
             is ViewState.Create -> {
                 val state = currentState as ViewState.Create
-                val storedTransaction = Transaction.withdrawalWithAmount(
+                val storedTransaction = withdrawal(
                         amount = amountText.asBigDecimal(),
                         desc = descText,
                         category = OTHER,
@@ -113,7 +113,7 @@ class NewTransactionActivity : AppCompatActivity() {
 
             is ViewState.Edit -> {
                 val state = currentState as ViewState.Edit
-                val storedTransaction = Transaction.withdrawalWithAmount(
+                val storedTransaction = withdrawal(
                         uuid = state.transaction,
                         amount = amountText.asBigDecimal(),
                         desc = descText,

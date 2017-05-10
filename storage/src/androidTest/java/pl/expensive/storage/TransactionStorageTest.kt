@@ -44,7 +44,7 @@ class TransactionStorageTest {
 
     @Test(expected = IllegalStateException::class)
     fun withoutStoredCurrency() {
-        val beer = Transaction.create(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer")
+        val beer = Transaction(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer", OTHER)
 
         storage.insert(beer)
     }

@@ -6,6 +6,7 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
 import pl.expensive.storage.Transaction
 import pl.expensive.storage._Seeds.EUR
+import pl.expensive.storage.toMillisUTC
 import java.math.BigDecimal
 import java.util.*
 
@@ -60,7 +61,7 @@ class TransactionGroupperTest {
     }
 
     private fun transactionAt(today: LocalDateTime): Transaction {
-        return Transaction.create(UUID.randomUUID(), BigDecimal.TEN, EUR, today, "")
+        return Transaction(UUID.randomUUID(), BigDecimal.TEN, EUR, today.toMillisUTC(), "")
     }
 
     companion object {
