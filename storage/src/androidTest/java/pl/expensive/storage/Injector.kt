@@ -9,6 +9,6 @@ internal object Injector {
     }
 
     fun provideDatabase(): Database {
-        return Database(provideContext(), provideContext().getSharedPreferences("test_sp", 0))
+        return Database(provideContext(), provideContext().getSharedPreferences("test_sp", 0), null)
     }
 }
