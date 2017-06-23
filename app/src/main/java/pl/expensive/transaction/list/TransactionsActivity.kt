@@ -29,15 +29,10 @@ class TransactionsActivity : AppCompatActivity() {
 
     private val transactionsModel by lazy { Injector.app().transactionsModel() }
 
-    private var shouldAnimateFab = true
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transactions)
         Injector.app().inject(this)
-
-        // Animate FAB only once
-        shouldAnimateFab = savedInstanceState == null
 
         setSupportActionBar(toolbar)
 
@@ -45,7 +40,8 @@ class TransactionsActivity : AppCompatActivity() {
         vTransactions.adapter = adapter
         vTransactions.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
 
-        startContentAnimation()
+        // Animate FAB only once
+        startContentAnimation(shouldAnimateFab = savedInstanceState == null)
     }
 
     override fun onResume() {
@@ -78,7 +74,7 @@ class TransactionsActivity : AppCompatActivity() {
         }
     }
 
-    private fun startContentAnimation() {
+    private fun startContentAnimation(shouldAnimateFab: Boolean) {
         val createWithdrawalAction: (View) -> Unit = {
             startNewTransactionCreatorScreen()
         }
