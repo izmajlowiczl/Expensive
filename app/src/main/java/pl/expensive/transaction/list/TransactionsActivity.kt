@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -55,6 +57,21 @@ class TransactionsActivity : AppCompatActivity() {
         transactionsModel.showWallets(update)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_transactions, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_add_transaction -> {
+                startNewTransactionCreatorScreen()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
     private val update: (ViewState) -> Unit = {
         when (it) {
             is ViewState.Wallets -> {
@@ -63,7 +80,7 @@ class TransactionsActivity : AppCompatActivity() {
                 adapter.data = it.adapterData
 
                 supportActionBar!!.show()
-                supportActionBar!!.title = it.title
+//                supportActionBar!!.title = it.title
                 toolbar_shadow.visibility = VISIBLE
 
                 vTransactionsEmptyMsg.visibility = GONE

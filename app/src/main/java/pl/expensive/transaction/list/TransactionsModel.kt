@@ -34,6 +34,9 @@ class TransactionsModel(private val transactionStorage: TransactionStorage,
 
             // Transactions grouped by month with headers
             val result = mutableListOf<Any>()
+
+            // Current month
+            result.add(Header("Current month", formattedHeaderTotal(res, currency, transactionsUntilToday)))
             group(transactionsUntilToday)
                     .forEach {
                         if (it.key == YearMonth.from(today)) { // This month
