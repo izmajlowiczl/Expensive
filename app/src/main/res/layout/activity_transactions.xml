@@ -21,21 +21,23 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_below="@id/toolbar"
-        android:background="@color/header_bg"/>
+        android:background="@color/divider"/>
 
-    <include
+    <android.support.v7.widget.CardView
         android:id="@+id/vTransactionsQuickAdd"
-        layout="@layout/view_quick_add_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar_shadow"/>
+        android:layout_below="@id/toolbar_shadow"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true">
 
-    <View
-        android:id="@+id/quick_add_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_below="@id/vTransactionsQuickAdd"
-        android:background="@color/header_bg"/>
+        <include
+            layout="@layout/view_quick_add_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </android.support.v7.widget.CardView>
 
     <!-- 88dp bottom padding consists of FAB sized + its margins top and bottom-->
     <android.support.v7.widget.RecyclerView
@@ -43,7 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/quick_add_shadow"
+        android:layout_below="@id/vTransactionsQuickAdd"
+        android:background="@color/window_bg"
         android:clipToPadding="false"
         android:paddingBottom="88dp"
         android:visibility="gone"

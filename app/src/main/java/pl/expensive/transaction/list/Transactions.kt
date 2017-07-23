@@ -1,5 +1,6 @@
 package pl.expensive.transaction.list
 
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.View.GONE
@@ -31,6 +32,7 @@ class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 // TODO: Do not use Transaction directly.. create viewModel for it
 class TransactionViewHolder(itemView: View, private val clickFun: (Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {
     fun update(viewModel: Transaction) = with(itemView) {
+        setBackgroundColor(ResourcesCompat.getColor(resources, R.color.white, null))
         vTransactionItemAmount.text = viewModel.currency.formatValue(money = viewModel.amount)
         vTransactionItemTime.text = viewModel.formatTime()
         if (viewModel.description.isNullOrBlank()) {

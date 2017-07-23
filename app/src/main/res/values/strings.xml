@@ -16,4 +16,5 @@
     <string name="repeat_monthly">Each month</string>
 
     <string name="empty_transactions_msg">Click on the plus button to create first transaction!</string>
+    <string name="menu_search">Search</string>
 </resources>

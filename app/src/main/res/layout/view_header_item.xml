@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/spacer"
-    android:paddingTop="@dimen/spacer">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/header_bg"
+                android:paddingBottom="@dimen/small_spacer"
+                android:paddingTop="@dimen/spacer">
 
     <TextView
         android:id="@+id/vHeader"
@@ -14,7 +15,7 @@
         android:paddingLeft="@dimen/content_padding_left"
         android:textColor="@color/header_text"
         android:textStyle="bold"
-        tools:text="January" />
+        tools:text="January"/>
 
     <TextView
         android:id="@+id/vHeaderAmount"
@@ -25,7 +26,7 @@
         android:paddingRight="@dimen/spacer"
         android:textColor="@color/header_text"
         android:textSize="@dimen/listItemTextMedium"
-        tools:text="125 E" />
+        tools:text="125 E"/>
 
 
 </RelativeLayout>

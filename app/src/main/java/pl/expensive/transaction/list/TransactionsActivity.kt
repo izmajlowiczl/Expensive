@@ -80,7 +80,6 @@ class TransactionsActivity : AppCompatActivity() {
                 adapter.data = it.adapterData
 
                 supportActionBar!!.show()
-//                supportActionBar!!.title = it.title
                 toolbar_shadow.visibility = VISIBLE
 
                 vTransactionsEmptyMsg.visibility = GONE
@@ -109,12 +108,28 @@ class TransactionsActivity : AppCompatActivity() {
                 val maybeAmountText = vQuickAddInput.text.toString()
                 if (maybeAmountText.isNotBlank()) {
                     transactionsModel.quickAdd(maybeAmountText.asBigDecimal(), update)
-                    vQuickAddInput.setText("")
+                    vQuickAddInput.text.clear()
                     return@OnEditorActionListener true
                 }
             }
             return@OnEditorActionListener false
         })
+
+        vQuickAddSubmitIcon.setOnClickListener {
+            val maybeAmountText = vQuickAddInput.text.toString()
+            if (maybeAmountText.isNotBlank()) {
+                transactionsModel.quickAdd(maybeAmountText.asBigDecimal(), update)
+                vQuickAddInput.text.clear()
+            }
+        }
+
+        vQuickAddInput.afterTextChanged1 { text ->
+            if (text.isNullOrEmpty()) {
+                vQuickAddSubmitIcon.tint(R.color.icons)
+            } else {
+                vQuickAddSubmitIcon.tint(R.color.ready)
+            }
+        }
     }
 
     private fun startContentAnimation(shouldAnimateFab: Boolean) {

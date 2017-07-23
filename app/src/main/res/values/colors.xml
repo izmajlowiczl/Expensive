@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
     <color name="transparent">@android:color/transparent</color>
 
     <color name="colorPrimary">@color/white</color>
@@ -9,10 +10,11 @@
     <color name="colorText">#4C4C4C</color>
     <color name="colorTextLight">#989898</color>
 
-    <color name="window_bg">@color/colorPrimary</color>
+    <color name="window_bg">@color/header_bg</color>
 
-    <color name="toolbar_bg">@color/transparent</color>
+    <color name="toolbar_bg">@color/white</color>
 
+    <color name="divider">#d6d6d6</color>
     <color name="header_bg">#EEEEEE</color>
     <color name="header_text">#767676</color>
     <color name="quick_add_text">@color/colorTextLight</color>
