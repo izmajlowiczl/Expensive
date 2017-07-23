@@ -85,7 +85,6 @@ class TransactionsActivity : AppCompatActivity() {
 
                 vTransactionsEmptyMsg.visibility = GONE
 
-                vQuickAddInput.text.clear()
                 vQuickAddInput.hideKeyboard()
             }
 
@@ -97,7 +96,6 @@ class TransactionsActivity : AppCompatActivity() {
 
                 vTransactionsEmptyMsg.visibility = VISIBLE
 
-                vQuickAddInput.text.clear()
                 vQuickAddInput.hideKeyboard()
             }
         }
