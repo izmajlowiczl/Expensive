@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/header_bg"
     android:paddingBottom="@dimen/spacer"
     android:paddingTop="@dimen/spacer">
 
@@ -12,7 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:background="@color/header_bg"
         android:paddingLeft="@dimen/content_padding_left"
         android:textColor="@color/header_text"
         android:textStyle="bold"
@@ -24,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_toLeftOf="@id/vHeader"
-        android:background="@color/header_bg"
         android:paddingRight="@dimen/spacer"
         android:textColor="@color/header_text"
         android:textSize="@dimen/listItemTextMedium"
