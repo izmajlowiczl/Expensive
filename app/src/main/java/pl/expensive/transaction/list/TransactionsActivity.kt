@@ -10,8 +10,12 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.OvershootInterpolator
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_transactions.*
+import kotlinx.android.synthetic.main.view_quick_add_item.*
 import pl.expensive.*
+import pl.expensive.storage.asBigDecimal
 
 sealed class ViewState {
     class Wallets(val adapterData: MutableList<Any>,
@@ -22,9 +26,10 @@ sealed class ViewState {
 
 class TransactionsActivity : AppCompatActivity() {
     private val adapter by lazy {
-        TransactionsAdapter({ transition ->
-            startEditTransactionScreen(transition)
-        })
+        TransactionsAdapter(
+                transactionClickFun = { transition ->
+                    startEditTransactionScreen(transition)
+                })
     }
 
     private val transactionsModel by lazy { Injector.app().transactionsModel() }
@@ -46,6 +51,7 @@ class TransactionsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        configureQuickAddView()
         transactionsModel.showWallets(update)
     }
 
@@ -61,6 +67,9 @@ class TransactionsActivity : AppCompatActivity() {
                 toolbar_shadow.visibility = VISIBLE
 
                 vTransactionsEmptyMsg.visibility = GONE
+
+                vQuickAddInput.text.clear()
+                vQuickAddInput.hideKeyboard()
             }
 
             is ViewState.Empty -> {
@@ -70,8 +79,27 @@ class TransactionsActivity : AppCompatActivity() {
                 supportActionBar!!.hide()
 
                 vTransactionsEmptyMsg.visibility = VISIBLE
+
+                vQuickAddInput.text.clear()
+                vQuickAddInput.hideKeyboard()
             }
         }
+    }
+
+    private fun configureQuickAddView() {
+        vQuickAddInput.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                vQuickAddInput.hideKeyboard()
+
+                val maybeAmountText = vQuickAddInput.text.toString()
+                if (maybeAmountText.isNotBlank()) {
+                    transactionsModel.quickAdd(maybeAmountText.asBigDecimal(), update)
+                    vQuickAddInput.setText("")
+                    return@OnEditorActionListener true
+                }
+            }
+            return@OnEditorActionListener false
+        })
     }
 
     private fun startContentAnimation(shouldAnimateFab: Boolean) {

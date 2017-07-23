@@ -15,6 +15,7 @@
 
     <color name="header_bg">#EEEEEE</color>
     <color name="header_text">#767676</color>
+    <color name="quick_add_text">@color/colorTextLight</color>
 
     <color name="ready">#60cc0c</color>
     <color name="icons">#757575</color>

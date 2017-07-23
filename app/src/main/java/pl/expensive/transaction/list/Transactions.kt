@@ -15,6 +15,8 @@ import pl.expensive.storage.Transaction
 import pl.expensive.storage.toLocalDateTime
 import kotlin.properties.Delegates
 
+// Header
+
 data class Header(val header: CharSequence, val formattedTotal: CharSequence)
 
 class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -23,6 +25,8 @@ class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         vHeaderAmount.text = header.formattedTotal
     }
 }
+
+// Transaction
 
 // TODO: Do not use Transaction directly.. create viewModel for it
 class TransactionViewHolder(itemView: View, private val clickFun: (Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {

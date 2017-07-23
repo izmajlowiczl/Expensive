@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground">
+
+    <EditText
+        android:id="@+id/vQuickAddInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:drawableLeft="@drawable/ic_add"
+        android:drawablePadding="@dimen/small_spacer"
+        android:drawableRight="@drawable/ic_done_white_24dp"
+        android:gravity="center_vertical"
+        android:hint="New spending"
+        android:imeOptions="actionDone|actionGo"
+        android:inputType="numberDecimal"
+        android:paddingBottom="@dimen/spacer"
+        android:paddingLeft="@dimen/content_padding_left"
+        android:paddingTop="@dimen/spacer"
+        android:textColor="@color/colorTextLight"
+        android:textSize="@dimen/listItemText"/>
+</RelativeLayout>

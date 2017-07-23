@@ -37,7 +37,7 @@ fun Currency.formatValue(locale: Locale = Locale.getDefault(), money: BigDecimal
     return numberFormat.format(money)
 }
 
-fun View.show(value: Boolean) {
+fun View.show(value: Boolean = true) {
     visibility = if (value) VISIBLE else GONE
 }
 
