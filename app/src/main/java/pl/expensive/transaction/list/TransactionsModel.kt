@@ -36,11 +36,15 @@ class TransactionsModel(private val transactionStorage: TransactionStorage,
             val result = mutableListOf<Any>()
 
             // Current month
-            result.add(Header("Current month", formattedHeaderTotal(res, currency, transactionsUntilToday)))
+            result.add(Header(res.getString(R.string.current_month), formattedHeaderTotal(res, currency, transactionsUntilToday)))
             group(transactionsUntilToday)
                     .forEach {
                         if (it.key == YearMonth.from(today)) { // This month
                             result.addAll(it.value)
+
+                            // Header for previous months just before details
+                            result.add(Header(res.getString(R.string.previous_months), ""))
+
                         } else {
                             result.add(Header(it.formattedHeaderTitle(res), formattedHeaderTotal(res, currency, it.value)))
                         }

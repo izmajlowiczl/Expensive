@@ -1,6 +1,7 @@
 <resources>
     <string name="total">Total:\u00A0</string>
     <string name="current_month">Current month</string>
+    <string name="previous_months">Previous months</string>
     <string name="add_new_spending">New spending</string>
     <string name="edit_spending">Edit spending</string>
     <string name="enter_amount">Enter amount</string>
