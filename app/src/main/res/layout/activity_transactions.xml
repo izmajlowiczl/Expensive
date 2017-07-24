@@ -30,27 +30,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar_shadow"/>
 
-    <!-- 88dp bottom padding consists of FAB sized + its margins top and bottom-->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/vTransactions"
+    <fragment
+        android:id="@+id/vTransactionsListContainer"
+        android:name="pl.expensive.transaction.list.TransactionListFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/vQuickAddContainer"
-        android:background="@color/window_bg"
-        android:clipToPadding="false"
-        android:paddingBottom="88dp"
-        android:visibility="gone"
-        tools:visibility="visible"/>
-
-    <TextView
-        android:id="@+id/vTransactionsEmptyMsg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:padding="@dimen/spacer"
-        android:text="@string/empty_transactions_msg"
-        android:visibility="gone"/>
+        android:layout_below="@id/vQuickAddContainer"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/vCreateTransactionFab"

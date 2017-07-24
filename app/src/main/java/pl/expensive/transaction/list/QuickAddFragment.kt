@@ -16,7 +16,11 @@ import kotlinx.android.synthetic.main.view_quick_add_item.*
 import pl.expensive.*
 
 class QuickAddFragment : Fragment() {
-    private var mListener: QuickAddCallbacks? = null
+    interface QuickAddCallbacks {
+        fun onQuickAdd(maybeAmountText: Editable?)
+    }
+
+    private var callback: QuickAddCallbacks? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.activity_quick_add, container, false)
@@ -26,25 +30,22 @@ class QuickAddFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         vHeader.text = getString(R.string.quick_add_title)
         vHeaderAmount.visibility = INVISIBLE
+        vQuickAddInput.hideKeyboard()
         configureQuickAddView()
     }
 
     override fun onAttach(activity: Context?) {
         super.onAttach(activity)
         if (activity is QuickAddCallbacks) {
-            mListener = activity
+            callback = activity
         } else {
-            throw RuntimeException(activity!!.toString() + " must implement QuickAddCallbacks")
+            throw RuntimeException(activity!!.toString() + " must implement TransactionListCallbacks")
         }
     }
 
     override fun onDetach() {
         super.onDetach()
-        mListener = null
-    }
-
-    interface QuickAddCallbacks {
-        fun onQuickAdd(maybeAmountText: Editable?)
+        callback = null
     }
 
     // In order to not animate submit button each time new character was typed
@@ -54,7 +55,7 @@ class QuickAddFragment : Fragment() {
     private fun configureQuickAddView() {
         vQuickAddInput.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                mListener!!.onQuickAdd(vQuickAddInput.text)
+                callback!!.onQuickAdd(vQuickAddInput.text)
                 vQuickAddInput.hideKeyboard()
                 vQuickAddInput.text.clear()
             }
@@ -62,7 +63,7 @@ class QuickAddFragment : Fragment() {
         })
 
         vQuickAddSubmitIcon.setOnClickListener {
-            mListener!!.onQuickAdd(vQuickAddInput.text)
+            callback!!.onQuickAdd(vQuickAddInput.text)
             vQuickAddInput.hideKeyboard()
             vQuickAddInput.text.clear()
         }

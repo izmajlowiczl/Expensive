@@ -4,18 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.animation.OvershootInterpolator
 import kotlinx.android.synthetic.main.activity_transactions.*
-import kotlinx.android.synthetic.main.view_quick_add_item.*
 import pl.expensive.*
+import pl.expensive.storage.Transaction
 import pl.expensive.storage.asBigDecimal
 
 sealed class ViewState {
@@ -25,21 +21,9 @@ sealed class ViewState {
     class Empty(val title: CharSequence) : ViewState()
 }
 
-class TransactionsActivity : AppCompatActivity(), QuickAddFragment.QuickAddCallbacks {
-    override fun onQuickAdd(maybeAmountText: Editable?) {
-        if (!maybeAmountText.isNullOrBlank()) {
-            transactionsModel.quickAdd(maybeAmountText.toString().asBigDecimal(), update)
-        }
-    }
-
-    private val adapter by lazy {
-        TransactionsAdapter(
-                transactionClickFun = { transition ->
-                    startEditTransactionScreen(transition)
-                })
-    }
-
-    private val transactionsModel by lazy { Injector.app().transactionsModel() }
+class TransactionsActivity : AppCompatActivity(),
+        QuickAddFragment.QuickAddCallbacks,
+        TransactionListFragment.TransactionListCallbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,60 +32,8 @@ class TransactionsActivity : AppCompatActivity(), QuickAddFragment.QuickAddCallb
 
         setSupportActionBar(toolbar)
 
-        vTransactions.layoutManager = LinearLayoutManager(this)
-        vTransactions.adapter = adapter
-        vTransactions.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
-
         // Animate FAB only once
         startContentAnimation(shouldAnimateFab = savedInstanceState == null)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        transactionsModel.showWallets(update)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_transactions, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_add_transaction -> {
-                startNewTransactionCreatorScreen()
-                return true
-            }
-            else -> return super.onOptionsItemSelected(item)
-        }
-    }
-
-    private val update: (ViewState) -> Unit = {
-        when (it) {
-            is ViewState.Wallets -> {
-                vTransactions.show(true)
-
-                adapter.data = it.adapterData
-
-                supportActionBar!!.show()
-                toolbar_shadow.visibility = VISIBLE
-
-                vTransactionsEmptyMsg.visibility = GONE
-
-                vQuickAddInput.hideKeyboard()
-            }
-
-            is ViewState.Empty -> {
-                vTransactions.show(false)
-
-                toolbar_shadow.visibility = GONE
-                supportActionBar!!.hide()
-
-                vTransactionsEmptyMsg.visibility = VISIBLE
-
-                vQuickAddInput.hideKeyboard()
-            }
-        }
     }
 
     private fun startContentAnimation(shouldAnimateFab: Boolean) {
@@ -128,6 +60,21 @@ class TransactionsActivity : AppCompatActivity(), QuickAddFragment.QuickAddCallb
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_transactions, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_add_transaction -> {
+                startNewTransactionCreatorScreen()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 666 && resultCode == Activity.RESULT_OK) {
@@ -136,6 +83,17 @@ class TransactionsActivity : AppCompatActivity(), QuickAddFragment.QuickAddCallb
             if (data != null && data.hasExtra("message")) {
                 toast(data.getStringExtra("message"))
             }
+        }
+    }
+
+    override fun onTransactionSelected(transaction: Transaction) {
+        this@TransactionsActivity.startEditTransactionScreen(transaction)
+    }
+
+    override fun onQuickAdd(maybeAmountText: Editable?) {
+        if (!maybeAmountText.isNullOrBlank()) {
+            val transactionsFragment: TransactionListFragment = supportFragmentManager.findFragmentById(R.id.vTransactionsListContainer) as TransactionListFragment
+            transactionsFragment.onNewItem(maybeAmountText.toString().asBigDecimal())
         }
     }
 }
