@@ -8,11 +8,5 @@
             android:icon="@drawable/ic_search"
             android:title="@string/menu_search"
             app:showAsAction="ifRoom"/>
-
-        <item
-            android:id="@+id/menu_add_transaction"
-            android:icon="@drawable/ic_add"
-            android:title="@string/add_new_spending"
-            app:showAsAction="ifRoom"/>
     </group>
 </menu>

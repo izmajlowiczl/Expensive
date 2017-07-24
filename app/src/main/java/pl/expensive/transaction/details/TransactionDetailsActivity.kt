@@ -2,131 +2,40 @@ package pl.expensive.transaction.details
 
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_transaction_details.*
-import pl.expensive.*
+import pl.expensive.Injector
 import pl.expensive.R
-import pl.expensive.storage.*
-import pl.expensive.storage.Currency
-import java.math.BigDecimal
-import java.util.*
+import pl.expensive.storage.Transaction
 
-sealed class ViewState {
-    class Create(val currency: Currency) : ViewState()
-
-    class Edit(val transaction: UUID,
-               val amount: BigDecimal,
-               val currency: Currency,
-               val description: CharSequence?) : ViewState()
-}
-
-class TransactionDetailsActivity : AppCompatActivity() {
-    private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
-    private val sharedPreferences: SharedPreferences by lazy { Injector.app().prefs() }
-
-    private lateinit var currentState: ViewState
-
+class TransactionDetailsActivity : AppCompatActivity(),
+        NewTransactionFragment.NewTransactionCallbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transaction_details)
         Injector.app().inject(this)
 
-        currentState = intent.extras?.toEditViewState()
-                ?: ViewState.Create(getDefaultCurrency(sharedPreferences))
-        updateViewState(currentState)
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                    .add(R.id.vNewTransactionContainer, createNewTransactionFragment(intent.extras), "new_transaction_fragment")
+                    .commit()
+        } else {
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.vNewTransactionContainer, createNewTransactionFragment(intent.extras), "new_transaction_fragment")
+                    .commit()
 
-        playEnterAnimation()
-    }
-
-    private val updateViewState: (ViewState) -> Unit = { state ->
-        currentState = state
-
-        when (state) {
-            is ViewState.Create -> {
-                vNewTransactionTitle.text = getString(R.string.add_new_spending)
-                vNewTransactionAmount.afterTextChanged({
-                    val color = if (vNewTransactionAmount.text.isNotBlank()) R.color.ready else R.color.colorTextLight
-                    vNewTransactionSave.tint(color)
-                })
-            }
-
-            is ViewState.Edit -> {
-                vNewTransactionTitle.text = getString(R.string.edit_spending)
-
-                with(vNewTransactionAmount) {
-                    setText(state.amount.toString())
-                    afterTextChanged({
-                        val color = if (text.toString() != state.amount.toString()) R.color.ready else R.color.colorTextLight
-                        vNewTransactionSave.tint(color)
-                    })
-                }
-                with(vNewTransactionDescription) {
-                    setText(state.description)
-                    afterTextChanged {
-                        val shouldEnableSaveButton = text.toString() != state.description ?: ""
-                        val color = if (shouldEnableSaveButton) R.color.ready else R.color.colorTextLight
-                        vNewTransactionSave.tint(color)
-                    }
-                }
-            }
         }
     }
 
-
-    private fun playEnterAnimation() {
-        vNewTransactionClose.startAnimation(vNewTransactionClose.rotate(0f, 45f).apply {
-            endAction { vNewTransactionClose.setOnClickListener { finishCanceled() } }
-        })
-        vNewTransactionSave.startAnimation(vNewTransactionSave.scaleFromMiddle(0f, 1f).apply {
-            endAction {
-                vNewTransactionSave.show(true)
-                vNewTransactionSave.setOnClickListener {
-                    if (validate()) {
-                        handleSaveButtonClick()
-                    }
-                }
-            }
-        })
-        vNewTransactionParent.startAnimation(vNewTransactionParent.expandDown())
+    override fun onNewTransaction(transaction: Transaction) {
+        finishWithResult(getString(R.string.new_withdrawal_success_message, transaction.amount.abs()))
     }
 
-    private fun handleSaveButtonClick() {
-        val amountText = vNewTransactionAmount.text.toString()
-        val descText = vNewTransactionDescription.text.toString()
-
-        when (currentState) {
-            is ViewState.Create -> {
-                val state = currentState as ViewState.Create
-                val storedTransaction = withdrawal(
-                        amount = amountText.asBigDecimal(),
-                        desc = descText,
-                        currency = state.currency)
-
-                transactionStorage.insert(storedTransaction)
-
-                clearViews()
-                finishWithResult(getString(R.string.new_withdrawal_success_message, storedTransaction.amount.abs()))
-            }
-
-            is ViewState.Edit -> {
-                val state = currentState as ViewState.Edit
-                val storedTransaction = withdrawal(
-                        uuid = state.transaction,
-                        amount = amountText.asBigDecimal(),
-                        desc = descText,
-                        currency = state.currency)
-
-                transactionStorage.update(storedTransaction)
-
-                clearViews()
-                finishWithResult(getString(R.string.withdrawal_edited_success_message, storedTransaction.amount.abs()))
-            }
-        }
+    override fun onTransactionEdited(transaction: Transaction) {
+        finishWithResult(getString(R.string.withdrawal_edited_success_message, transaction.amount.abs()))
     }
 
-    private fun finishCanceled() {
+    override fun onCanceled() {
         setResult(Activity.RESULT_CANCELED)
         finish()
     }
@@ -137,28 +46,4 @@ class TransactionDetailsActivity : AppCompatActivity() {
         setResult(Activity.RESULT_OK, Intent().putExtras(extras))
         finish()
     }
-
-    private fun validate(): Boolean {
-        var isValid = true
-        val amountText = vNewTransactionAmount.text.toString()
-        if (amountText.isNullOrEmpty()) {
-            vNewTransactionAmount.error = getString(R.string.err_mandatory)
-            isValid = false
-        } else {
-            vNewTransactionAmount.error = null
-        }
-        return isValid
-    }
-
-    private fun clearViews() {
-        vNewTransactionAmount.text.clear()
-        vNewTransactionDescription.text.clear()
-        vNewTransactionAmount.hideKeyboard()
-    }
-
-    private fun Bundle.toEditViewState(): ViewState.Edit = ViewState.Edit(
-            transaction = getString("transaction_uuid").toUUID(),
-            amount = getString("transaction_amount").asBigDecimal(),
-            description = getString("transaction_desc"),
-            currency = getDefaultCurrency(sharedPreferences))
 }

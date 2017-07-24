@@ -67,8 +67,7 @@ class TransactionsActivity : AppCompatActivity(),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_add_transaction -> {
-                startNewTransactionCreatorScreen()
+            R.id.menu_search -> {
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
