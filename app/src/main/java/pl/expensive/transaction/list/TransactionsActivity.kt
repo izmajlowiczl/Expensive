@@ -6,14 +6,13 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.OvershootInterpolator
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_transactions.*
 import kotlinx.android.synthetic.main.view_quick_add_item.*
 import pl.expensive.*
@@ -26,7 +25,13 @@ sealed class ViewState {
     class Empty(val title: CharSequence) : ViewState()
 }
 
-class TransactionsActivity : AppCompatActivity() {
+class TransactionsActivity : AppCompatActivity(), QuickAddFragment.QuickAddCallbacks {
+    override fun onQuickAdd(maybeAmountText: Editable?) {
+        if (!maybeAmountText.isNullOrBlank()) {
+            transactionsModel.quickAdd(maybeAmountText.toString().asBigDecimal(), update)
+        }
+    }
+
     private val adapter by lazy {
         TransactionsAdapter(
                 transactionClickFun = { transition ->
@@ -53,7 +58,6 @@ class TransactionsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        configureQuickAddView()
         transactionsModel.showWallets(update)
     }
 
@@ -96,38 +100,6 @@ class TransactionsActivity : AppCompatActivity() {
                 vTransactionsEmptyMsg.visibility = VISIBLE
 
                 vQuickAddInput.hideKeyboard()
-            }
-        }
-    }
-
-    private fun configureQuickAddView() {
-        vQuickAddInput.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                vQuickAddInput.hideKeyboard()
-
-                val maybeAmountText = vQuickAddInput.text.toString()
-                if (maybeAmountText.isNotBlank()) {
-                    transactionsModel.quickAdd(maybeAmountText.asBigDecimal(), update)
-                    vQuickAddInput.text.clear()
-                    return@OnEditorActionListener true
-                }
-            }
-            return@OnEditorActionListener false
-        })
-
-        vQuickAddSubmitIcon.setOnClickListener {
-            val maybeAmountText = vQuickAddInput.text.toString()
-            if (maybeAmountText.isNotBlank()) {
-                transactionsModel.quickAdd(maybeAmountText.asBigDecimal(), update)
-                vQuickAddInput.text.clear()
-            }
-        }
-
-        vQuickAddInput.afterTextChanged1 { text ->
-            if (text.isNullOrEmpty()) {
-                vQuickAddSubmitIcon.tint(R.color.icons)
-            } else {
-                vQuickAddSubmitIcon.tint(R.color.ready)
             }
         }
     }
