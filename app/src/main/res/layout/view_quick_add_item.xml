@@ -23,6 +23,7 @@
         android:layout_centerVertical="true"
         android:background="?selectableItemBackgroundBorderless"
         android:padding="@dimen/spacer"
+        android:tint="@color/ready"
         app:srcCompat="@drawable/ic_done"/>
 
     <EditText
