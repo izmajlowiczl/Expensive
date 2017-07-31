@@ -3,6 +3,9 @@ package pl.expensive.storage
 import java.math.BigDecimal
 import java.util.*
 
+data class Tag(val uuid: UUID = UUID.randomUUID(),
+               val name: String)
+
 data class Currency(val code: String, val format: String)
 
 data class Transaction(val uuid: UUID,
