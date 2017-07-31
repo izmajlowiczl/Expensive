@@ -7,8 +7,10 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
+import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
+import org.threeten.bp.ZoneId
 import org.threeten.bp.format.TextStyle
 import pl.expensive.R
 import pl.expensive.calculateTotal
@@ -125,3 +127,8 @@ class TransactionsModel(private val db: Database,
 fun group(sortedTransactions: List<Transaction>): Map<YearMonth, List<Transaction>> {
     return sortedTransactions.groupBy { YearMonth.of(it.toLocalDateTime().year, it.toLocalDateTime().month) }
 }
+
+fun Transaction.toLocalDateTime(): LocalDateTime =
+        Instant.ofEpochMilli(date)
+                .atZone(ZoneId.of("UTC"))
+                .toLocalDateTime()

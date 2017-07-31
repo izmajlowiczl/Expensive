@@ -13,7 +13,6 @@ import pl.expensive.dateTimeFormat
 import pl.expensive.formatValue
 import pl.expensive.inflateLayout
 import pl.expensive.storage.Transaction
-import pl.expensive.storage.toLocalDateTime
 import kotlin.properties.Delegates
 
 // Header

@@ -2,9 +2,12 @@ package pl.expensive.storage
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.annotation.VisibleForTesting
+import java.math.BigDecimal
+import java.util.*
 
 private const val DB_VERSION = 1
 private const val DB_NAME = "expensive.db"
@@ -55,3 +58,9 @@ class Database : SQLiteOpenHelper {
                 FOREIGN KEY(currency) REFERENCES tbl_currency(code));""")
     }
 }
+
+fun String.toUUID(): UUID = UUID.fromString(this)
+fun String.asBigDecimal(): BigDecimal = BigDecimal(this)
+
+fun Cursor.uuid(columnIndex: Int): UUID = UUID.fromString(getString(columnIndex))
+fun Cursor.bigDecimal(columnIndex: Int) = BigDecimal(getString(columnIndex))

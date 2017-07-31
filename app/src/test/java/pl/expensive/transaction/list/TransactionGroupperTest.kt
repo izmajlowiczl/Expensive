@@ -4,9 +4,9 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
+import org.threeten.bp.ZoneOffset
 import pl.expensive.storage.Transaction
 import pl.expensive.storage._Seeds.EUR
-import pl.expensive.storage.toMillisUTC
 import java.math.BigDecimal
 import java.util.*
 
@@ -63,6 +63,9 @@ class TransactionGroupperTest {
     private fun transactionAt(today: LocalDateTime): Transaction {
         return Transaction(UUID.randomUUID(), BigDecimal.TEN, EUR, today.toMillisUTC(), "")
     }
+
+    private fun LocalDateTime.toMillisUTC(): Long =
+            toInstant(ZoneOffset.UTC).toEpochMilli()
 
     companion object {
         private val SOME_DAY = LocalDateTime.of(2001, 10, 19, 10, 20, 0)
