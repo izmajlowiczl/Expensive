@@ -5,11 +5,6 @@ import android.content.SharedPreferences
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.annotation.VisibleForTesting
-import pl.expensive.storage._Seeds.CHF
-import pl.expensive.storage._Seeds.CZK
-import pl.expensive.storage._Seeds.EUR
-import pl.expensive.storage._Seeds.GBP
-import pl.expensive.storage._Seeds.PLN
 
 private const val DB_VERSION = 1
 private const val DB_NAME = "expensive.db"
@@ -32,6 +27,7 @@ class Database : SQLiteOpenHelper {
     override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
         createSchema(sqLiteDatabase)
         applySeeds(sqLiteDatabase)
+        setDefaultCurrency(_Seeds.PLN, prefs)
     }
 
     override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i1: Int) {
@@ -57,20 +53,5 @@ class Database : SQLiteOpenHelper {
                 description TEXT,
                 PRIMARY KEY(uuid),
                 FOREIGN KEY(currency) REFERENCES tbl_currency(code));""")
-    }
-
-    private fun applySeeds(db: SQLiteDatabase) {
-        // Currencies
-        storeCurrency(db, EUR)
-        storeCurrency(db, GBP)
-        storeCurrency(db, CHF)
-        storeCurrency(db, PLN)
-        storeCurrency(db, CZK)
-
-        setDefaultCurrency(PLN, prefs)
-    }
-
-    private fun storeCurrency(db: SQLiteDatabase, currency: Currency) {
-        db.execSQL(String.format("INSERT INTO tbl_currency VALUES('%s', '%s');", currency.code, currency.format))
     }
 }
