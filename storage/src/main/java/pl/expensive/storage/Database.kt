@@ -11,17 +11,20 @@ import pl.expensive.storage._Seeds.EUR
 import pl.expensive.storage._Seeds.GBP
 import pl.expensive.storage._Seeds.PLN
 
+private const val DB_VERSION = 1
+private const val DB_NAME = "expensive.db"
+
 class Database : SQLiteOpenHelper {
     private var ctx: Context
     private var prefs: SharedPreferences
 
-    constructor(context: Context, preferences: SharedPreferences) : super(context, NAME, null, VERSION) {
+    constructor(context: Context, preferences: SharedPreferences) : super(context, DB_NAME, null, DB_VERSION) {
         ctx = context
         prefs = preferences
     }
 
     @VisibleForTesting
-    constructor(context: Context, preferences: SharedPreferences, dbName: String?) : super(context, dbName, null, VERSION) {
+    constructor(context: Context, preferences: SharedPreferences, dbName: String?) : super(context, dbName, null, DB_VERSION) {
         ctx = context
         prefs = preferences
     }
@@ -41,15 +44,19 @@ class Database : SQLiteOpenHelper {
     }
 
     private fun createSchema(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE tbl_currency (code TEXT NOT NULL, format TEXT NOT NULL, PRIMARY KEY(code));")
-        db.execSQL("CREATE TABLE tbl_transaction (" +
-                "uuid TEXT NOT NULL, " +
-                "amount TEXT NOT NULL, " +
-                "currency TEXT NOT NULL, " +
-                "date INTEGER NOT NULL, " +
-                "description TEXT, " +
-                "PRIMARY KEY(uuid), " +
-                "FOREIGN KEY(currency) REFERENCES tbl_currency(code));")
+        db.execSQL("""CREATE TABLE tbl_currency (
+                                    code TEXT NOT NULL,
+                                    format TEXT NOT NULL,
+                                    PRIMARY KEY(code));""")
+
+        db.execSQL("""CREATE TABLE tbl_transaction (
+                uuid TEXT NOT NULL,
+                amount TEXT NOT NULL,
+                currency TEXT NOT NULL,
+                date INTEGER NOT NULL,
+                description TEXT,
+                PRIMARY KEY(uuid),
+                FOREIGN KEY(currency) REFERENCES tbl_currency(code));""")
     }
 
     private fun applySeeds(db: SQLiteDatabase) {
@@ -65,10 +72,5 @@ class Database : SQLiteOpenHelper {
 
     private fun storeCurrency(db: SQLiteDatabase, currency: Currency) {
         db.execSQL(String.format("INSERT INTO tbl_currency VALUES('%s', '%s');", currency.code, currency.format))
-    }
-
-    companion object {
-        private val VERSION = 1
-        private val NAME = "expensive.db"
     }
 }
