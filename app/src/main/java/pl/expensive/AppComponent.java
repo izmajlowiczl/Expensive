@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import pl.expensive.storage.Database;
 import pl.expensive.storage.StorageModule;
-import pl.expensive.storage.TransactionStorage;
 import pl.expensive.transaction.details.TransactionDetailsActivity;
 import pl.expensive.transaction.list.TransactionsActivity;
 import pl.expensive.transaction.list.TransactionsModel;
@@ -20,7 +20,7 @@ public interface AppComponent {
 
     TransactionsModel transactionsModel();
 
-    TransactionStorage transactions();
-
     SharedPreferences prefs();
+
+    Database db();
 }

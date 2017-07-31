@@ -27,10 +27,4 @@ public class StorageModule {
     Database database(SharedPreferences prefs) {
         return new Database(context, prefs);
     }
-
-    @Singleton
-    @Provides
-    TransactionStorage transactionStorage(Database database) {
-        return new SQLiteBasedTransactionStorage(database);
-    }
 }

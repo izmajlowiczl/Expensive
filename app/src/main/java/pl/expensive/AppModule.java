@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import pl.expensive.storage.TransactionStorage;
+import pl.expensive.storage.Database;
 import pl.expensive.transaction.list.TransactionsModel;
 
 @Module
@@ -20,10 +20,10 @@ public class AppModule {
     }
 
     @Provides
-    TransactionsModel transactionsModel(Resources resources,
-                                        TransactionStorage transactionStorage,
+    TransactionsModel transactionsModel(Database db,
+                                        Resources resources,
                                         SharedPreferences preferences) {
-        return new TransactionsModel(transactionStorage, resources, preferences);
+        return new TransactionsModel(db, resources, preferences);
     }
 
     @Provides

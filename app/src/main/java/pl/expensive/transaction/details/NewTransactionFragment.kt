@@ -38,7 +38,7 @@ class NewTransactionFragment : Fragment() {
         fun onCanceled()
     }
 
-    private val transactionStorage: TransactionStorage by lazy { Injector.app().transactions() }
+    private val db: Database by lazy { Injector.app().db() }
     private val sharedPreferences: SharedPreferences by lazy { Injector.app().prefs() }
 
     private lateinit var currentState: ViewState
@@ -141,7 +141,7 @@ class NewTransactionFragment : Fragment() {
                         desc = descText,
                         currency = state.currency)
 
-                transactionStorage.insert(storedTransaction)
+                insertTransaction(storedTransaction, db)
 
                 clearViews()
                 callback?.onNewTransaction(storedTransaction)
@@ -155,7 +155,7 @@ class NewTransactionFragment : Fragment() {
                         desc = descText,
                         currency = state.currency)
 
-                transactionStorage.update(storedTransaction)
+                updateTransaction(storedTransaction, db)
 
                 clearViews()
                 callback?.onTransactionEdited(storedTransaction)

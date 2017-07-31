@@ -18,12 +18,12 @@ import pl.expensive.storage.Currency
 import java.math.BigDecimal
 import java.util.*
 
-class TransactionsModel(private val transactionStorage: TransactionStorage,
+class TransactionsModel(private val db: Database,
                         private val res: Resources,
                         private val prefs: SharedPreferences) {
 
     fun showWallets(viewCallback: (ViewState) -> Unit) {
-        val transactionData = transactionStorage.list().sortedByDescending { it.date }
+        val transactionData = listTransactions(db).sortedByDescending { it.date }
 
         val currency = getDefaultCurrency(prefs)
         val viewState = if (transactionData.isEmpty()) {
@@ -116,7 +116,7 @@ class TransactionsModel(private val transactionStorage: TransactionStorage,
                 amount = amount,
                 currency = getDefaultCurrency(prefs))
 
-        transactionStorage.insert(storedTransaction)
+        insertTransaction(storedTransaction, db)
 
         showWallets(viewCallback)
     }
