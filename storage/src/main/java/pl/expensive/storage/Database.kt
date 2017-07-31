@@ -48,6 +48,11 @@ class Database : SQLiteOpenHelper {
                                     format TEXT NOT NULL,
                                     PRIMARY KEY(code));""")
 
+        db.execSQL("""CREATE TABLE tbl_tag (
+                                        uuid TEXT NOT NULL,
+                                        name TEXT NOT NULL,
+                                        PRIMARY KEY(uuid));""")
+
         db.execSQL("""CREATE TABLE tbl_transaction (
                 uuid TEXT NOT NULL,
                 amount TEXT NOT NULL,
