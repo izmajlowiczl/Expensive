@@ -31,4 +31,16 @@ public class AppModule {
     Resources resources() {
         return context.getResources();
     }
+
+    @Provides
+    @Singleton
+    SharedPreferences preferences() {
+        return context.getSharedPreferences("expensive_prefs", 0);
+    }
+
+    @Singleton
+    @Provides
+    Database database(SharedPreferences prefs) {
+        return new Database(context, prefs);
+    }
 }

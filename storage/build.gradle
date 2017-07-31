@@ -31,12 +31,6 @@ android {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    annotationProcessor "com.squareup:javapoet:1.8.0" // needs to be declared before dagger
-    annotationProcessor "com.google.guava:guava:$guavaVersion" // required by dagger compiler
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
-    compile "com.google.dagger:dagger:$daggerVersion"
-    provided "javax.annotation:jsr250-api:1.0"
-
     compile "com.android.support:support-annotations:$supportVersion"
 
     compile "com.jakewharton.threetenabp:threetenabp:$threeTenAndroidVersion"

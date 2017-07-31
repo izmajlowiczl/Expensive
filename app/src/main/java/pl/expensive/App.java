@@ -5,8 +5,6 @@ import android.app.Application;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.squareup.leakcanary.LeakCanary;
 
-import pl.expensive.storage.StorageModule;
-
 public class App extends Application {
     @Override
     public void onCreate() {
@@ -23,7 +21,6 @@ public class App extends Application {
 
         AppComponent appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplicationContext()))
-                .storageModule(new StorageModule(this))
                 .build();
         Injector.initAppComponent(appComponent);
     }
