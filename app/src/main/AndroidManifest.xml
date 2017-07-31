@@ -21,6 +21,10 @@
 
         <activity
             android:name=".transaction.details.TransactionDetailsActivity"/>
+
+        <activity
+            android:name=".tag.TagsActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
     </application>
 
 </manifest>
