@@ -59,8 +59,30 @@ class Database : SQLiteOpenHelper {
     }
 }
 
+
+/**
+ * Maps Cursor to Object with given transformation
+ */
+inline fun <T> Cursor.map(transform: (Cursor) -> T): List<T> {
+    val result = ArrayList<T>()
+    while (moveToNext()) {
+        result.add(transform(this))
+    }
+    return result
+}
+
+/**
+ * Queries given table for columns.
+ * Do not forget to close returned Cursor object.
+ */
+fun SQLiteDatabase.simpleQuery(table: String, columns: Array<String>): Cursor =
+        query(table, columns, null, null, null, null, null)
+
+fun Cursor.string(columnName: String): String = getString(getColumnIndex(columnName))
+fun Cursor.uuid(columnName: String): UUID = UUID.fromString(string(columnName))
+fun Cursor.uuid(columnIndex: Int): UUID = UUID.fromString(getString(columnIndex))
 fun String.toUUID(): UUID = UUID.fromString(this)
+
+fun Cursor.bigDecimal(columnIndex: Int) = BigDecimal(getString(columnIndex))
 fun String.asBigDecimal(): BigDecimal = BigDecimal(this)
 
-fun Cursor.uuid(columnIndex: Int): UUID = UUID.fromString(getString(columnIndex))
-fun Cursor.bigDecimal(columnIndex: Int) = BigDecimal(getString(columnIndex))

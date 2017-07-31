@@ -3,21 +3,14 @@ package pl.expensive.storage
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteConstraintException
-import java.util.*
 
 fun listTransactions(database: Database): List<Transaction> {
-    val readableDatabase = database.readableDatabase
     val tables = "tbl_transaction t LEFT JOIN tbl_currency AS cur ON t.currency=cur.code "
     val columns = arrayOf(
             "t.uuid", "t.amount", "t.date", "t.description",
             "cur.code", "cur.format")
-    val cursor = readableDatabase.query(tables, columns, null, null, null, null, null)
-
-    val result = ArrayList<Transaction>()
-    while (cursor.moveToNext()) {
-        result.add(from(cursor))
-    }
-
+    val cursor = database.readableDatabase.simpleQuery(tables, columns)
+    val result = cursor.map { from(it) }
     cursor.close()
     return result
 }

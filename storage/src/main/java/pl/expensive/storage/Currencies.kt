@@ -2,9 +2,9 @@ package pl.expensive.storage
 
 import android.content.ContentValues
 import android.content.SharedPreferences
+import android.database.Cursor
 import android.database.sqlite.SQLiteConstraintException
 import pl.expensive.storage._Seeds.EUR
-import java.util.*
 
 private const val KEY_CODE: String = "DEFAULT_CURRENCY_CODE"
 private const val KEY_FORMAT: String = "DEFAULT_CURRENCY_FORMAT"
@@ -20,14 +20,8 @@ fun getDefaultCurrency(preferences: SharedPreferences, fallbackCurrency: Currenc
         format = preferences.getString(KEY_FORMAT, fallbackCurrency.format))
 
 fun listCurrencies(database: Database): List<Currency> {
-    val readableDatabase = database.readableDatabase
-    val cursor = readableDatabase.query("tbl_currency", arrayOf("code", "format"), null, null, null, null, null)
-
-    val result = ArrayList<Currency>()
-    while (cursor.moveToNext()) {
-        result.add(Currency(cursor.getString(0), cursor.getString(1)))
-    }
-
+    val cursor = database.readableDatabase.simpleQuery("tbl_currency", arrayOf("code", "format"))
+    val result = cursor.map { resultsToCurrency(it) }
     cursor.close()
     return result
 }
@@ -43,3 +37,7 @@ fun insertCurrency(currency: Currency, database: Database) {
         throw IllegalStateException("Trying to store currency, which already exist. Currency -> " + currency)
     }
 }
+
+private fun resultsToCurrency(cursor: Cursor): Currency =
+        Currency(cursor.string("code"), cursor.string("format"))
+
