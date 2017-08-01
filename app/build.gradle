@@ -81,6 +81,7 @@ dependencies {
     testCompile "com.google.guava:guava:$guavaVersion"
     // replace Android ThreeTenBP with regular .jar to avoid using context at unit tests
     testCompile "org.threeten:threetenbp:$threeTenVersion"
+    testCompile "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 }
 repositories {
     mavenCentral()
