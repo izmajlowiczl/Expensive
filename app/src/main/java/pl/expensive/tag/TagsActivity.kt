@@ -24,9 +24,6 @@ class TagsActivity : AppCompatActivity() {
             vTagsFilterInput.hideKeyboard()
             vTagsFilterInput.text.clear()
         } else {
-            // Restore filter
-            adapter.replace(listTags(database))
-
             toast("Oops.. Couldn't create tag.")
         }
     }
@@ -51,7 +48,7 @@ class TagsActivity : AppCompatActivity() {
         })
 
         vTagsFilterInput.afterTextChanged1 { text ->
-            adapter.replace(filterTags(text, database))
+            adapter.replace(filterTags(text, listTags(database)))
         }
 
         vTagsCreate.setOnClickListener {

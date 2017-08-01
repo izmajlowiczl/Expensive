@@ -1,6 +1,5 @@
 package pl.expensive.tag
 
-import android.text.Editable
 import pl.expensive.storage.Database
 import pl.expensive.storage.Tag
 import pl.expensive.storage.insertTag
@@ -17,11 +16,10 @@ fun storeTag(name: CharSequence, database: Database, continuation: (storedTag: T
     }
 }
 
-fun filterTags(text: Editable?, database: Database): List<Tag> {
-    val allStoredTags = listTags(database)
+fun filterTags(text: CharSequence?, fromList: List<Tag>): List<Tag> {
     if (text.isNullOrBlank()) {
-        return allStoredTags
+        return fromList
     } else {
-        return allStoredTags.filter { it.name == text.toString() }
+        return fromList.filter { it.name.contains(text.toString(), ignoreCase = true) }
     }
 }
