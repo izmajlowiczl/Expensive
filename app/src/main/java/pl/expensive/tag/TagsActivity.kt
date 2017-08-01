@@ -41,7 +41,10 @@ class TagsActivity : AppCompatActivity() {
 
         vTagsFilterInput.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                storeTag(vTagsFilterInput.text, tagsRepository, storeTagContinuation)
+                val input = vTagsFilterInput.text
+                if (!input.isNullOrBlank()) {
+                    storeTag(Tag(name = input.toString()), tagsRepository, storeTagContinuation)
+                }
             }
             return@OnEditorActionListener false
         })
@@ -51,7 +54,10 @@ class TagsActivity : AppCompatActivity() {
         }
 
         vTagsCreate.setOnClickListener {
-            storeTag(vTagsFilterInput.text, tagsRepository, storeTagContinuation)
+            val input = vTagsFilterInput.text
+            if (!input.isNullOrBlank()) {
+                storeTag(Tag(name = input.toString()), tagsRepository, storeTagContinuation)
+            }
         }
 
         vTags.layoutManager = LinearLayoutManager(this)

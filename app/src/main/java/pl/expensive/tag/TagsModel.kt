@@ -3,14 +3,17 @@ package pl.expensive.tag
 import pl.expensive.storage.Tag
 import pl.expensive.storage.TagsRepository
 
-fun storeTag(name: CharSequence, repository: TagsRepository, continuation: (storedTag: Tag?, succeed: Boolean) -> Unit) {
-    val alreadyExists = repository.list()
-            .find { it.name == name.toString() } != null
-    if (name.isNullOrEmpty() || alreadyExists) {
+/* Inline */fun storeTag(tag: Tag, repository: TagsRepository, continuation: (storedTag: Tag?, succeed: Boolean) -> Unit) {
+    if (tag.name.isNullOrEmpty()) {
         continuation(null, false)
     } else {
-        val tag = Tag(name = name.toString())
-        continuation(tag, repository.insert(tag))
+        val alreadyExists = repository.list()
+                .find { it.name == tag.name } != null
+        if (alreadyExists) {
+            continuation(null, false)
+        } else {
+            continuation(tag, repository.insert(tag))
+        }
     }
 }
 
