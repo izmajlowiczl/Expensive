@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import pl.expensive.storage.Database;
+import pl.expensive.storage.TagsRepository;
 import pl.expensive.tag.TagsActivity;
 import pl.expensive.transaction.details.TransactionDetailsActivity;
 import pl.expensive.transaction.list.TransactionsActivity;
@@ -25,4 +26,6 @@ public interface AppComponent {
     SharedPreferences prefs();
 
     Database db();
+
+    TagsRepository tagsRepository();
 }

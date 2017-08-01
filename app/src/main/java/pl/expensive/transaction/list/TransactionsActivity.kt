@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_transactions.*
 import pl.expensive.*
 import pl.expensive.storage.Transaction
 import pl.expensive.storage.asBigDecimal
+import pl.expensive.tag.TagsActivity
 
 sealed class ViewState {
     class Wallets(val adapterData: MutableList<Any>,
@@ -68,6 +69,7 @@ class TransactionsActivity : AppCompatActivity(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_search -> {
+                startActivity(Intent(this, TagsActivity::class.java))
                 return true
             }
             else -> return super.onOptionsItemSelected(item)

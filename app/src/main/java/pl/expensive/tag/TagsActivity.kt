@@ -8,10 +8,9 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_tags.*
 import pl.expensive.*
 import pl.expensive.storage.Tag
-import pl.expensive.storage.listTags
 
 class TagsActivity : AppCompatActivity() {
-    private val database by lazy { Injector.app().db() }
+    private val tagsRepository by lazy { Injector.app().tagsRepository() }
 
     private val storeTagContinuation: (Tag?, Boolean) -> Unit = { storedTag, success ->
         if (success) {
@@ -19,7 +18,7 @@ class TagsActivity : AppCompatActivity() {
             vTags.smoothScrollToPosition(0)
 
             // Restore filter
-            adapter.replace(listTags(database))
+            adapter.replace(tagsRepository.list())
 
             vTagsFilterInput.hideKeyboard()
             vTagsFilterInput.text.clear()
@@ -42,21 +41,21 @@ class TagsActivity : AppCompatActivity() {
 
         vTagsFilterInput.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                storeTag(vTagsFilterInput.text, database, storeTagContinuation)
+                storeTag(vTagsFilterInput.text, tagsRepository, storeTagContinuation)
             }
             return@OnEditorActionListener false
         })
 
         vTagsFilterInput.afterTextChanged1 { text ->
-            adapter.replace(filterTags(text, listTags(database)))
+            adapter.replace(filterTags(text, tagsRepository.list()))
         }
 
         vTagsCreate.setOnClickListener {
-            storeTag(vTagsFilterInput.text, database, storeTagContinuation)
+            storeTag(vTagsFilterInput.text, tagsRepository, storeTagContinuation)
         }
 
         vTags.layoutManager = LinearLayoutManager(this)
         vTags.adapter = adapter
-        adapter.replace(listTags(database).toMutableList())
+        adapter.replace(tagsRepository.list().toMutableList())
     }
 }

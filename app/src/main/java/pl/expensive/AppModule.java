@@ -9,6 +9,9 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import pl.expensive.storage.Database;
+import pl.expensive.storage.SQLiteTagsStorage;
+import pl.expensive.storage.TagsCache;
+import pl.expensive.storage.TagsRepository;
 import pl.expensive.transaction.list.TransactionsModel;
 
 @Module
@@ -42,5 +45,23 @@ public class AppModule {
     @Provides
     Database database(SharedPreferences prefs) {
         return new Database(context, prefs);
+    }
+
+    @Singleton
+    @Provides
+    SQLiteTagsStorage storage(Database database) {
+        return new SQLiteTagsStorage(database);
+    }
+
+    @Singleton
+    @Provides
+    TagsCache tagsCache() {
+        return new TagsCache();
+    }
+
+    @Singleton
+    @Provides
+    TagsRepository tagsRepository(TagsCache cache, SQLiteTagsStorage storage) {
+        return new TagsRepository(cache, storage);
     }
 }
