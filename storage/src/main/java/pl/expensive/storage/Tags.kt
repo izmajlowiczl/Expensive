@@ -16,11 +16,7 @@ class TagsRepository(private val cache: TagsCache,
 
     override fun insert(tag: Tag): Boolean {
         val result = storage.insert(tag)
-        if (result) {
-            cache.insert(tag)
-        } else {
-            cache.clear()
-        }
+        cache.clear()
         return result
 
     }
