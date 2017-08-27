@@ -42,7 +42,7 @@ class TransactionsModel(private val db: Database,
 
             // Header for current month
             if (transactionsForCurrentMonth != null && transactionsForCurrentMonth.isNotEmpty()) {
-                result.add(Header(res.getString(R.string.current_month), formattedHeaderTotal(res, currency, transactionsUntilToday)))
+                result.add(Header(res.getString(R.string.current_month), formattedHeaderTotal(res, currency, transactionsForCurrentMonth)))
             }
 
             transactionsGroupedByMonth
