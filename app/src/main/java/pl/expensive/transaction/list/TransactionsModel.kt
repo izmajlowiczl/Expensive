@@ -37,12 +37,18 @@ class TransactionsModel(private val db: Database,
             // Transactions grouped by month with headers
             val result = mutableListOf<Any>()
 
-            // Current month
-            result.add(Header(res.getString(R.string.current_month), formattedHeaderTotal(res, currency, transactionsUntilToday)))
             val transactionsGroupedByMonth = group(transactionsUntilToday)
+            val transactionsForCurrentMonth = transactionsGroupedByMonth[YearMonth.from(today)]
+
+            // Header for current month
+            if (transactionsForCurrentMonth != null && transactionsForCurrentMonth.isNotEmpty()) {
+                result.add(Header(res.getString(R.string.current_month), formattedHeaderTotal(res, currency, transactionsUntilToday)))
+            }
+
             transactionsGroupedByMonth
                     .forEach {
                         if (it.key == YearMonth.from(today)) { // This month
+                            // Transactions for current month
                             result.addAll(it.value)
 
                             // Header for previous months just before details
@@ -51,6 +57,7 @@ class TransactionsModel(private val db: Database,
                                 result.add(Header(res.getString(R.string.previous_months), ""))
                             }
                         } else {
+                            // Headers for previous months
                             result.add(Header(formatDateForMonthHeader(it.key, res), formattedHeaderTotal(res, currency, it.value)))
                         }
                     }
