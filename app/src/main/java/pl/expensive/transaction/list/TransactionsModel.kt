@@ -51,7 +51,7 @@ class TransactionsModel(private val db: Database,
                                 result.add(Header(res.getString(R.string.previous_months), ""))
                             }
                         } else {
-                            result.add(Header(it.formattedHeaderTitle(res), formattedHeaderTotal(res, currency, it.value)))
+                            result.add(Header(formatDateForMonthHeader(it.key, res), formattedHeaderTotal(res, currency, it.value)))
                         }
                     }
 
@@ -72,17 +72,17 @@ class TransactionsModel(private val db: Database,
      *
      * Year part is skipped for current year
      */
-    private fun Map.Entry<YearMonth, List<Transaction>>.formattedHeaderTitle(res: Resources): CharSequence {
-        val month = key.month.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()
+    private fun formatDateForMonthHeader(date: YearMonth, res: Resources): CharSequence {
+        val month = date.month.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()
         val now = YearMonth.now()
-        if (key.year == now.year) {
-            if (key.month == now.month) {
+        if (date.year == now.year) {
+            if (date.month == now.month) {
                 return res.getString(R.string.current_month)
             }
             return month
         }
 
-        val span = SpannableString("$month '${if (key.year > 2000) key.year - 2000 else key.year}")
+        val span = SpannableString("$month '${if (date.year > 2000) date.year - 2000 else date.year}")
         val start = month.length
         val end = span.length
         span.setSpan(SuperscriptSpan(), start, end, 0)
