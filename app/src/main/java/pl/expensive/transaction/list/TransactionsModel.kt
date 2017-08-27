@@ -39,14 +39,17 @@ class TransactionsModel(private val db: Database,
 
             // Current month
             result.add(Header(res.getString(R.string.current_month), formattedHeaderTotal(res, currency, transactionsUntilToday)))
-            group(transactionsUntilToday)
+            val transactionsGroupedByMonth = group(transactionsUntilToday)
+            transactionsGroupedByMonth
                     .forEach {
                         if (it.key == YearMonth.from(today)) { // This month
                             result.addAll(it.value)
 
                             // Header for previous months just before details
-                            result.add(Header(res.getString(R.string.previous_months), ""))
-
+                            // Only in case there are transactions for previous month
+                            if (transactionsGroupedByMonth.size > 1) {
+                                result.add(Header(res.getString(R.string.previous_months), ""))
+                            }
                         } else {
                             result.add(Header(it.formattedHeaderTitle(res), formattedHeaderTotal(res, currency, it.value)))
                         }
