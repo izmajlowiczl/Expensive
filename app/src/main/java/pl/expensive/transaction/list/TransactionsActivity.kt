@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -12,7 +11,6 @@ import android.view.animation.OvershootInterpolator
 import kotlinx.android.synthetic.main.activity_transactions.*
 import pl.expensive.*
 import pl.expensive.storage.Transaction
-import pl.expensive.storage.asBigDecimal
 
 sealed class ViewState {
     class Wallets(val adapterData: MutableList<Any>,
@@ -22,7 +20,6 @@ sealed class ViewState {
 }
 
 class TransactionsActivity : AppCompatActivity(),
-        QuickAddFragment.QuickAddCallbacks,
         TransactionListFragment.TransactionListCallbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,12 +84,5 @@ class TransactionsActivity : AppCompatActivity(),
 
     override fun onTransactionSelected(transaction: Transaction) {
         this@TransactionsActivity.startEditTransactionScreen(transaction)
-    }
-
-    override fun onQuickAdd(maybeAmountText: Editable?) {
-        if (!maybeAmountText.isNullOrBlank()) {
-            val transactionsFragment: TransactionListFragment = supportFragmentManager.findFragmentById(R.id.vTransactionsListContainer) as TransactionListFragment
-            transactionsFragment.onNewItem(maybeAmountText.toString().asBigDecimal())
-        }
     }
 }

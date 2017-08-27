@@ -24,19 +24,12 @@
         android:background="@color/divider"/>
 
     <fragment
-        android:id="@+id/vQuickAddContainer"
-        android:name="pl.expensive.transaction.list.QuickAddFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar_shadow"/>
-
-    <fragment
         android:id="@+id/vTransactionsListContainer"
         android:name="pl.expensive.transaction.list.TransactionListFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/vQuickAddContainer"/>
+        android:layout_below="@id/toolbar_shadow"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/vCreateTransactionFab"

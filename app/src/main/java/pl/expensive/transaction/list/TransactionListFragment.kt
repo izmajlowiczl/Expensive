@@ -13,7 +13,6 @@ import pl.expensive.Injector
 import pl.expensive.R
 import pl.expensive.show
 import pl.expensive.storage.Transaction
-import java.math.BigDecimal
 
 class TransactionListFragment : Fragment() {
     interface TransactionListCallbacks {
@@ -69,10 +68,6 @@ class TransactionListFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         callback = null
-    }
-
-    fun onNewItem(amount: BigDecimal) {
-        transactionsModel.quickAdd(amount, update)
     }
 }
 

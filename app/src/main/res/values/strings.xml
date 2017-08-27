@@ -18,5 +18,4 @@
 
     <string name="empty_transactions_msg">Click on the plus button to create first transaction!</string>
     <string name="menu_search">Search</string>
-    <string name="quick_add_title">Quick Add</string>
 </resources>

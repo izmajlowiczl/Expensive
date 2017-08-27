@@ -122,16 +122,6 @@ class TransactionsModel(private val db: Database,
 
         return span
     }
-
-    fun quickAdd(amount: BigDecimal, viewCallback: (ViewState) -> Unit) {
-        val storedTransaction = withdrawal(
-                amount = amount,
-                currency = getDefaultCurrency(prefs))
-
-        insertTransaction(storedTransaction, db)
-
-        showWallets(viewCallback)
-    }
 }
 
 fun group(sortedTransactions: List<Transaction>): Map<YearMonth, List<Transaction>> {
