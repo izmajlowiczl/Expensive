@@ -21,6 +21,7 @@
 
         <activity
             android:name=".transaction.details.TransactionDetailsActivity"/>
+        <activity android:name=".month_overview.MonthOverviewActivity"/>
     </application>
 
 </manifest>

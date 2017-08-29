@@ -18,4 +18,5 @@
 
     <string name="empty_transactions_msg">Click on the plus button to create first transaction!</string>
     <string name="menu_search">Search</string>
+    <string name="tag_filter_hint">Enter tag name</string>
 </resources>

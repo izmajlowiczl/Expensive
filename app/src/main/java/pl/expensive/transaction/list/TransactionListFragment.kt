@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_transactions_list.*
-import pl.expensive.Injector
+import org.threeten.bp.YearMonth
 import pl.expensive.R
 import pl.expensive.show
 import pl.expensive.storage.Transaction
@@ -17,11 +17,14 @@ import pl.expensive.storage.Transaction
 class TransactionListFragment : Fragment() {
     interface TransactionListCallbacks {
         fun onTransactionSelected(transaction: Transaction)
+        fun onMonthSelected(month: YearMonth)
     }
 
-    private val adapter by lazy { TransactionsAdapter(transactionClickFun = { transition -> callback?.onTransactionSelected(transition) }) }
-    private val transactionsModel by lazy { Injector.app().transactionsModel() }
-
+    private val adapter by lazy {
+        val transactionClickFun: (Transaction) -> Unit = { transition -> callback?.onTransactionSelected(transition) }
+        val headerClickFun: (YearMonth) -> Unit = { callback?.onMonthSelected(it) }
+        TransactionsAdapter(transactionClickFun, headerClickFun)
+    }
     private var callback: TransactionListCallbacks? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -33,27 +36,6 @@ class TransactionListFragment : Fragment() {
         vTransactions.layoutManager = LinearLayoutManager(activity)
         vTransactions.adapter = adapter
         vTransactions.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
-    }
-
-    override fun onResume() {
-        super.onResume()
-        transactionsModel.showWallets(update)
-    }
-
-    private val update: (ViewState) -> Unit = {
-        when (it) {
-            is ViewState.Wallets -> {
-                vTransactions.show(true)
-                adapter.data = it.adapterData
-                vTransactionsEmptyMsg.show(false)
-
-            }
-
-            is ViewState.Empty -> {
-                vTransactions.show(false)
-                vTransactionsEmptyMsg.show()
-            }
-        }
     }
 
     override fun onAttach(activity: Context?) {
@@ -68,6 +50,17 @@ class TransactionListFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         callback = null
+    }
+
+    fun showTransactions(data: List<Any>) {
+        vTransactionsEmptyMsg.show(false)
+        vTransactions.show(true)
+        adapter.replaceAll(data)
+    }
+
+    fun showEmpty() {
+        vTransactions.show(false)
+        vTransactionsEmptyMsg.show()
     }
 }
 

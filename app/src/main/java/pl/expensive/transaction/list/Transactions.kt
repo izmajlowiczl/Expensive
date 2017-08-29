@@ -8,21 +8,30 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.view_header_item.view.*
 import kotlinx.android.synthetic.main.view_transaction_item.view.*
+import org.threeten.bp.YearMonth
 import pl.expensive.R
 import pl.expensive.dateTimeFormat
 import pl.expensive.formatValue
 import pl.expensive.inflateLayout
 import pl.expensive.storage.Transaction
-import kotlin.properties.Delegates
 
 // Header
 
-data class Header(val header: CharSequence, val formattedTotal: CharSequence)
+data class Header(val header: CharSequence,
+                  val formattedTotal: CharSequence,
+                  val date: YearMonth,
+                  val clickable: Boolean)
 
-class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+fun clickableHeader(header: CharSequence, formattedTotal: CharSequence, date: YearMonth) = Header(header, formattedTotal, date, true)
+fun staticHeader(header: CharSequence, formattedTotal: CharSequence, date: YearMonth) = Header(header, formattedTotal, date, false)
+
+class HeaderViewHolder(itemView: View, private val headerClickFun: (YearMonth) -> Unit) : RecyclerView.ViewHolder(itemView) {
     fun update(header: Header) = with(itemView) {
         vHeader.text = header.header
         vHeaderAmount.text = header.formattedTotal
+        if (header.clickable) {
+            setOnClickListener { headerClickFun(header.date) }
+        }
     }
 }
 
@@ -54,10 +63,26 @@ class TransactionViewHolder(itemView: View, private val clickFun: (Transaction) 
     }
 }
 
-class TransactionsAdapter(private val transactionClickFun: (Transaction) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var data: MutableList<Any> by Delegates.vetoable(mutableListOf()) { p, old, new ->
+class TransactionsAdapter(private val transactionClickFun: (Transaction) -> Unit,
+                          private val headerClickFun: (YearMonth) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var data: MutableList<Any> = mutableListOf()
+
+    fun replaceAll(newData: List<Any>) {
+        data.clear()
+        data.addAll(newData)
         notifyDataSetChanged()
-        old != new
+    }
+
+    fun addTop(transaction: Transaction) {
+        data.add(1, transaction)
+        notifyItemInserted(1)
+    }
+
+    fun edit(transaction: Transaction) {
+        val position = data.indexOf(transaction)
+        if (position != -1) {
+            notifyItemChanged(position)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
@@ -65,7 +90,7 @@ class TransactionsAdapter(private val transactionClickFun: (Transaction) -> Unit
                 R.layout.view_transaction_item ->
                     TransactionViewHolder(parent.inflateLayout(viewType), transactionClickFun)
                 R.layout.view_header_item ->
-                    HeaderViewHolder(parent.inflateLayout(viewType))
+                    HeaderViewHolder(parent.inflateLayout(viewType), headerClickFun)
                 else ->
                     throw IllegalArgumentException("Unknown view type $viewType")
             }
