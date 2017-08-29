@@ -9,9 +9,21 @@ fun listTransactions(database: Database): List<Transaction> {
     val tables = "tbl_transaction t LEFT JOIN tbl_currency AS cur ON t.currency=cur.code "
     val columns = arrayOf(
             "t.uuid", "t.amount", "t.date", "t.description",
-            "cur.code", "cur.format")
+            "cur.code AS currency_code", "cur.format AS currency_format")
     val cursor = database.readableDatabase.simpleQuery(tables, columns)
     val result = cursor.map { from(it) }
+    cursor.close()
+    return result
+}
+
+fun findTransaction(uuid: UUID, database: Database): Transaction? {
+    val tables = "tbl_transaction t LEFT JOIN tbl_currency AS cur ON t.currency=cur.code "
+    val columns = arrayOf(
+            "t.uuid", "t.amount", "t.date", "t.description",
+            "cur.code AS currency_code", "cur.format AS currency_format")
+
+    val cursor = database.readableDatabase.query(tables, columns, "uuid=?", arrayOf(uuid.toString()), null, null, null)
+    val result = cursor.map { from(it) }.firstOrNull()
     cursor.close()
     return result
 }
@@ -28,18 +40,6 @@ fun updateTransaction(transaction: Transaction, database: Database) {
     database.writableDatabase.replace("tbl_transaction", null, toContentValues(transaction))
 }
 
-fun findTransaction(uuid: UUID, database: Database): Transaction? {
-    val tables = "tbl_transaction t LEFT JOIN tbl_currency AS cur ON t.currency=cur.code "
-    val columns = arrayOf(
-            "t.uuid", "t.amount", "t.date", "t.description",
-            "cur.code", "cur.format")
-
-    val cursor = database.readableDatabase.query(tables, columns, "uuid=?", arrayOf(uuid.toString()), null, null, null)
-    val result = cursor.map { from(it) }.firstOrNull()
-    cursor.close()
-    return result
-}
-
 private fun toContentValues(transaction: Transaction): ContentValues {
     val cv = ContentValues()
     cv.put("uuid", transaction.uuid.toString())
@@ -51,11 +51,11 @@ private fun toContentValues(transaction: Transaction): ContentValues {
 }
 
 private fun from(cursor: Cursor): Transaction {
-    val currency = Currency(cursor.getString(4), cursor.getString(5))
+    val currency = Currency(cursor.string("currency_code"), cursor.string("currency_format"))
     return Transaction(
-            cursor.uuid(0),
-            cursor.bigDecimal(1),
+            cursor.uuid("uuid"),
+            cursor.bigDecimal("amount"),
             currency,
-            cursor.getLong(2),
-            cursor.getString(3))
+            cursor.long("date"),
+            cursor.string("description"))
 }
