@@ -149,16 +149,18 @@ class NewTransactionFragment : Fragment() {
 
             is ViewState.Edit -> {
                 val state = currentState as ViewState.Edit
-                val storedTransaction = withdrawal(
-                        uuid = state.transaction,
-                        amount = amountText.asBigDecimal(),
-                        desc = descText,
-                        currency = state.currency)
 
-                updateTransaction(storedTransaction, db)
+                val transactionToUpdateId = state.transaction
+                val persisted = findTransaction(transactionToUpdateId, db)
+                if (persisted != null) {
+                    val storedTransaction = persisted.copy(
+                            amount = amountText.asBigDecimal(),
+                            description = descText)
+                    updateTransaction(storedTransaction, db)
 
-                clearViews()
-                callback?.onTransactionEdited(storedTransaction)
+                    clearViews()
+                    callback?.onTransactionEdited(storedTransaction)
+                }
             }
         }
     }
