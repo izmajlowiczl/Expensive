@@ -79,10 +79,10 @@ fun SQLiteDatabase.simpleQuery(table: String, columns: Array<String>): Cursor =
         query(table, columns, null, null, null, null, null)
 
 fun Cursor.string(columnName: String): String = getString(getColumnIndex(columnName))
+fun Cursor.long(columnName: String): Long = getLong(getColumnIndex(columnName))
 fun Cursor.uuid(columnName: String): UUID = UUID.fromString(string(columnName))
-fun Cursor.uuid(columnIndex: Int): UUID = UUID.fromString(getString(columnIndex))
 fun String.toUUID(): UUID = UUID.fromString(this)
 
-fun Cursor.bigDecimal(columnIndex: Int) = BigDecimal(getString(columnIndex))
+fun Cursor.bigDecimal(columnName: String) = BigDecimal(string(columnName))
 fun String.asBigDecimal(): BigDecimal = BigDecimal(this)
 
