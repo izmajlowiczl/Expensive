@@ -1,20 +1,18 @@
 <resources>
     <string name="total">Gesamt:\u00A0</string>
     <string name="current_month">Diese Monat</string>
+    <string name="previous_months">Vorherige Monate</string>
     <string name="add_new_spending">Neue Kosten</string>
     <string name="edit_spending">Bearbeiten Kosten</string>
     <string name="enter_amount">Geld hinzufügen</string>
     <string name="description">Beschreibung</string>
 
-    <!-- Repeat modes -->
-    <string name="repeat_no_repeat">Nicht wiederholen</string>
-    <string name="repeat_daily">Täglich</string>
-    <string name="repeat_monthly">Monatlich</string>
-
     <string name="err_mandatory">Pflichtfeld</string>
+    <string name="menu_search">Suche</string>
 
     <!-- TODO: Translate -->
     <string name="withdrawal_edited_success_message">Spending for %s updated!</string>
     <string name="new_withdrawal_success_message">Spending for %s created!</string>
     <string name="empty_transactions_msg">Click on the plus button to create first transaction!</string>
+    <string name="tag_filter_hint">Enter tag name</string>
 </resources>

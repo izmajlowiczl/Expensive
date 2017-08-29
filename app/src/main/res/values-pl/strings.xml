@@ -1,6 +1,7 @@
 <resources>
     <string name="total">Razem:\u00A0</string>
     <string name="current_month">Aktualny miesiąc</string>
+    <string name="previous_months">Wcześniejsze miesiące</string>
     <string name="add_new_spending">Nowy wydatek</string>
     <string name="edit_spending">Edytuj wydatek</string>
     <string name="enter_amount">Wprowadź wartość</string>
@@ -11,9 +12,7 @@
 
     <string name="err_mandatory">Pole Wymagane!</string>
 
-    <string name="repeat_no_repeat">Nie powtarzaj</string>
-    <string name="repeat_daily">Codziennie</string>
-    <string name="repeat_monthly">Miesięcznie</string>
-
     <string name="empty_transactions_msg">Kliknij na przycisk plus: żeby dodać pierwszą tranzakcję!</string>
+    <string name="menu_search">Szukaj</string>
+    <string name="tag_filter_hint">Wprowadź nazwę tagu</string>
 </resources>
