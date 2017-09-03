@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_new_transaction.*
 import pl.expensive.*
+import pl.expensive.R
 import pl.expensive.storage.*
 import pl.expensive.storage.Currency
 import java.math.BigDecimal
