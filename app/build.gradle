@@ -15,6 +15,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        resConfigs "en", "de", "pl"
     }
 
     buildTypes {
@@ -23,7 +25,7 @@ android {
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "boolean", "LEAK_CANARY_ENABLED", "false"
         }
