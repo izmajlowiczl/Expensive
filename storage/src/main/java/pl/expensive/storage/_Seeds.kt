@@ -25,5 +25,5 @@ fun applySeeds(db: SQLiteDatabase) {
 }
 
 private fun storeCurrency(db: SQLiteDatabase, currency: Currency) {
-    db.execSQL(String.format("INSERT INTO tbl_currency VALUES('%s', '%s');", currency.code, currency.format))
+    db.execSQL(String.format("INSERT INTO $tbl_currency VALUES('%s', '%s');", currency.code, currency.format))
 }

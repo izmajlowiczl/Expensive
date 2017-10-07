@@ -20,11 +20,11 @@ fun getDefaultCurrency(preferences: SharedPreferences, fallbackCurrency: Currenc
 
 fun insertCurrency(currency: Currency, database: Database) {
     val cv = ContentValues()
-    cv.put("code", currency.code)
-    cv.put("format", currency.format)
+    cv.put(tbl_currency_col_code, currency.code)
+    cv.put(tbl_currency_col_format, currency.format)
 
     try {
-        database.writableDatabase.insertOrThrow("tbl_currency", null, cv)
+        database.writableDatabase.insertOrThrow(tbl_currency, null, cv)
     } catch (ex: SQLiteConstraintException) {
         throw IllegalStateException("Trying to store currency, which already exist. Currency -> " + currency)
     }

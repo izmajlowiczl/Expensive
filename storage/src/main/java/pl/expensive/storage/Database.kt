@@ -43,23 +43,24 @@ class Database : SQLiteOpenHelper {
     }
 
     private fun createSchema(db: SQLiteDatabase) {
-        db.execSQL("""CREATE TABLE tbl_currency (
-                                    code TEXT NOT NULL,
-                                    format TEXT NOT NULL,
-                                    PRIMARY KEY(code));""")
+        db.execSQL("""CREATE TABLE $tbl_currency (
+                                    $tbl_currency_col_code TEXT NOT NULL,
+                                    $tbl_currency_col_format TEXT NOT NULL,
+                                    PRIMARY KEY($tbl_currency_col_code));""")
 
-        db.execSQL("""CREATE TABLE tbl_transaction (
-                uuid TEXT NOT NULL,
-                amount TEXT NOT NULL,
-                currency TEXT NOT NULL,
-                date INTEGER NOT NULL,
-                description TEXT,
-                PRIMARY KEY(uuid),
-                FOREIGN KEY(currency) REFERENCES tbl_currency(code));""")
+        db.execSQL("""CREATE TABLE $tbl_transaction (
+                $tbl_transaction_col_id TEXT NOT NULL,
+                $tbl_transaction_col_amount TEXT NOT NULL,
+                $tbl_transaction_col_currency TEXT NOT NULL,
+                $tbl_transaction_col_date INTEGER NOT NULL,
+                $tbl_transaction_col_description TEXT,
+                PRIMARY KEY($tbl_transaction_col_id),
+                FOREIGN KEY($tbl_transaction_col_currency) REFERENCES $tbl_currency($tbl_currency_col_code));""")
     }
 }
 
 
+//region Helpers
 /**
  * Maps Cursor to Object with given transformation
  */
@@ -85,4 +86,5 @@ fun String.toUUID(): UUID = UUID.fromString(this)
 
 fun Cursor.bigDecimal(columnName: String) = BigDecimal(string(columnName))
 fun String.asBigDecimal(): BigDecimal = BigDecimal(this)
+//endregion
 

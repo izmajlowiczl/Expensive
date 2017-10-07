@@ -20,7 +20,7 @@ class DatabaseSchemaTest {
 
     @Test
     fun columnsForCurrencyTable() {
-        val columns = getTableColumns(database.readableDatabase, "tbl_currency")
+        val columns = getTableColumns(database.readableDatabase, tbl_currency)
 
         assertThat(columns)
                 .containsExactly("code", "format")

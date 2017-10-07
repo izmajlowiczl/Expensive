@@ -50,6 +50,6 @@ internal object DatabaseSchemaTestHelper {
     }
 
     fun queryForCurrencyCode(code: String): String {
-        return String.format("SELECT code FROM tbl_currency WHERE code='%s';", code)
+        return String.format("SELECT code FROM $tbl_currency WHERE code='%s';", code)
     }
 }
