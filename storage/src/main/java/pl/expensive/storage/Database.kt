@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.annotation.VisibleForTesting
+import pl.expensive.storage.SQLiteTableBuilder.newTable
 import java.math.BigDecimal
 import java.util.*
 
@@ -43,22 +44,23 @@ class Database : SQLiteOpenHelper {
     }
 
     private fun createSchema(db: SQLiteDatabase) {
-        db.execSQL("""CREATE TABLE $tbl_currency (
-                                    $tbl_currency_col_code TEXT NOT NULL,
-                                    $tbl_currency_col_format TEXT NOT NULL,
-                                    PRIMARY KEY($tbl_currency_col_code));""")
+        db.execSQL(newTable(tbl_currency)
+                .withMandatoryText(tbl_currency_col_code)
+                .withMandatoryText(tbl_currency_col_format)
+                .withPrimaryKey(tbl_currency_col_code)
+                .build())
 
-        db.execSQL("""CREATE TABLE $tbl_transaction (
-                $tbl_transaction_col_id TEXT NOT NULL,
-                $tbl_transaction_col_amount TEXT NOT NULL,
-                $tbl_transaction_col_currency TEXT NOT NULL,
-                $tbl_transaction_col_date INTEGER NOT NULL,
-                $tbl_transaction_col_description TEXT,
-                PRIMARY KEY($tbl_transaction_col_id),
-                FOREIGN KEY($tbl_transaction_col_currency) REFERENCES $tbl_currency($tbl_currency_col_code));""")
+        db.execSQL(newTable(tbl_transaction)
+                .withMandatoryText(tbl_transaction_col_id)
+                .withMandatoryText(tbl_transaction_col_amount)
+                .withMandatoryText(tbl_transaction_col_currency)
+                .withMandatoryDecimal(tbl_transaction_col_date)
+                .withOptionalText(tbl_transaction_col_description)
+                .withPrimaryKey(tbl_transaction_col_id)
+                .withForeignKey(tbl_transaction_col_currency, tbl_currency, tbl_currency_col_code)
+                .build())
     }
 }
-
 
 //region Helpers
 /**
