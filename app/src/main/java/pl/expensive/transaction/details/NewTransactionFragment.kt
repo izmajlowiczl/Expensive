@@ -1,7 +1,6 @@
 package pl.expensive.transaction.details
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -40,7 +39,7 @@ class NewTransactionFragment : Fragment() {
     }
 
     private val db: Database by lazy { Injector.app().db() }
-    private val sharedPreferences: SharedPreferences by lazy { Injector.app().prefs() }
+    private val currencyRepository by lazy { Injector.app().currenciesRepository() }
 
     private lateinit var currentState: ViewState
     private var callback: NewTransactionCallbacks? = null
@@ -49,7 +48,7 @@ class NewTransactionFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         currentState = arguments?.toEditViewState()
-                ?: ViewState.Create(getDefaultCurrency(sharedPreferences))
+                ?: toCreateState()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -188,6 +187,8 @@ class NewTransactionFragment : Fragment() {
             transaction = getString("transaction_uuid").toUUID(),
             amount = getString("transaction_amount").asBigDecimal(),
             description = getString("transaction_desc"),
-            currency = getDefaultCurrency(sharedPreferences))
+            currency = currencyRepository.getDefaultCurrency())
+
+    private fun toCreateState() = ViewState.Create(currencyRepository.getDefaultCurrency())
 }
 

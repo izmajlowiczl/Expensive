@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import pl.expensive.storage.CurrencyRepository;
 import pl.expensive.storage.Database;
 import pl.expensive.transaction.list.TransactionsModel;
 
@@ -22,8 +23,13 @@ public class AppModule {
     @Provides
     TransactionsModel transactionsModel(Database db,
                                         Resources resources,
-                                        SharedPreferences preferences) {
-        return new TransactionsModel(db, resources, preferences);
+                                        CurrencyRepository currencyRepository) {
+        return new TransactionsModel(db, resources, currencyRepository);
+    }
+
+    @Provides
+    CurrencyRepository currencyRepository(SharedPreferences preferences) {
+        return new CurrencyRepository(preferences);
     }
 
     @Provides
@@ -40,7 +46,7 @@ public class AppModule {
 
     @Singleton
     @Provides
-    Database database(SharedPreferences prefs) {
-        return new Database(context, prefs);
+    Database database(CurrencyRepository currencyRepository) {
+        return new Database(context, currencyRepository);
     }
 }

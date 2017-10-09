@@ -1,6 +1,5 @@
 package pl.expensive.transaction.list
 
-import android.content.SharedPreferences
 import android.content.res.Resources
 import android.text.Spannable
 import android.text.SpannableString
@@ -22,11 +21,11 @@ import java.util.*
 
 class TransactionsModel(private val db: Database,
                         private val res: Resources,
-                        private val prefs: SharedPreferences) {
+                        private val currenciesRepository: CurrencyRepository) {
 
     fun showWalletForMonth(month: YearMonth, viewCallback: (ViewState) -> Unit) {
         val transactionData = listTransactions(db)
-        val currency = getDefaultCurrency(prefs)
+        val currency = currenciesRepository.getDefaultCurrency()
 
         val allPairs = group(transactionData)
         if (allPairs.containsKey(month)) {
@@ -41,7 +40,7 @@ class TransactionsModel(private val db: Database,
     fun showWallets(viewCallback: (ViewState) -> Unit) {
         val transactionData = listTransactions(db).sortedByDescending { it.date }
 
-        val currency = getDefaultCurrency(prefs)
+        val currency = currenciesRepository.getDefaultCurrency()
         val viewState = if (transactionData.isEmpty()) {
             ViewState.Empty(formattedScreenTitleForCurrentMonth(BigDecimal.ZERO, currency))
         } else {

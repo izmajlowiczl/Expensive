@@ -1,7 +1,6 @@
 package pl.expensive.storage
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
@@ -15,23 +14,23 @@ private const val DB_NAME = "expensive.db"
 
 class Database : SQLiteOpenHelper {
     private var ctx: Context
-    private var prefs: SharedPreferences
+    private var currencyRepository: CurrencyRepository
 
-    constructor(context: Context, preferences: SharedPreferences) : super(context, DB_NAME, null, DB_VERSION) {
+    constructor(context: Context, currencyRepository: CurrencyRepository) : super(context, DB_NAME, null, DB_VERSION) {
         ctx = context
-        prefs = preferences
+        this.currencyRepository = currencyRepository
     }
 
     @VisibleForTesting
-    constructor(context: Context, preferences: SharedPreferences, dbName: String?) : super(context, dbName, null, DB_VERSION) {
+    constructor(context: Context, currencyRepository: CurrencyRepository, dbName: String?) : super(context, dbName, null, DB_VERSION) {
         ctx = context
-        prefs = preferences
+        this.currencyRepository = currencyRepository
     }
 
     override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
         createSchema(sqLiteDatabase)
         applySeeds(sqLiteDatabase)
-        setDefaultCurrency(_Seeds.PLN, prefs)
+        currencyRepository.setDefaultCurrency(_Seeds.PLN)
     }
 
     override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i1: Int) {

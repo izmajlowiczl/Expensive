@@ -10,8 +10,9 @@ internal object Injector {
     }
 
     fun provideDatabase(): Database {
-        return Database(provideContext(), provideKeyValueStorage(), null)
+        return Database(provideContext(), provideCurrencyRepository(), null)
     }
 
+    fun provideCurrencyRepository(): CurrencyRepository = CurrencyRepository(provideKeyValueStorage())
     fun provideKeyValueStorage(): SharedPreferences = provideContext().getSharedPreferences("test_sp", 0)
 }
