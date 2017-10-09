@@ -1,8 +1,6 @@
 package pl.expensive.storage
 
-import android.content.ContentValues
 import android.content.SharedPreferences
-import android.database.sqlite.SQLiteConstraintException
 import pl.expensive.storage._Seeds.EUR
 
 private const val KEY_CODE: String = "DEFAULT_CURRENCY_CODE"
@@ -17,16 +15,3 @@ fun setDefaultCurrency(currency: Currency, preferences: SharedPreferences) =
 fun getDefaultCurrency(preferences: SharedPreferences, fallbackCurrency: Currency = EUR) = Currency(
         code = preferences.getString(KEY_CODE, fallbackCurrency.code),
         format = preferences.getString(KEY_FORMAT, fallbackCurrency.format))
-
-fun insertCurrency(currency: Currency, database: Database) {
-    val cv = ContentValues()
-    cv.put(tbl_currency_col_code, currency.code)
-    cv.put(tbl_currency_col_format, currency.format)
-
-    try {
-        database.writableDatabase.insertOrThrow(tbl_currency, null, cv)
-    } catch (ex: SQLiteConstraintException) {
-        throw IllegalStateException("Trying to store currency, which already exist. Currency -> " + currency)
-    }
-}
-
