@@ -33,4 +33,6 @@ fun withdrawal(uuid: UUID = UUID.randomUUID(),
                time: Long = Date().time,
                desc: String = "") =
         Transaction(uuid, amount.negate(), currency, time, desc)
+
+fun String.asBigDecimalWithdrawal(): BigDecimal = BigDecimal(this).negate()
 //endregion

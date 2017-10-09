@@ -155,7 +155,7 @@ class NewTransactionFragment : Fragment() {
                 val persisted = findTransaction(transactionToUpdateId, db)
                 if (persisted != null) {
                     val storedTransaction = persisted.copy(
-                            amount = amountText.asBigDecimal(),
+                            amount = amountText.asBigDecimalWithdrawal(),
                             description = descText)
                     updateTransaction(storedTransaction, db)
 
