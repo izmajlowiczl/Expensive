@@ -86,6 +86,30 @@ class TransactionsModel(private val db: Database,
 
         viewCallback(viewState)
     }
+
+    fun insertTransaction(transaction: Transaction) {
+        insertTransaction(transaction, db)
+    }
+
+    fun findTransaction(uuid: UUID): Transaction? =
+            findTransaction(uuid, db)
+
+    fun updateTransaction(transactionId: UUID, amount: BigDecimal, descText: String): Transaction? {
+        val persisted = findTransaction(transactionId) ?: return null
+
+        val didChangeAmount = persisted.amount != amount
+        val didChangeDesc = persisted.description != descText
+        if (didChangeAmount || didChangeDesc) {
+            val storedTransaction = persisted.copy(
+                    amount = amount.negate(),
+                    description = descText)
+            updateTransaction(storedTransaction, db)
+
+            return storedTransaction
+        } else {
+            return null
+        }
+    }
 }
 
 /**

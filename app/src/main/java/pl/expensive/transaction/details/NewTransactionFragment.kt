@@ -11,6 +11,7 @@ import pl.expensive.*
 import pl.expensive.R
 import pl.expensive.storage.*
 import pl.expensive.storage.Currency
+import pl.expensive.transaction.list.TransactionsModel
 import java.math.BigDecimal
 import java.util.*
 
@@ -38,7 +39,7 @@ class NewTransactionFragment : Fragment() {
         fun onCanceled()
     }
 
-    private val db: Database by lazy { Injector.app().db() }
+    private val transactionsModel: TransactionsModel by lazy { Injector.app().transactionsModel() }
     private val currencyRepository by lazy { Injector.app().currenciesRepository() }
 
     private lateinit var currentState: ViewState
@@ -140,8 +141,7 @@ class NewTransactionFragment : Fragment() {
                         amount = amountText.asBigDecimal(),
                         desc = descText,
                         currency = state.currency)
-
-                insertTransaction(storedTransaction, db)
+                transactionsModel.insertTransaction(storedTransaction)
 
                 clearViews()
                 callback?.onNewTransaction(storedTransaction)
@@ -150,16 +150,11 @@ class NewTransactionFragment : Fragment() {
             is ViewState.Edit -> {
                 val state = currentState as ViewState.Edit
 
-                val transactionToUpdateId = state.transaction
-                val persisted = findTransaction(transactionToUpdateId, db)
-                if (persisted != null) {
-                    val storedTransaction = persisted.copy(
-                            amount = amountText.asBigDecimalWithdrawal(),
-                            description = descText)
-                    updateTransaction(storedTransaction, db)
-
+                val maybeStoredTransaction = transactionsModel.updateTransaction(
+                        state.transaction, amountText.asBigDecimalWithdrawal(), descText)
+                if (maybeStoredTransaction != null) {
                     clearViews()
-                    callback?.onTransactionEdited(storedTransaction)
+                    callback?.onTransactionEdited(maybeStoredTransaction)
                 }
             }
         }
