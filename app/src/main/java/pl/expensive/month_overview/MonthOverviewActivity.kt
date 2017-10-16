@@ -7,11 +7,10 @@ import org.threeten.bp.YearMonth
 import pl.expensive.Injector
 import pl.expensive.R
 import pl.expensive.extra_month_overview_date
-import pl.expensive.storage.Transaction
 import pl.expensive.transaction.list.TransactionListFragment
 import pl.expensive.transaction.list.ViewState
 
-class MonthOverviewActivity : AppCompatActivity(), TransactionListFragment.TransactionListCallbacks {
+class MonthOverviewActivity : AppCompatActivity() {
     private val transactionsModel by lazy { Injector.app().transactionsModel() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,14 +36,6 @@ class MonthOverviewActivity : AppCompatActivity(), TransactionListFragment.Trans
             }
             is ViewState.Empty -> transactionsFragment().showEmpty()
         }
-    }
-
-    override fun onTransactionSelected(transaction: Transaction) {
-        // No-op
-    }
-
-    override fun onMonthSelected(month: YearMonth) {
-        // No-op
     }
 
     private fun transactionsFragment(): TransactionListFragment =

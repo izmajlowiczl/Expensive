@@ -20,9 +20,7 @@ sealed class ViewState {
     class Empty(val title: CharSequence) : ViewState()
 }
 
-class TransactionsActivity : AppCompatActivity(),
-        TransactionListFragment.TransactionListCallbacks {
-
+class TransactionsActivity : AppCompatActivity(), TransactionListFragment.TransactionListCallbacks {
     private val transactionsModel by lazy { Injector.app().transactionsModel() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +34,16 @@ class TransactionsActivity : AppCompatActivity(),
         startContentAnimation(shouldAnimateFab = savedInstanceState == null)
 
         transactionsModel.showWallets(update)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        transactionsFragment().attachCallbacks(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        transactionsFragment().detachCallbacks()
     }
 
     private val update: (ViewState) -> Unit = {

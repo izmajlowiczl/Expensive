@@ -1,6 +1,5 @@
 package pl.expensive.transaction.list
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -14,18 +13,29 @@ import pl.expensive.R
 import pl.expensive.show
 import pl.expensive.storage.Transaction
 
+/**
+ *
+ * Displays list of transactions after calling  showTransactions(data) function
+ * or empty placeholder after calling showEmpty() function.
+ *
+ * Exposes an listener for row item and month header click events (TransactionListCallbacks interface).
+ * Use attachCallbacks/detachCallbacks when you want to listen for click events.
+ * When maybeCallback is not attached, click events won't be populated.
+ *
+ */
 class TransactionListFragment : Fragment() {
     interface TransactionListCallbacks {
         fun onTransactionSelected(transaction: Transaction)
         fun onMonthSelected(month: YearMonth)
     }
 
+    private var maybeCallback: TransactionListCallbacks? = null
+
     private val adapter by lazy {
-        val transactionClickFun: (Transaction) -> Unit = { transition -> callback?.onTransactionSelected(transition) }
-        val headerClickFun: (YearMonth) -> Unit = { callback?.onMonthSelected(it) }
+        val transactionClickFun: (Transaction) -> Unit = { transition -> maybeCallback?.onTransactionSelected(transition) }
+        val headerClickFun: (YearMonth) -> Unit = { maybeCallback?.onMonthSelected(it) }
         TransactionsAdapter(transactionClickFun, headerClickFun)
     }
-    private var callback: TransactionListCallbacks? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.activity_transactions_list, container, false)
@@ -38,20 +48,15 @@ class TransactionListFragment : Fragment() {
         vTransactions.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
     }
 
-    override fun onAttach(activity: Context?) {
-        super.onAttach(activity)
-        if (activity is TransactionListCallbacks) {
-            callback = activity
-        } else {
-            throw RuntimeException(activity!!.toString() + " must implement TransactionListCallbacks")
-        }
+    fun attachCallbacks(callbacks: TransactionListCallbacks) {
+        this.maybeCallback = callbacks
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        callback = null
+    fun detachCallbacks() {
+        maybeCallback = null
     }
 
+    // TODO: data: List<Any> is not the best idea.. encapsulate it to more meaningful data class
     fun showTransactions(data: List<Any>) {
         vTransactionsEmptyMsg.show(false)
         vTransactions.show(true)
@@ -63,4 +68,3 @@ class TransactionListFragment : Fragment() {
         vTransactionsEmptyMsg.show()
     }
 }
-
