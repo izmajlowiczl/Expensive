@@ -11,7 +11,8 @@ const val tbl_label = "tbl_label"
 const val tbl_label_col_id = col_uuid
 const val tbl_label_col_name = "name"
 
-data class Label(val id: Id, val name: String)
+data class Label(val id: Id,
+                 val name: String)
 //endregion
 
 //region Currency
