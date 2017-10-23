@@ -8,17 +8,6 @@ import java.util.*
 
 internal object DatabaseSchemaTestHelper {
 
-    fun SQLiteDatabase.doesTableExist(tableName: String): Boolean {
-        val sql = "SELECT name FROM sqlite_master WHERE type='table';"
-        val c = rawQuery(sql, null)
-        while (c.moveToNext()) {
-            if (c.getString(0) == tableName) return true
-            else continue
-        }
-
-        return false
-    }
-
     fun getTableColumns(db: SQLiteDatabase, tableName: String): List<String> {
         var c: Cursor? = null
         try {
@@ -52,4 +41,21 @@ internal object DatabaseSchemaTestHelper {
     fun queryForCurrencyCode(code: String): String {
         return String.format("SELECT code FROM $tbl_currency WHERE code='%s';", code)
     }
+
+
+    //region Labels
+    fun assertLabelStored(db: SQLiteDatabase, label: Label) {
+        val cursor = db.rawQuery(queryForLabel(label), null)
+        if (cursor == null || !cursor.moveToNext()) {
+            org.junit.Assert.fail("Cannot find label")
+        }
+
+        assertThat(cursor.uuid("uuid")).isEqualTo(label.id)
+        assertThat(cursor.string("name")).isEqualTo(label.name)
+    }
+
+    fun queryForLabel(label: Label): String {
+        return String.format("SELECT uuid, name FROM tbl_label WHERE uuid='%s' AND name='%s';", label.id.toString(), label.name)
+    }
+    //endregion
 }

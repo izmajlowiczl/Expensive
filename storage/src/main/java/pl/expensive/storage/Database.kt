@@ -43,6 +43,12 @@ class Database : SQLiteOpenHelper {
     }
 
     private fun createSchema(db: SQLiteDatabase) {
+        db.execSQL(newTable(tbl_label)
+                .withMandatoryText(tbl_label_col_id)
+                .withMandatoryText(tbl_label_col_name)
+                .withPrimaryKey(tbl_label_col_id)
+                .build())
+
         db.execSQL(newTable(tbl_currency)
                 .withMandatoryText(tbl_currency_col_code)
                 .withMandatoryText(tbl_currency_col_format)
