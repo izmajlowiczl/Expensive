@@ -48,6 +48,7 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
+    buildToolsVersion '27.0.1'
 }
 
 configurations.all {
@@ -92,6 +93,9 @@ dependencies {
 }
 repositories {
     mavenCentral()
+    maven {
+        url 'https://maven.google.com'
+    }
 }
 
 // Signing properties

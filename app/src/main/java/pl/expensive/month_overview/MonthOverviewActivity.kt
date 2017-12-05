@@ -17,14 +17,13 @@ class MonthOverviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_month_overview)
 
-        if (intent.hasExtra(extra_month_overview_date)) {
-            val ym: YearMonth = intent.getSerializableExtra(extra_month_overview_date) as YearMonth
-            transactionsModel.showWalletForMonth(ym, update)
-        } else {
+        val selectedMonth = getBundledMonth()
+        if (selectedMonth == null) {
             finish()
             return
         }
 
+        transactionsModel.showWalletForMonth(selectedMonth, update)
         vBack.setOnClickListener { finish() }
     }
 
@@ -40,4 +39,12 @@ class MonthOverviewActivity : AppCompatActivity() {
 
     private fun transactionsFragment(): TransactionListFragment =
             supportFragmentManager.findFragmentById(R.id.fMonthOverviewTransactions) as TransactionListFragment
+
+    private fun getBundledMonth(): YearMonth? {
+        if (!intent.hasExtra(extra_month_overview_date)) {
+            return null
+        }
+
+        return intent.getSerializableExtra(extra_month_overview_date) as YearMonth
+    }
 }
