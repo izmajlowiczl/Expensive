@@ -13,7 +13,7 @@ import pl.expensive.R
 import pl.expensive.dateTimeFormat
 import pl.expensive.formatValue
 import pl.expensive.inflateLayout
-import pl.expensive.storage.Transaction
+import pl.expensive.storage.TransactionDbo
 
 // Header
 
@@ -35,11 +35,11 @@ class HeaderViewHolder(itemView: View, private val headerClickFun: (YearMonth) -
     }
 }
 
-// Transaction
+// TransactionDbo
 
-// TODO: Do not use Transaction directly.. create viewModel for it
-class TransactionViewHolder(itemView: View, private val clickFun: (Transaction) -> Unit) : RecyclerView.ViewHolder(itemView) {
-    fun update(viewModel: Transaction) = with(itemView) {
+// TODO: Do not use TransactionDbo directly.. create viewModel for it
+class TransactionViewHolder(itemView: View, private val clickFun: (TransactionDbo) -> Unit) : RecyclerView.ViewHolder(itemView) {
+    fun update(viewModel: TransactionDbo) = with(itemView) {
         setBackgroundColor(ResourcesCompat.getColor(resources, R.color.white, null))
         vTransactionItemAmount.text = viewModel.currency.formatValue(money = viewModel.amount)
         vTransactionItemTime.text = viewModel.formatTime()
@@ -57,13 +57,13 @@ class TransactionViewHolder(itemView: View, private val clickFun: (Transaction) 
      * Formats transaction time to show date (eg Jan 12) in normal text size.
      * Time (22:12) in 70% of date text size in new line
      */
-    private fun Transaction.formatTime(): CharSequence {
+    private fun TransactionDbo.formatTime(): CharSequence {
         val localDateTime = toLocalDateTime()
         return localDateTime.format(dateTimeFormat)
     }
 }
 
-class TransactionsAdapter(private val transactionClickFun: (Transaction) -> Unit,
+class TransactionsAdapter(private val transactionClickFun: (TransactionDbo) -> Unit,
                           private val headerClickFun: (YearMonth) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var data: MutableList<Any> = mutableListOf()
 
@@ -73,12 +73,12 @@ class TransactionsAdapter(private val transactionClickFun: (Transaction) -> Unit
         notifyDataSetChanged()
     }
 
-    fun addTop(transaction: Transaction) {
+    fun addTop(transaction: TransactionDbo) {
         data.add(1, transaction)
         notifyItemInserted(1)
     }
 
-    fun edit(transaction: Transaction) {
+    fun edit(transaction: TransactionDbo) {
         val position = data.indexOf(transaction)
         if (position != -1) {
             notifyItemChanged(position)
@@ -99,7 +99,7 @@ class TransactionsAdapter(private val transactionClickFun: (Transaction) -> Unit
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
             when (holder) {
                 is TransactionViewHolder ->
-                    holder.update(data[position] as Transaction)
+                    holder.update(data[position] as TransactionDbo)
                 is HeaderViewHolder ->
                     holder.update(data[position] as Header)
                 else ->
@@ -109,7 +109,7 @@ class TransactionsAdapter(private val transactionClickFun: (Transaction) -> Unit
 
     override fun getItemViewType(position: Int): Int =
             when (data[position]) {
-                is Transaction ->
+                is TransactionDbo ->
                     R.layout.view_transaction_item
                 is Header ->
                     R.layout.view_header_item

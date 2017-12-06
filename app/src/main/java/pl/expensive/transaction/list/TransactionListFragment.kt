@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_transactions_list.*
 import org.threeten.bp.YearMonth
 import pl.expensive.R
 import pl.expensive.show
-import pl.expensive.storage.Transaction
+import pl.expensive.storage.TransactionDbo
 
 /**
  *
@@ -25,14 +25,14 @@ import pl.expensive.storage.Transaction
  */
 class TransactionListFragment : Fragment() {
     interface TransactionListCallbacks {
-        fun onTransactionSelected(transaction: Transaction)
+        fun onTransactionSelected(transaction: TransactionDbo)
         fun onMonthSelected(month: YearMonth)
     }
 
     private var maybeCallback: TransactionListCallbacks? = null
 
     private val adapter by lazy {
-        val transactionClickFun: (Transaction) -> Unit = { transition -> maybeCallback?.onTransactionSelected(transition) }
+        val transactionClickFun: (TransactionDbo) -> Unit = { transition -> maybeCallback?.onTransactionSelected(transition) }
         val headerClickFun: (YearMonth) -> Unit = { maybeCallback?.onMonthSelected(it) }
         TransactionsAdapter(transactionClickFun, headerClickFun)
     }

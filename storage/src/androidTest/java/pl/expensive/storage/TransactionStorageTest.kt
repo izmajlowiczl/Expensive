@@ -14,7 +14,7 @@ class TransactionStorageTest {
     private val database = Injector.provideDatabase()
     @Test
     fun storeSingleTransaction() {
-        val beer = Transaction(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer")
+        val beer = TransactionDbo(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer")
 
         insertTransaction(beer, database)
 
@@ -24,7 +24,7 @@ class TransactionStorageTest {
 
     @Test
     fun listTransactions() {
-        val beer = Transaction(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer")
+        val beer = TransactionDbo(UUID.randomUUID(), BigDecimal("4.99"), EUR, Date().time, "Beer")
         insertTransaction(beer, database)
 
         assertThat(listTransactions(database))
@@ -33,7 +33,7 @@ class TransactionStorageTest {
 
     @Test(expected = IllegalStateException::class)
     fun withoutStoredCurrency() {
-        val beer = Transaction(UUID.randomUUID(), BigDecimal("4.99"), Currency("FAKE", "##-$$"), Date().time, "Beer")
+        val beer = TransactionDbo(UUID.randomUUID(), BigDecimal("4.99"), CurrencyDbo("FAKE", "##-$$"), Date().time, "Beer")
 
         insertTransaction(beer, database)
     }

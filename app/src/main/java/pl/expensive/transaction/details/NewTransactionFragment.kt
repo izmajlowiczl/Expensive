@@ -10,7 +10,6 @@ import kotlinx.android.synthetic.main.fragment_new_transaction.*
 import pl.expensive.*
 import pl.expensive.R
 import pl.expensive.storage.*
-import pl.expensive.storage.Currency
 import pl.expensive.transaction.list.TransactionsModel
 import java.math.BigDecimal
 import java.util.*
@@ -25,17 +24,17 @@ fun createNewTransactionFragment(extras: Bundle?): NewTransactionFragment {
 
 class NewTransactionFragment : Fragment() {
     sealed class ViewState {
-        class Create(val currency: Currency) : ViewState()
+        class Create(val currency: CurrencyDbo) : ViewState()
 
         class Edit(val transaction: UUID,
                    val amount: BigDecimal,
-                   val currency: Currency,
+                   val currency: CurrencyDbo,
                    val description: CharSequence?) : ViewState()
     }
 
     interface NewTransactionCallbacks {
-        fun onNewTransaction(transaction: Transaction)
-        fun onTransactionEdited(transaction: Transaction)
+        fun onNewTransaction(transaction: TransactionDbo)
+        fun onTransactionEdited(transaction: TransactionDbo)
         fun onCanceled()
     }
 

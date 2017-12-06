@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import pl.expensive.Injector
 import pl.expensive.R
-import pl.expensive.storage.Transaction
+import pl.expensive.storage.TransactionDbo
 
 class TransactionDetailsActivity : AppCompatActivity(),
         NewTransactionFragment.NewTransactionCallbacks {
@@ -27,11 +27,11 @@ class TransactionDetailsActivity : AppCompatActivity(),
         }
     }
 
-    override fun onNewTransaction(transaction: Transaction) {
+    override fun onNewTransaction(transaction: TransactionDbo) {
         finishWithResult(getString(R.string.new_withdrawal_success_message, transaction.amount.abs()))
     }
 
-    override fun onTransactionEdited(transaction: Transaction) {
+    override fun onTransactionEdited(transaction: TransactionDbo) {
         finishWithResult(getString(R.string.withdrawal_edited_success_message, transaction.amount.abs()))
     }
 

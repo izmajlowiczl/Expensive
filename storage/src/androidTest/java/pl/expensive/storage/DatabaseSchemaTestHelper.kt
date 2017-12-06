@@ -44,7 +44,7 @@ internal object DatabaseSchemaTestHelper {
 
 
     //region Labels
-    fun assertLabelStored(db: SQLiteDatabase, label: Label) {
+    fun assertLabelStored(db: SQLiteDatabase, label: LabelDbo) {
         val cursor = db.rawQuery(queryForLabel(label), null)
         if (cursor == null || !cursor.moveToNext()) {
             org.junit.Assert.fail("Cannot find label")
@@ -54,7 +54,7 @@ internal object DatabaseSchemaTestHelper {
         assertThat(cursor.string("name")).isEqualTo(label.name)
     }
 
-    fun queryForLabel(label: Label): String {
+    fun queryForLabel(label: LabelDbo): String {
         return String.format("SELECT uuid, name FROM tbl_label WHERE uuid='%s' AND name='%s';", label.id.toString(), label.name)
     }
     //endregion

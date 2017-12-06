@@ -12,7 +12,7 @@ class LabelsStorageTest {
 
     @Test
     fun listLabels() {
-        val someLabel = Label(UUID.randomUUID(), "aLabel")
+        val someLabel = LabelDbo(UUID.randomUUID(), "aLabel")
         insertLabel(someLabel, database)
 
         assertThat(listLabels(database))

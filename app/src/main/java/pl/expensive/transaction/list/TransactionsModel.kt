@@ -15,7 +15,6 @@ import pl.expensive.R
 import pl.expensive.calculateTotal
 import pl.expensive.formatValue
 import pl.expensive.storage.*
-import pl.expensive.storage.Currency
 import java.math.BigDecimal
 import java.util.*
 
@@ -87,14 +86,14 @@ class TransactionsModel(private val db: Database,
         viewCallback(viewState)
     }
 
-    fun insertTransaction(transaction: Transaction) {
+    fun insertTransaction(transaction: TransactionDbo) {
         insertTransaction(transaction, db)
     }
 
-    fun findTransaction(uuid: UUID): Transaction? =
+    fun findTransaction(uuid: UUID): TransactionDbo? =
             findTransaction(uuid, db)
 
-    fun updateTransaction(transactionId: UUID, amount: BigDecimal, descText: String): Transaction? {
+    fun updateTransaction(transactionId: UUID, amount: BigDecimal, descText: String): TransactionDbo? {
         val persisted = findTransaction(transactionId) ?: return null
 
         val didChangeAmount = persisted.amount != amount
@@ -142,7 +141,7 @@ fun formatDateForMonthHeader(date: YearMonth, res: Resources): CharSequence {
  *
  * Total prefix is 60% font size of amount
  */
-private fun formattedHeaderTotal(res: Resources, currency: Currency, transactions: List<Transaction>): Spannable {
+private fun formattedHeaderTotal(res: Resources, currency: CurrencyDbo, transactions: List<TransactionDbo>): Spannable {
     val relative: Spannable = SpannableString(res.getString(R.string.total))
     relative.setSpan(RelativeSizeSpan(.6f), 0, relative.length, 0)
     return SpannableStringBuilder()
@@ -153,13 +152,13 @@ private fun formattedHeaderTotal(res: Resources, currency: Currency, transaction
 /**
  * Generates title for screen by showing current month name with total amount per current month
  */
-fun formattedScreenTitleForCurrentMonth(total: BigDecimal, currency: Currency): CharSequence =
+fun formattedScreenTitleForCurrentMonth(total: BigDecimal, currency: CurrencyDbo): CharSequence =
         formattedScreenTitle(YearMonth.now(), total, currency)
 
 /**
  * Generates title for screen by showing given month name with total amount per current month
  */
-fun formattedScreenTitle(date: YearMonth, total: BigDecimal, currency: Currency): CharSequence {
+fun formattedScreenTitle(date: YearMonth, total: BigDecimal, currency: CurrencyDbo): CharSequence {
     val month = date.month.getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()
 
     val span = SpannableString("$month ${currency.formatValue(money = total)}")
@@ -168,11 +167,11 @@ fun formattedScreenTitle(date: YearMonth, total: BigDecimal, currency: Currency)
     return span
 }
 
-fun group(sortedTransactions: List<Transaction>): Map<YearMonth, List<Transaction>> {
+fun group(sortedTransactions: List<TransactionDbo>): Map<YearMonth, List<TransactionDbo>> {
     return sortedTransactions.groupBy { YearMonth.of(it.toLocalDateTime().year, it.toLocalDateTime().month) }
 }
 
-fun Transaction.toLocalDateTime(): LocalDateTime =
+fun TransactionDbo.toLocalDateTime(): LocalDateTime =
         Instant.ofEpochMilli(date)
                 .atZone(ZoneId.of("UTC"))
                 .toLocalDateTime()

@@ -11,7 +11,7 @@ import android.view.animation.OvershootInterpolator
 import kotlinx.android.synthetic.main.activity_transactions.*
 import org.threeten.bp.YearMonth
 import pl.expensive.*
-import pl.expensive.storage.Transaction
+import pl.expensive.storage.TransactionDbo
 
 sealed class ViewState {
     class Wallets(val adapterData: MutableList<Any>,
@@ -107,7 +107,7 @@ class TransactionsActivity : AppCompatActivity(), TransactionListFragment.Transa
         }
     }
 
-    override fun onTransactionSelected(transaction: Transaction) {
+    override fun onTransactionSelected(transaction: TransactionDbo) {
         this@TransactionsActivity.startEditTransactionScreen(transaction)
     }
 

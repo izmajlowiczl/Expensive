@@ -17,8 +17,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import org.threeten.bp.format.DateTimeFormatter
-import pl.expensive.storage.Currency
-import pl.expensive.storage.Transaction
+import pl.expensive.storage.CurrencyDbo
+import pl.expensive.storage.TransactionDbo
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.util.*
@@ -31,7 +31,7 @@ fun View.hideKeyboard() {
 fun ViewGroup.inflateLayout(@LayoutRes layout: Int): View =
         LayoutInflater.from(context).inflate(layout, this, false)
 
-fun Currency.formatValue(locale: Locale = Locale.getDefault(), money: BigDecimal): String {
+fun CurrencyDbo.formatValue(locale: Locale = Locale.getDefault(), money: BigDecimal): String {
     val numberFormat = DecimalFormat.getInstance(locale) as DecimalFormat
     numberFormat.applyPattern(format)
     return numberFormat.format(money)
@@ -69,7 +69,7 @@ fun ImageView.tint(color: Int) {
 /**
  * Calculate total of <b>absolute</b> amounts
  */
-fun List<Transaction>.calculateTotal(): BigDecimal {
+fun List<TransactionDbo>.calculateTotal(): BigDecimal {
     var total = BigDecimal.ZERO
     map { total += it.amount }
     return total

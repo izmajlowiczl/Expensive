@@ -5,7 +5,7 @@ import org.junit.Test
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
 import org.threeten.bp.ZoneOffset
-import pl.expensive.storage.Transaction
+import pl.expensive.storage.TransactionDbo
 import pl.expensive.storage._Seeds.EUR
 import java.math.BigDecimal
 import java.util.*
@@ -14,7 +14,7 @@ class TransactionGroupperTest {
 
     @Test
     fun empty() {
-        assertThat(group(ArrayList<Transaction>())).isEmpty()
+        assertThat(group(ArrayList<TransactionDbo>())).isEmpty()
     }
 
     @Test
@@ -60,8 +60,8 @@ class TransactionGroupperTest {
         assertThat(group[SOME_DAY_YEAR_MONTH.plusMonths(1)]).containsExactly(d2t1, d2t2)
     }
 
-    private fun transactionAt(today: LocalDateTime): Transaction {
-        return Transaction(UUID.randomUUID(), BigDecimal.TEN, EUR, today.toMillisUTC(), "")
+    private fun transactionAt(today: LocalDateTime): TransactionDbo {
+        return TransactionDbo(UUID.randomUUID(), BigDecimal.TEN, EUR, today.toMillisUTC(), "")
     }
 
     private fun LocalDateTime.toMillisUTC(): Long =

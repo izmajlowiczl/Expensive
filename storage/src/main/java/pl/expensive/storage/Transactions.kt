@@ -8,7 +8,7 @@ import java.util.*
 private const val alias_currency_code = "currency_code"
 private const val alias_currency_format = "currency_format"
 
-fun listTransactions(database: Database): List<Transaction> {
+fun listTransactions(database: Database): List<TransactionDbo> {
     val tables = "$tbl_transaction t LEFT JOIN $tbl_currency AS cur ON t.$tbl_transaction_col_currency=cur.$tbl_currency_col_code "
     val columns = arrayOf(
             "t.$tbl_transaction_col_id", "t.$tbl_transaction_col_amount", "t.$tbl_transaction_col_date", "t.$tbl_transaction_col_description",
@@ -19,7 +19,7 @@ fun listTransactions(database: Database): List<Transaction> {
     return result
 }
 
-fun findTransaction(uuid: UUID, database: Database): Transaction? {
+fun findTransaction(uuid: UUID, database: Database): TransactionDbo? {
     val tables = "$tbl_transaction t LEFT JOIN $tbl_currency AS cur ON t.$tbl_transaction_col_currency=cur.$tbl_currency_col_code "
     val columns = arrayOf(
             "t.$tbl_transaction_col_id", "t.$tbl_transaction_col_amount", "t.$tbl_transaction_col_date", "t.$tbl_transaction_col_description",
@@ -31,19 +31,19 @@ fun findTransaction(uuid: UUID, database: Database): Transaction? {
     return result
 }
 
-fun insertTransaction(transaction: Transaction, database: Database) {
+fun insertTransaction(transaction: TransactionDbo, database: Database) {
     try {
         database.writableDatabase.insertOrThrow(tbl_transaction, null, toContentValues(transaction))
     } catch (ex: SQLiteConstraintException) {
-        throw IllegalStateException("!!!CONSTRAINT VIOLATION!!! Is Currency stored?")
+        throw IllegalStateException("!!!CONSTRAINT VIOLATION!!! Is CurrencyDbo stored?")
     }
 }
 
-fun updateTransaction(transaction: Transaction, database: Database) {
+fun updateTransaction(transaction: TransactionDbo, database: Database) {
     database.writableDatabase.replace(tbl_transaction, null, toContentValues(transaction))
 }
 
-private fun toContentValues(transaction: Transaction): ContentValues {
+private fun toContentValues(transaction: TransactionDbo): ContentValues {
     val cv = ContentValues()
     cv.put(tbl_transaction_col_id, transaction.uuid.toString())
     cv.put(tbl_transaction_col_amount, transaction.amount.toString())
@@ -53,11 +53,11 @@ private fun toContentValues(transaction: Transaction): ContentValues {
     return cv
 }
 
-private fun from(cursor: Cursor): Transaction {
-    return Transaction(
+private fun from(cursor: Cursor): TransactionDbo {
+    return TransactionDbo(
             cursor.uuid(tbl_transaction_col_id),
             cursor.bigDecimal(tbl_transaction_col_amount),
-            Currency(cursor.string(alias_currency_code), cursor.string(alias_currency_format)),
+            CurrencyDbo(cursor.string(alias_currency_code), cursor.string(alias_currency_format)),
             cursor.long(tbl_transaction_col_date),
             cursor.string(tbl_transaction_col_description))
 }

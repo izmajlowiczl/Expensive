@@ -3,7 +3,7 @@ package pl.expensive
 import android.content.Intent
 import org.threeten.bp.YearMonth
 import pl.expensive.month_overview.MonthOverviewActivity
-import pl.expensive.storage.Transaction
+import pl.expensive.storage.TransactionDbo
 import pl.expensive.transaction.details.TransactionDetailsActivity
 import pl.expensive.transaction.list.TransactionsActivity
 
@@ -13,7 +13,7 @@ fun TransactionsActivity.startNewTransactionCreatorScreen() {
     overridePendingTransition(0, 0)
 }
 
-fun TransactionsActivity.startEditTransactionScreen(transaction: Transaction) {
+fun TransactionsActivity.startEditTransactionScreen(transaction: TransactionDbo) {
     val intent = Intent(this, TransactionDetailsActivity::class.java)
             .putExtra("transaction_uuid", transaction.uuid.toString())
             .putExtra("transaction_amount", transaction.amount.abs().toString())
