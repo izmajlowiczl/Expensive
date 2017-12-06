@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
@@ -33,9 +34,9 @@
                     android:background="?selectableItemBackgroundBorderless"
                     android:gravity="center_vertical"
                     android:padding="@dimen/spacer"
-                    android:src="@drawable/ic_add_white_24dp"
                     android:tint="@color/icons"
                     android:visibility="invisible"
+                    app:srcCompat="@drawable/ic_add"
                     tools:visibility="visible"/>
 
                 <ImageView
@@ -47,9 +48,9 @@
                     android:background="?selectableItemBackgroundBorderless"
                     android:gravity="center_vertical"
                     android:padding="@dimen/spacer"
-                    android:src="@drawable/ic_done_white_24dp"
                     android:tint="@color/icons"
                     android:visibility="invisible"
+                    app:srcCompat="@drawable/ic_done"
                     tools:visibility="visible"/>
 
             </RelativeLayout>
@@ -90,7 +91,7 @@
                         style="@style/NewTransaction.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_attach_money_white_24dp"/>
+                        app:srcCompat="@drawable/ic_attach_money"/>
 
                     <EditText
                         android:id="@+id/vNewTransactionAmount"
@@ -122,7 +123,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
-                        android:src="@drawable/ic_short_text_white_24dp"/>
+                        app:srcCompat="@drawable/ic_short_text"/>
 
                     <EditText
                         android:id="@+id/vNewTransactionDescription"
