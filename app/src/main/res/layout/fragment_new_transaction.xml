@@ -1,141 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="@color/white">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/vNewTransactionScrollParent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <ScrollView
-        android:id="@+id/vNewTransactionScrollParent"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/vNewTransactionTitleHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <RelativeLayout
-                android:id="@+id/vNewTransactionTitleHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/vNewTransactionClose"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:gravity="center_vertical"
-                    android:padding="@dimen/spacer"
-                    android:tint="@color/icons"
-                    android:visibility="invisible"
-                    app:srcCompat="@drawable/ic_add"
-                    tools:visibility="visible"/>
-
-                <ImageView
-                    android:id="@+id/vNewTransactionSave"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:gravity="center_vertical"
-                    android:padding="@dimen/spacer"
-                    android:tint="@color/icons"
-                    android:visibility="invisible"
-                    app:srcCompat="@drawable/ic_done"
-                    tools:visibility="visible"/>
-
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/vNewTransactionTitle"
+            <ImageView
+                android:id="@+id/vNewTransactionClose"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/medium_spacer"
-                android:layout_marginTop="@dimen/medium_spacer"
-                android:paddingLeft="@dimen/extra_content_padding_left"
-                android:paddingRight="@dimen/small_spacer"
-                android:text="@string/add_new_spending"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                android:textColor="@color/colorText"/>
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="?selectableItemBackgroundBorderless"
+                android:gravity="center_vertical"
+                android:padding="@dimen/spacer"
+                android:tint="@color/icons"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/ic_add"
+                tools:visibility="visible"/>
 
-            <LinearLayout
-                android:id="@+id/vNewTransactionParent"
+            <ImageView
+                android:id="@+id/vNewTransactionSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="?selectableItemBackgroundBorderless"
+                android:gravity="center_vertical"
+                android:padding="@dimen/spacer"
+                android:tint="@color/icons"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/ic_done"
+                tools:visibility="visible"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/vNewTransactionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium_spacer"
+            android:layout_marginTop="@dimen/medium_spacer"
+            android:paddingLeft="@dimen/extra_content_padding_left"
+            android:paddingRight="@dimen/small_spacer"
+            android:text="@string/add_new_spending"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+            android:textColor="@color/colorText"/>
+
+        <LinearLayout
+            android:id="@+id/vNewTransactionParent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_spacer"
+            android:background="@color/toolbar_bg"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <!-- Amount -->
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_spacer"
-                android:background="@color/toolbar_bg"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/small_spacer"
+                android:paddingTop="@dimen/small_spacer">
 
-                <!-- Amount -->
-                <RelativeLayout
+                <ImageView
+                    android:id="@+id/vNewTransactionAmountImg"
+                    style="@style/NewTransaction.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_attach_money"/>
+
+                <EditText
+                    android:id="@+id/vNewTransactionAmount"
+                    style="@style/NewTransaction.Item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingBottom="@dimen/small_spacer"
-                    android:paddingTop="@dimen/small_spacer">
+                    android:layout_toRightOf="@id/vNewTransactionAmountImg"
+                    android:hint="@string/enter_amount"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"/>
+            </RelativeLayout>
 
-                    <ImageView
-                        android:id="@+id/vNewTransactionAmountImg"
-                        style="@style/NewTransaction.Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_attach_money"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/medium_spacer"
+                android:background="@color/header_bg"/>
 
-                    <EditText
-                        android:id="@+id/vNewTransactionAmount"
-                        style="@style/NewTransaction.Item"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/vNewTransactionAmountImg"
-                        android:hint="@string/enter_amount"
-                        android:inputType="numberDecimal"
-                        android:maxLines="1"/>
-                </RelativeLayout>
+            <!-- Description -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/small_spacer">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="@dimen/medium_spacer"
-                    android:background="@color/header_bg"/>
+                <ImageView
+                    android:id="@+id/vNewTransactionDescriptionImg"
+                    style="@style/NewTransaction.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    app:srcCompat="@drawable/ic_short_text"/>
 
-                <!-- Description -->
-                <RelativeLayout
+                <EditText
+                    android:id="@+id/vNewTransactionDescription"
+                    style="@style/NewTransaction.Item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="@dimen/small_spacer">
-
-                    <ImageView
-                        android:id="@+id/vNewTransactionDescriptionImg"
-                        style="@style/NewTransaction.Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        app:srcCompat="@drawable/ic_short_text"/>
-
-                    <EditText
-                        android:id="@+id/vNewTransactionDescription"
-                        style="@style/NewTransaction.Item"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/vNewTransactionDescriptionImg"
-                        android:hint="@string/description"/>
-                </RelativeLayout>
-
-            </LinearLayout>
+                    android:layout_toRightOf="@id/vNewTransactionDescriptionImg"
+                    android:hint="@string/description"/>
+            </RelativeLayout>
 
         </LinearLayout>
-    </ScrollView>
-</FrameLayout>
+
+    </LinearLayout>
+</ScrollView>
