@@ -58,20 +58,22 @@ class TransactionsModel(private val db: Database,
                 result.add(clickableHeader(res.getString(R.string.current_month), formattedHeaderTotal(res, currency, transactionsForCurrentMonth), thisMonth))
             }
 
-            transactionsGroupedByMonth
+            transactionsGroupedByMonth.keys
                     .forEach {
-                        if (it.key == thisMonth) { // This month
+                        if (it == thisMonth) { // This month
                             // Transactions for current month
-                            result.addAll(it.value)
+                            val value = transactionsGroupedByMonth[it]!!
+                            result.addAll(value)
 
                             // Header for previous months just before details
                             // Only in case there are transactions for previous month
                             if (transactionsGroupedByMonth.size > 1) {
-                                result.add(staticHeader(res.getString(R.string.previous_months), "", it.key))
+                                result.add(staticHeader(res.getString(R.string.previous_months), "", it))
                             }
                         } else {
                             // Headers for previous months
-                            result.add(clickableHeader(formatDateForMonthHeader(it.key, res), formattedHeaderTotal(res, currency, it.value), it.key))
+                            val value = transactionsGroupedByMonth[it]!!
+                            result.add(clickableHeader(formatDateForMonthHeader(it, res), formattedHeaderTotal(res, currency, value), it))
                         }
                     }
 
