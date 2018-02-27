@@ -1,4 +1,4 @@
-package pl.expensive.storage;
+package pl.expensive.storage.util;
 
 import org.junit.Test;
 
