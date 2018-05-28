@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.support.annotation.VisibleForTesting
-import pl.expensive.storage.SQLiteTableBuilder.newTable
+import pl.expensive.storage.util.SQLiteTableBuilder.newTable
 import java.math.BigDecimal
 import java.util.*
 
